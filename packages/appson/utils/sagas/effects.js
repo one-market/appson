@@ -1,7 +1,7 @@
 import R from 'ramda'
 import { all, fork } from 'redux-saga/effects'
 
-import appson, { setActiveEffects } from '../stores/appson'
+import effectsStore, { setActiveEffects } from '../stores/effects'
 import { diff, symmetricDiff } from '../object/diff'
 import transformValues from '../object/transform-values'
 
@@ -25,7 +25,7 @@ const filterEffects = (active, effects) => {
 const activeWithoutCanceled = (active, tasks) =>
   R.fromPairs(R.difference(R.toPairs(active), R.toPairs(tasks)))
 
-export default function* effectsSaga({ active, all: effects }) {
+export default function* effectsSaga({ active, effects }) {
   const tasksToCancel = cancelTasks(active, effects)
   const filteredEffects = filterEffects(active, effects)
   const filteredTasks = activeWithoutCanceled(active, tasksToCancel)
@@ -33,5 +33,5 @@ export default function* effectsSaga({ active, all: effects }) {
   const tasks = yield all(transformValues(fork)(filteredEffects))
   const newActive = R.merge(tasks, filteredTasks)
 
-  appson.dispatch(setActiveEffects(newActive))
+  effectsStore.dispatch(setActiveEffects(newActive))
 }

@@ -1,17 +1,17 @@
 import t from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import { toggleEffects } from '../utils/stores/appson'
+import { toggleEffects } from '../utils/stores/effects'
 import { isModel } from './model'
 
 const atComponent = (effects, WrappedComponent) =>
   class WithEffects extends PureComponent {
     static contextTypes = {
-      appson: t.object,
+      effects: t.object,
     }
 
     dispatchAction = () =>
-      this.context.appson.dispatch(toggleEffects(effects))
+      this.context.effects.dispatch(toggleEffects(effects))
 
     componentWillMount() {
       this.dispatchAction()

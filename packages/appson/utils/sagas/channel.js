@@ -1,18 +1,17 @@
 import { eventChannel } from 'redux-saga'
 
-import compareState from '../stores/compare-state'
-import appson from '../stores/appson'
+import reducers from '../stores/reducers'
+import effects from '../stores/effects'
 
-const emitFrom = (getState, emitter) => (type) => {
-  const compare = compareState(getState, type)
-  return compare((payload) => emitter({ type, payload }))
-}
+const emitFrom = (emitter) => ({ name, getState }) => () =>
+  emitter({ type: name, payload: getState() })
 
 const appsonChannel = () => eventChannel((emitter) => {
-  const emit = emitFrom(appson.getState, emitter)
+  const emit = emitFrom(emitter)
 
-  appson.subscribe(emit('reducers'))
-  appson.subscribe(emit('effects'))
+  reducers.subscribe(emit(reducers))
+  effects.subscribe(emit(effects))
+
   return () => null
 })
 

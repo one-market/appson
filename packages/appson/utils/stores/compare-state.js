@@ -1,9 +1,7 @@
 import R from 'ramda'
 
-export const s = (string: string) => string.split('.');
-
 const compareState = (getState, path) => {
-  const fromPath = R.path(s(path))
+  const fromPath = R.path(path)
   let currentValue = fromPath(getState())
 
   return (fn) => () => {

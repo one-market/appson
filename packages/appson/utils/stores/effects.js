@@ -1,13 +1,7 @@
-import { createStore, combineReducers } from 'redux'
-import { routerReducer } from 'react-router-redux'
+import { combineReducers } from 'redux'
 import { symmetricDiff } from '../object/diff'
 
-const DEFAULT_REDUCERS = {
-  router: routerReducer,
-}
-
-const reducers = (state = DEFAULT_REDUCERS, { type, payload }) =>
-  /TOGGLE_REDUCER/.test(type) ? symmetricDiff(state, payload) : state
+import createNamedStore from './create-named-store'
 
 const effects = (state = null, { type, payload }) =>
   /TOGGLE_EFFECTS/.test(type) ? symmetricDiff(state, payload) : state
@@ -16,19 +10,11 @@ const active = (state = null, { type, payload }) =>
   /SET_ACTIVE_EFFECTS/.test(type) ? payload : state
 
 const root = combineReducers({
-  reducers,
-  effects: combineReducers({
-    all: effects,
-    active,
-  }),
+  effects,
+  active,
 })
 
-export default createStore(root)
-
-export const toggleReducer = (payload) => ({
-  type: '@@appson/TOGGLE_REDUCER',
-  payload,
-})
+export default createNamedStore('effects', root)
 
 export const toggleEffects = (payload) => ({
   type: '@@appson/TOGGLE_EFFECTS',

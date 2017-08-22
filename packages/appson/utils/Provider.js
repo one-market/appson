@@ -1,17 +1,22 @@
 import React from 'react'
 import { createProvider } from 'react-redux/lib/components/Provider'
-import appson from './stores/appson'
+
+import effects from './stores/effects'
+import reducers from './stores/reducers'
 
 const Provider = ({ children, store }) => {
   const Redux = createProvider('store')
-  const Appson = createProvider('appson')
+  const Reducers = createProvider('reducers')
+  const Effects = createProvider('effects')
 
   return (
-    <Appson store={appson}>
-      <Redux store={store}>
-        {children}
-      </Redux>
-    </Appson>
+    <Reducers store={reducers}>
+      <Effects store={effects}>
+        <Redux store={store}>
+          {children}
+        </Redux>
+      </Effects>
+    </Reducers>
   )
 }
 

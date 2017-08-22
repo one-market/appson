@@ -2,7 +2,7 @@ import R from 'ramda'
 import t from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import { toggleReducer } from '../utils/stores/appson'
+import { toggleReducer } from '../utils/stores/reducers'
 import { getModelName, getEffects } from './model'
 import withEffects from './with-effects'
 
@@ -17,11 +17,11 @@ const withModel = (model) => (WrappedComponent) => {
 
   class AddModels extends PureComponent {
     static contextTypes = {
-      appson: t.object,
+      reducers: t.object,
     }
 
     dispatchActions = () => {
-      this.context.appson.dispatch(action)
+      this.context.reducers.dispatch(action)
     }
 
     componentWillMount() {
