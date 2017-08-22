@@ -1,16 +1,18 @@
-import R from 'ramda'
 import { eventChannel } from 'redux-saga'
-import { stores } from '../stores/appson'
+
+import compareState from '../stores/compare-state'
+import appson from '../stores/appson'
+
+const emitFrom = (getState, emitter) => (type) => {
+  const compare = compareState(getState, type)
+  return compare((payload) => emitter({ type, payload }))
+}
 
 const appsonChannel = () => eventChannel((emitter) => {
-  for (const type of R.keys(stores)) {
-    const store = stores[type]
-    const action = (payload) => ({ type, payload })
+  const emit = emitFrom(appson.getState, emitter)
 
-    emitter(action(store.getState()))
-    store.subscribe(() => emitter(action(store.getState())))
-  }
-
+  appson.subscribe(emit('reducers'))
+  appson.subscribe(emit('effects'))
   return () => null
 })
 

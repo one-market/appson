@@ -1,23 +1,17 @@
 import t from 'prop-types'
 import React, { PureComponent } from 'react'
 
+import { toggleEffects } from '../utils/stores/appson'
 import { isModel } from './model'
 
-export const toggleEffects = (payload) => ({
-  type: '@appson/TOGGLE_EFFECTS',
-  payload,
-})
-
-const atComponent = (effects, WrappedComponent) => {
-  const action = toggleEffects(effects)
-
+const atComponent = (effects, WrappedComponent) =>
   class WithEffects extends PureComponent {
     static contextTypes = {
-      effects: t.object,
+      appson: t.object,
     }
 
     dispatchAction = () =>
-      this.context.effects.dispatch(action)
+      this.context.appson.dispatch(toggleEffects(effects))
 
     componentWillMount() {
       this.dispatchAction()
@@ -33,9 +27,6 @@ const atComponent = (effects, WrappedComponent) => {
       )
     }
   }
-
-  return WithEffects
-}
 
 const atModel = (effects, model) => {
   effects && Object.defineProperty(model, 'effects', {

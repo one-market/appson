@@ -2,28 +2,26 @@ import R from 'ramda'
 import t from 'prop-types'
 import React, { PureComponent } from 'react'
 
+import { toggleReducer } from '../utils/stores/appson'
 import { getModelName, getEffects } from './model'
 import withEffects from './with-effects'
 
-const modelToReducer = (model) => R.assoc(getModelName(model), model, {})
-
-const toggleReducer = (payload) => ({
-  type: '@appson/TOGGLE_REDUCER',
-  payload,
-})
+const modelToReducer = (model) =>
+  R.assoc(getModelName(model), model, {})
 
 const withModel = (model) => (WrappedComponent) => {
+  const effects = getEffects(model)
   const newReducer = modelToReducer(model)
   const action = toggleReducer(newReducer)
-  const effects = getEffects(model)
+  const Component = effects ? withEffects(effects)(WrappedComponent) : WrappedComponent
 
   class AddModels extends PureComponent {
     static contextTypes = {
-      reducers: t.object,
+      appson: t.object,
     }
 
     dispatchActions = () => {
-      this.context.reducers.dispatch(action)
+      this.context.appson.dispatch(action)
     }
 
     componentWillMount() {
@@ -36,12 +34,12 @@ const withModel = (model) => (WrappedComponent) => {
 
     render() {
       return (
-        <WrappedComponent {...this.props} />
+        <Component {...this.props} />
       )
     }
   }
 
-  return effects ? withEffects(effects)(AddModels) : AddModels
+  return AddModels
 }
 
 export default withModel
