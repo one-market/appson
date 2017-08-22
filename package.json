@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "devDependencies": {
+    "eslint-config-appson": "^0.0.1",
+    "eslint": "4.3.0"
+  }
+}
