@@ -1,12 +1,11 @@
 import R from 'ramda'
 import { model as reedxModel } from 'reedx'
-import transformValues from '../utils/object/transform-values'
 
 export const isModel = R.has('modelName')
 export const getEffects = R.prop('effects')
 export const getModelName = R.prop('modelName')
 
-const transformToDefineProps = transformValues(
+const transformToDefineProps = R.mapObjIndexed(
   (value) => ({ value, writable: false })
 )
 

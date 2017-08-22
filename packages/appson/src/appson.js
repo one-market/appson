@@ -2,6 +2,7 @@
 
 import { render } from 'react-dom'
 import createHistory from 'history/createBrowserHistory'
+
 import createApp from '../utils/create-app'
 import createStore from '../utils/create-store'
 import rootSaga from '../utils/sagas/root'

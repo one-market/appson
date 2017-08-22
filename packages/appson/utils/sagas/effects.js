@@ -1,37 +1,26 @@
 import R from 'ramda'
-import { all, fork } from 'redux-saga/effects'
+import { all, fork, cancel } from 'redux-saga/effects'
 
 import effectsStore, { setActiveEffects } from '../stores/effects'
 import { diff, symmetricDiff } from '../object/diff'
-import transformValues from '../object/transform-values'
 
-const isFn = R.is(Function)
+const sDiffAndFilterByFn = R.pipe(symmetricDiff, R.pickBy(R.is(Function)))
 
-const cancelTasks = (active, effects) => {
-  const foundTasks = diff(active, effects)
-
-  for (const task of R.values(foundTasks)) task.cancel()
-  return foundTasks
+function* cancelTasks(tasks) {
+  for (const task of R.values(tasks)) {
+    yield cancel(task)
+  }
 }
-
-const filterEffects = (active, effects) => {
-  const foundEffects = R.toPairs(symmetricDiff(active, effects))
-
-  return R.reduce((obj, item) =>
-    isFn(item[1]) ? R.assoc(item[0], item[1], obj) : obj, {}, foundEffects
-  )
-}
-
-const activeWithoutCanceled = (active, tasks) =>
-  R.fromPairs(R.difference(R.toPairs(active), R.toPairs(tasks)))
 
 export default function* effectsSaga({ active, effects }) {
-  const tasksToCancel = cancelTasks(active, effects)
-  const filteredEffects = filterEffects(active, effects)
-  const filteredTasks = activeWithoutCanceled(active, tasksToCancel)
+  const tasksToCancel = diff(active, effects)
+  const activeWithoutCanceled = diff(active, tasksToCancel)
+  const effectsToFork = sDiffAndFilterByFn(active, effects)
 
-  const tasks = yield all(transformValues(fork)(filteredEffects))
-  const newActive = R.merge(tasks, filteredTasks)
+  yield cancelTasks(tasksToCancel)
+
+  const tasks = yield all(R.mapObjIndexed(fork, effectsToFork))
+  const newActive = R.merge(tasks, activeWithoutCanceled)
 
   effectsStore.dispatch(setActiveEffects(newActive))
 }
