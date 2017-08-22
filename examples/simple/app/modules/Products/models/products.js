@@ -1,6 +1,5 @@
 import R from 'ramda'
-import { model, withEffects } from 'appson'
-import { takeEvery } from 'redux-saga/effects'
+import { model } from 'appson'
 
 const products = model({
   name: 'products',
@@ -12,10 +11,4 @@ const products = model({
   },
 })
 
-const effects = {
-  *showProducts() {
-    yield takeEvery('test', () => console.log('test'))
-  },
-}
-
-export default withEffects(effects)(products)
+export default products
