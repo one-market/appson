@@ -1,0 +1,17 @@
+{
+  "name": "example-simple",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "shazam start",
+    "build": "shazam build"
+  },
+  "dependencies": {
+    "appson": "^0.0.1",
+    "reedx": "^0.1.1"
+  },
+  "devDependencies": {
+    "babel-preset-appson": "^0.0.1",
+    "shazamjs": "^0.21.0"
+  }
+}
