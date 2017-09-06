@@ -1,0 +1,7 @@
+{
+  "presets": ["appson"],
+  "plugins": [
+    "ramda",
+    "external-helpers"
+  ]
+}
