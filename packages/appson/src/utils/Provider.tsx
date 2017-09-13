@@ -1,10 +1,10 @@
 import React from 'react'
-import { createProvider } from 'react-redux/lib/components/Provider'
+import { createProvider, ProviderProps } from 'react-redux'
 
-import effects from './stores/effects'
-import reducers from './stores/reducers'
+import effects from '../stores/effects'
+import reducers from '../stores/reducers'
 
-const Provider = ({ children, store }) => {
+const Provider = ({ children, store }: ProviderProps): JSX.Element => {
   const Redux = createProvider('store')
   const Reducers = createProvider('reducers')
   const Effects = createProvider('effects')

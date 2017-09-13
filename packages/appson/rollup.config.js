@@ -1,10 +1,13 @@
 /* eslint camelcase: 0 */
+import visualizer from 'rollup-plugin-visualizer'
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import sourceMaps from 'rollup-plugin-sourcemaps'
 import replace from 'rollup-plugin-replace'
 import uglify from 'rollup-plugin-uglify'
+import typescript from 'rollup-plugin-typescript'
+import sizes from 'rollup-plugin-sizes'
 import { minify } from 'uglify-es'
 import pkg from './package.json'
 
@@ -18,8 +21,8 @@ const external = [
 ]
 
 const globals = {
-  'react-dom': 'reactDom',
   'react': 'React',
+  'react-dom': 'reactDom',
   'react-router': 'reactRouter',
   'redux': 'redux',
   'redux-saga': 'createSagaMiddleware',
@@ -27,11 +30,18 @@ const globals = {
 }
 
 const plugins = [
+  sizes(),
+  visualizer({
+    sourcemap: true,
+  }),
   resolve({
     jsnext: true,
-    extensions: ['.js', '.ts'],
+    extensions: ['.js', '.ts', '.tsx'],
   }),
   commonjs(),
+  typescript({
+    typescript: require('typescript'),
+  }),
   babel({
     exclude: [
       '../../node_modules/**',
@@ -56,7 +66,7 @@ export default [{
   external,
   globals,
   plugins,
-  input: './index.js',
+  input: './index.ts',
   name: 'appson',
   sourcemap: true,
   output: [
@@ -67,10 +77,9 @@ export default [{
   external,
   globals,
   plugins,
-  input: './index.js',
+  input: './index.ts',
   sourcemap: true,
   output: [
-    { file: pkg.main, format: 'cjs', exports: 'named' },
     { file: pkg.module, format: 'es' },
     { file: pkg['jsnext:main'], format: 'es' },
   ],
