@@ -1,0 +1,14 @@
+{
+  "name": "tslint-config-appson",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "2.4.2",
+    "tslint-config-airbnb": "^5.2.1",
+    "tslint-consistent-codestyle": "^1.6.0",
+    "tslint-eslint-rules": "^4.1.1",
+    "tslint-microsoft-contrib": "^5.0.1",
+    "vrsource-tslint-rules": "^5.1.1"
+  }
+}

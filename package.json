@@ -4,7 +4,8 @@
     "packages/*",
     "examples/*"
   ],
-  "devDependencies": {
+  "dependencies": {
+    "tslint-config-appson": "^0.0.1",
     "eslint-config-appson": "^0.0.1",
     "eslint": "4.3.0"
   }

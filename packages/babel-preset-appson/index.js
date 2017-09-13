@@ -8,7 +8,7 @@ const runtime = require('babel-plugin-transform-runtime')
 const reactOptimize = require('babel-preset-react-optimize')
 const macros = require('babel-macros')
 
-module.exports = {
+exports.default = {
   presets: [
     [env, { modules: false }],
     react,
@@ -33,3 +33,5 @@ module.exports = {
     },
   },
 }
+
+module.exports = exports.default
