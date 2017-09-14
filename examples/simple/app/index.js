@@ -1,8 +1,8 @@
 import R from 'ramda'
 import React from 'react'
-import { Routes, Route, Link, withModel, withEffects } from 'appson'
+import { Routes, Route, Link, withState, withEffects } from 'appson'
 
-import main from './models/main'
+import main from './states/main'
 import logAction from './effects/log-action'
 
 import Home from './modules/Home'
@@ -28,7 +28,7 @@ const Simple = () => (
 )
 
 const enhance = R.compose(
-  withModel(main),
+  withState(main),
   withEffects({ logAction }),
 )
 

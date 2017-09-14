@@ -1,12 +1,30 @@
+import R from 'ramda'
+import t from 'prop-types'
 import React from 'react'
-import { withModel } from 'appson'
+import { connect } from 'react-redux'
+import { withState, propsFrom, pick } from 'appson'
 
-import products from './models/products'
+import products from './states/products'
+import AddProducts from './components/AddProduct'
 
-const Products = () => (
-  <div>
-    List of products
-  </div>
+const Products = ({ products }) => (
+  <ul>
+    {products.map(product => (
+      <li key={product.id}>{product.name}</li>
+    ))}
+    <AddProducts />
+  </ul>
 )
 
-export default withModel(products)(Products)
+Products.propTypes = {
+  products: t.array.isRequired,
+}
+
+const enhance = R.compose(
+  withState(products),
+  connect(
+    propsFrom(pick(products, ['list:products']))
+  )
+)
+
+export default enhance(Products)
