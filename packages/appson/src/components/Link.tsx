@@ -2,7 +2,7 @@ import { LinkProps } from '../../index.d'
 
 import t from 'prop-types'
 import React, { PureComponent } from 'react'
-import { Link as RLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 import { mountPath } from './Routes'
 
@@ -20,9 +20,10 @@ class Link extends PureComponent<LinkProps, {}> {
   render(): JSX.Element {
     const { basePath } = this.context
     const { relative, to, ...props } = this.props
+    const path = relative ? mountPath(basePath, to) : to
 
     return (
-      <RLink {...props} to={relative ? mountPath(basePath, to) : to} />
+      <NavLink {...props} to={path} />
     )
   }
 }
