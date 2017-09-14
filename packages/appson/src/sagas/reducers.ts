@@ -1,9 +1,9 @@
-import { Store, StateReducerMap } from '../../index.d'
+import { Store, ReducerMap } from '../../index.d'
 import { combineReducers } from 'redux'
 
 type ReducersParams = {
   store: Store,
-  reducers: StateReducerMap<any, any>,
+  reducers: ReducerMap<any>,
 }
 
 const reducersSaga = ({ store, reducers }: ReducersParams): void =>

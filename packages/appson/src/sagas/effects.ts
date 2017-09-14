@@ -2,7 +2,7 @@ import R from 'ramda'
 import { SagaIterator } from 'redux-saga'
 import { all, fork, cancel } from 'redux-saga/effects'
 
-import { diff, symmetricDiff } from '../utils/diff-object'
+import { diff, symmetricDiff } from '../utils/object/diff'
 import effectsStore, { setActiveEffects } from '../stores/effects'
 
 const sDiffAndFilterByFn = R.pipe(symmetricDiff, R.pickBy(R.is(Function)))
@@ -12,7 +12,7 @@ type EffectsParams = {
   effects: object,
 }
 
-export default function* effectsSaga({ active, effects }: EffectsParams): SagaIterator {
+export default function* effectsSaga({ effects, active }: EffectsParams): SagaIterator {
   const tasksToCancel = diff(active, effects)
   const activeWithoutCanceled = diff(active, tasksToCancel)
   const effectsToFork = sDiffAndFilterByFn(active, effects)

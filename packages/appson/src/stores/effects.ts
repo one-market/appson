@@ -1,17 +1,20 @@
-import { Effects, Action } from '../../index.d'
+import { Effects, BaseAction } from '../../index.d'
 
 import R from 'ramda'
 import { createStore, combineReducers, Store, Reducer } from 'redux'
 
-import { symmetricDiff } from '../utils/diff-object'
+import { symmetricDiff } from '../utils/object/diff'
 
-type EffectsState = Effects | null
-type ActiveState = object | null
+type EffectsState = Effects
+type EffectsAction = BaseAction<Effects>
 
-const effects = (state: EffectsState = null, { type, payload }: Action<Effects>): EffectsState =>
+type ActiveState = object
+type ActiveAction = BaseAction<object>
+
+const effects = (state: EffectsState = {}, { type, payload = {} }: EffectsAction): EffectsState =>
   /TOGGLE_EFFECTS/.test(type) ? symmetricDiff(state, payload) : state
 
-const active = (state: ActiveState = null, { type, payload }: Action<object>): ActiveState =>
+const active = (state: ActiveState = {}, { type, payload = {} }: ActiveAction): ActiveState =>
   /SET_ACTIVE_EFFECTS/.test(type) ? payload : state
 
 const root: Reducer<any> = combineReducers({ effects, active })
@@ -19,12 +22,12 @@ const store: Store<any> = createStore(root)
 
 export default R.merge(store, { name: 'effects' })
 
-export const toggleEffects = (payload: Effects): Action<Effects> => ({
+export const toggleEffects = (payload: Effects): EffectsAction => ({
   type: '@@appson/TOGGLE_EFFECTS',
   payload,
 })
 
-export const setActiveEffects = (payload: object): Action<Object> => ({
+export const setActiveEffects = (payload: object): ActiveAction => ({
   type: '@@appson/SET_ACTIVE_EFFECTS',
   payload,
 })

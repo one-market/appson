@@ -1,29 +1,27 @@
-import { StateAsReducer, StateSelector, StateSelectorMap } from '../../index.d'
+import { Selector as BaseSelector, SelectorMap } from '../../index.d'
 
 import R from 'ramda'
+import State from '../state'
+
+type Selector = BaseSelector<any, any, any>
+type Selectors = SelectorMap<any> | Selector
 
 const isFunc = R.is(Function)
 const reduceIndexed = R.addIndex(R.reduce)
 
-type Selector = StateSelector<any, any>
-type Selectors = StateSelectorMap<any, any> | Selector
-
-const mountObject = (globalState: any, selectors: Selectors) => {
-  const reduce = reduceIndexed((obj: object, key: string, idx: number): object => {
+const selectorMap = (globalState: any, selectors: Selectors): Selectors =>
+  reduceIndexed((obj: object, key: string, idx: number): object => {
     const selector: Selector = R.nth(idx, R.values(selectors))
+    const newSelector: Selectors = isFunc(selector) ?
+      selector(globalState) :
+      selectorMap(globalState, selector)
 
-    return R.merge(obj, {
-      [key]: isFunc(selector) ? selector(globalState) : mountObject(globalState, selector)
-    })
-  }, {})
+    return R.assoc(key, newSelector, obj)
+  }, {}, R.keys(selectors))
 
-  return reduce(R.keys(selectors))
-}
+const propsFrom = (...states: State[]) => (globalState: any): Selectors =>
+  R.reduce((obj: object, state: State): Selectors =>
+    R.merge(obj, selectorMap(globalState, state.getConnectedProps())), {}, states
+  )
 
-const reducersFrom = (...states: StateAsReducer[]) =>
-  (globalState: any) =>
-    R.reduce((obj: object, state: StateAsReducer): object =>
-      R.merge(obj, mountObject(globalState, state.selectors)), {}, R.values(states)
-    )
-
-export default reducersFrom
+export default propsFrom

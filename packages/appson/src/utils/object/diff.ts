@@ -1,8 +1,8 @@
 import R from 'ramda'
 
-const normalize = R.reduce((obj, { name, fn }) => R.assoc(name, fn, obj), {})
+type DiffObj = object | null | undefined
 
-type DiffObj = object | null
+const normalize = R.reduce((obj, { name, fn }) => R.assoc(name, fn, obj), {})
 
 const denormalize = (items: DiffObj) =>
   R.map(name => ({ name, fn: R.prop(name, items) }), R.keys(items))

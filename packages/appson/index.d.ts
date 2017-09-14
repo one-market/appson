@@ -1,22 +1,46 @@
 import * as Redux from 'redux';
 import * as ReduxSaga from 'redux-saga'
 import * as ReactRouter from 'react-router'
-import * as ReduxActions from 'redux-actions'
+import * as History from 'history'
+
+import State from './src/state'
+
+/*
+  Internal
+**/
 
 export type ChannelAction = {
   type: string,
   payload: any,
 }
 
-export interface Channel extends ReduxSaga.Channel<ChannelAction> {}
+export type Channel = ReduxSaga.Channel<ChannelAction>
 
 export interface Store extends Redux.Store<any> {
   name: string
 }
 
+/*
+  Components
+**/
+
+export interface IsActiveFn {
+  (match: ReactRouter.match<any>, location: History.LocationDescriptorObject): boolean
+}
+
 export interface LinkProps {
-  relative: boolean
-  to: string
+  replace?: boolean
+  relative?: boolean
+  exact?: boolean,
+  strict?: boolean,
+  activeClassName?: string,
+  className?: string,
+  activeStyle?: object,
+  style?: object,
+  to: string | History.LocationDescriptorObject
+  location?: History.LocationDescriptorObject,
+  isActive?: IsActiveFn,
+  ariaCurrent?: 'page' | 'step' | 'location' | 'true'
 }
 
 export interface RouteProps extends ReactRouter.RouteProps {
@@ -27,40 +51,58 @@ export interface RoutesProps {
   children: React.ReactChild
 }
 
-export type Effect = ReduxSaga.SagaIterator
-export interface Effects { [effect: string]: Effect }
+/*
+  State
+**/
 
-export interface Action<P> extends Redux.Action {
-  payload: P
+export type ActionTypes = string[]
+
+export interface ActionFn<Action, Payload, Meta> {
+  (payload?: Payload, meta?: Meta): Action
 }
 
-export type StateTypes = string[]
-export interface StateAction<P> extends ReduxActions.Action<P> { meta?: object }
-export interface StateActionMap<P> {
-  [actionName: string]: ReduxActions.ActionFunctionAny<StateAction<P>>
+export interface BaseAction<Payload> extends Redux.Action {
+  payload?: Payload
 }
 
-export type StateReducer<S, P> = (state: S, action: StateAction<P>) => S
-export interface StateReducerMap<S, P> { [actionType: string]: StateReducer<S, P> }
+export interface Action<Payload, Meta> extends BaseAction<Payload> {
+  meta?: Meta
+}
 
-export type StateSelector<S, P> = (state: S, props?: P) => any
-export interface StateSelectorMap<S, P> { [key: string]: StateSelector<S, P> }
+export interface Reducer<States, Action> {
+  (state: States, action: Action): States
+}
 
-export interface State<S, P1, P2> {
+export interface Selector<States, Props, Return> {
+  (state: States, props?: Props): Return
+}
+
+interface Map<Type> {
+  [key: string]: Type
+}
+
+export interface ActionMap extends Map<ActionFn<Action<any, any>, any, any>> {}
+export interface ReducerMap<States> extends Map<Reducer<States, any>> {}
+export interface SelectorMap<States> extends Map<Selector<States, any, any>> {}
+
+export interface StateParams<States> {
   name: string
   initial?: any
-  reducers?: StateReducerMap<S, P1>
-  selectors?: StateSelectorMap<S, P2>
+  reducers?: ReducerMap<States>
+  selectors?: SelectorMap<States>
 }
 
-export interface StateAsReducer extends StateReducer<any, any> {
-  stateName: string
-  actions: StateActionMap<any>
-  selectors: StateSelectorMap<any, any>
-  effects?: Effects
-}
+export interface StateMap extends Map<State> {}
 
-export interface StateMap { [stateName: string]: State<any, any, any> }
+/*
+  Effects
+**/
+
+export type Effect = ReduxSaga.SagaIterator
+
+export interface Effects {
+  [effect: string]: Effect
+}
 
 export interface App {
   render: (el: string) => void

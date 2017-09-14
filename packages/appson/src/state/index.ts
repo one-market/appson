@@ -1,41 +1,83 @@
 import {
-  State,
-  StateSelectorMap,
-  StateActionMap,
-  StateReducer,
-  StateTypes,
-  StateAsReducer,
+  StateParams,
+  ActionTypes,
+  Action as BaseAction,
+  Reducer as BaseReducer,
+  Effects,
+  ActionMap,
+  SelectorMap,
+  ReducerMap,
 } from '../../index.d'
 
 import R from 'ramda'
-import invariant from 'invariant'
 
+import * as invariant from '../utils/invariant'
 import createActions from './create-actions'
 import createReducer from './create-reducer'
 import createTypes from './create-types'
 import createSelectors from './create-selectors'
 
-type Params = State<any, any, any>
+type Action = BaseAction<any, any>
+type Reducer = BaseReducer<any, Action>
 
 export const isState = R.has('stateName')
-export const getEffects = R.prop('effects')
 
-const state = ({ name, initial = {}, selectors = {}, reducers = {} }: Params): StateAsReducer => {
-  invariant(
-    name && typeof name === 'string',
-    'You need to set a name as a string for your state'
-  )
+class State {
+  readonly stateName: string
 
-  const types: StateTypes = createTypes(name, reducers)
-  const actions: StateActionMap<any> = createActions(types, reducers)
-  const reducer: StateReducer<any, any> = createReducer(state, types, reducers)
-  const newSelectors: StateSelectorMap<any, any> = createSelectors(name, initial, selectors)
+  private initialState: any
+  private actionTypes: ActionTypes
+  private actions: ActionMap
+  private reducer: Reducer
+  private reducers: ReducerMap<any>
+  private selectors: SelectorMap<any>
+  private effects: Effects
 
-  return Object.assign(reducer, {
-    actions,
-    stateName: name,
-    selectors: newSelectors,
-  })
+  private connectedProps: SelectorMap<any>
+  private connectedReducers: SelectorMap<any>
+
+  constructor({ name: stateName, initial = {}, reducers = {}, selectors = {} }: StateParams<any>) {
+    invariant.isString('name', stateName)
+    invariant.isPlainObject('reducers', reducers)
+    invariant.isPlainObject('selectors', selectors)
+    invariant.hasAllValuesAsFunction('reducers', reducers)
+    invariant.hasAllValuesAsFunction('selectors', selectors)
+
+    this.stateName = stateName
+    this.initialState = initial
+    this.reducers = reducers
+
+    this.actionTypes = createTypes(stateName, reducers)
+    this.actions = createActions(this.actionTypes, reducers)
+    this.reducer = createReducer(initial, this.actionTypes, reducers)
+    this.selectors = createSelectors(stateName, initial, selectors)
+
+    this.connectedProps = this.selectors
+    this.connectedReducers = this.reducers
+  }
+
+  public getStateName = (): string => this.stateName
+  public getInitialState = (): any => this.initialState
+  public getActionTypes = (): ActionTypes => this.actionTypes
+  public getReducer = (): Reducer => this.reducer
+  public getReducers = (): ReducerMap<any> => this.reducers
+  public getActions = (): ActionMap => this.actions
+  public getSelectors = (): SelectorMap<any> => this.selectors
+  public getEffects = (): Effects => this.effects
+  public getConnectedProps = (): SelectorMap<any> => this.connectedProps
+  public getConnectedReducers = (): ReducerMap<any> => this.connectedReducers
+
+  public setEffects = (effects: Effects): void => {
+    this.effects = effects
+  }
+
+  public setConnectedProps = (selectors: SelectorMap<any>) => {
+    this.connectedProps = selectors
+  }
+
+  public setConnectedReducers = (reducers: ReducerMap<any>) => {
+    this.connectedReducers = reducers
+  }
 }
 
-export default state
+export default State

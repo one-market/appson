@@ -7,7 +7,7 @@ export { default as Route } from './src/components/Route'
 export { default as Routes } from './src/components/Routes'
 
 /* state */
-export { default as state } from './src/state'
+export { default as State } from './src/state'
 export { default as propsFrom } from './src/state/props-from'
 export { default as reducersFrom } from './src/state/reducers-from'
 export { default as pick } from './src/state/pick'

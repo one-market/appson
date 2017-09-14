@@ -3,6 +3,7 @@ import { Store } from 'redux'
 import { History } from 'history'
 import { ConnectedRouter } from 'react-router-redux'
 import { Route } from 'react-router-dom'
+
 import Provider from './Provider'
 
 type Props = {

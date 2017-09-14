@@ -1,22 +1,35 @@
-import { StateAsReducer, StateSelector } from '../../index.d'
+import { Selector, SelectorMap } from '../../index.d'
 
 import R from 'ramda'
+import State from './'
+import { isArrayOfString } from '../utils/invariant'
 
-type Selector = StateSelector<any, any>
+interface PickPropsFn {
+  (value: any, selectors: SelectorMap<any>): SelectorMap<any>
+}
 
-const pick = (state: StateAsReducer, keys: string[]): StateAsReducer => {
-  if (!keys.length || !state.selectors) return state
+const pickAndRename = (oldName: string, newName: string): PickPropsFn =>
+  (value: any, selectors: SelectorMap<any>): SelectorMap<any> =>
+    R.pipe(R.assoc(newName, value), R.omit([oldName]))(selectors)
 
-  const selectors = R.reduce((obj: object, key: string): object => {
+const pickInSelectors = (keys: string[], selectors: SelectorMap<any>): SelectorMap<any> =>
+  R.reduce((props: SelectorMap<any>, key: string): SelectorMap<any> => {
     const [name, replace] = key.split(':')
 
-    const selectedName: string = replace || name
-    const selector: Selector = state.selectors[name]
+    const selector: Selector<any, any, any> = R.prop(name, selectors)
+    const pickProps: PickPropsFn = pickAndRename(name, replace || name)
 
-    return R.has(name, state.selectors) ? R.merge(obj, { [selectedName]: selector }) : obj
-  }, {}, keys)
+    return R.has(name, props) ? pickProps(selector, props) : props
+  }, selectors, keys)
 
-  return R.merge(state, { selectors })
+const pick = (state: State, keys: string[]): State => {
+  isArrayOfString('keys', keys)
+
+  const selectors: SelectorMap<any> = state.getSelectors()
+  const newSelectors = pickInSelectors(keys, selectors)
+
+  !R.isNil(selectors) && state.setConnectedProps(newSelectors)
+  return state
 }
 
 export default pick

@@ -1,16 +1,16 @@
-import { Effects, StateAsReducer } from '../../index.d'
+import { Effects } from '../../index.d'
 
 import t from 'prop-types'
-import React, { ComponentType, PureComponent } from 'react'
+import React, { ComponentType as CompType, PureComponent } from 'react'
 import { Store } from 'redux'
-import { isState } from '../state'
+import State, { isState } from '../state'
 import { toggleEffects } from '../stores/effects'
 
 type Context = {
   effects: Store<any>,
 }
 
-const atComponent = (effects: Effects, WrappedComponent: ComponentType): ComponentType =>
+const atComponent = (effects: Effects, WrappedComponent: CompType): CompType =>
   class WithEffects extends PureComponent {
     context: Context
 
@@ -36,16 +36,12 @@ const atComponent = (effects: Effects, WrappedComponent: ComponentType): Compone
     }
   }
 
-const atState = (effects: Effects, state: StateAsReducer): StateAsReducer => {
-  effects && Object.defineProperty(state, 'effects', {
-    value: effects,
-    writable: false,
-  })
-
+const atState = (effects: Effects, state: State): State => {
+  if (effects) state.setEffects(effects)
   return state
 }
 
-const withEffects = (effects: Effects) => (resource: any) =>
+const withEffects = (effects: Effects) => (resource: any): any =>
   isState(resource) ? atState(effects, resource) : atComponent(effects, resource)
 
 export default withEffects

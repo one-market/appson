@@ -1,9 +1,6 @@
-import { StateSelector, StateSelectorMap } from '../../index.d'
+import { Selector, SelectorMap } from '../../index.d'
 
 import R from 'ramda'
-
-type Selector = StateSelector<any, any>
-type SelectorMap = StateSelectorMap<any, any>
 
 const isFunc = R.is(Function)
 const isObject = R.is(Object)
@@ -13,18 +10,18 @@ const isPrimitive = (state: any): boolean =>
 
 const getInState = (state: any, key: string): any => isObject(state) ? state[key] : state
 
-const stateAsProp = (name: string): SelectorMap => ({
+const stateAsProp = (name: string): SelectorMap<any> => ({
   [name]: (state: any): any => getInState(state, name)
 })
 
-const createSelector = (name: string, key: string): Selector =>
+const createSelector = (name: string, key: string): Selector<any, any, any> =>
   (state: any): any =>
     getInState(getInState(state, name), key)
 
-const reduceState = (keys: string[]) => (name: string): SelectorMap =>
+const reduceState = (keys: string[]) => (name: string): SelectorMap<any> =>
   R.reduce((obj, key) => R.merge(obj, { [key]: createSelector(name, key) }), {}, keys)
 
-const createSelectors = (name: string, initial: any, selectors: SelectorMap): any => {
+const createSelectors = (name: string, initial: any, selectors: SelectorMap<any>): any => {
   if (isPrimitive(initial)) return stateAsProp(name)
   return R.merge(reduceState(R.keys(initial))(name), selectors || null)
 }

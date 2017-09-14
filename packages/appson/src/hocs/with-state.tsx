@@ -1,21 +1,32 @@
-import { StateMap, StateAsReducer, Effects, Action } from '../../index.d'
+import {
+  Action as BaseAction,
+  Reducer as BaseReducer,
+  ReducerMap,
+  Effects,
+} from '../../index.d'
 
 import t from 'prop-types'
 import { Store } from 'redux'
-import React, { ComponentType, PureComponent } from 'react'
+import React, { ComponentType as CompType, PureComponent } from 'react'
 
-import { toggleReducer } from '../stores/reducers'
-import { getEffects } from '../state'
+import State from '../state'
 import withEffects from './with-effects'
+import { toggleReducer } from '../stores/reducers'
+
+type Action = BaseAction<ReducerMap<any>, any>
+type Reducer = BaseReducer<any, Action>
 
 type Context = {
   reducers: Store<any>
 }
 
-const withState = (state: StateAsReducer) => (WrappedComponent: ComponentType): ComponentType => {
-  const effects: Effects = getEffects(state)
-  const action: Action<StateMap> = toggleReducer({ [state.stateName]: state })
-  const Component: ComponentType = effects ? withEffects(effects)(WrappedComponent) : WrappedComponent
+const withState = (state: State) => (WrappedComponent: CompType): CompType => {
+  const name: string = state.getStateName()
+  const effects: Effects = state.getEffects()
+  const reducer: Reducer = state.getReducer()
+
+  const action: Action = toggleReducer({ [name]: reducer })
+  const Component: CompType = effects ? withEffects(effects)(WrappedComponent) : WrappedComponent
 
   class AddModels extends PureComponent {
     context: Context
