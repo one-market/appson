@@ -18,6 +18,7 @@ const external = [
   'react-router',
   'redux',
   'redux-saga',
+  'redux-saga/effects',
 ]
 
 const globals = {
@@ -43,6 +44,8 @@ const plugins = [
     typescript: require('typescript'),
   }),
   babel({
+    runtimeHelpers: true,
+    externalHelpers: true,
     exclude: [
       '../../node_modules/**',
       './node_modules/**',
