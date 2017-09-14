@@ -20,11 +20,8 @@ import createSelectors from './create-selectors'
 type Action = BaseAction<any, any>
 type Reducer = BaseReducer<any, Action>
 
-export const isState = R.has('stateName')
-
 class State {
-  readonly stateName: string
-
+  private stateName: string
   private initialState: any
   private actionTypes: ActionTypes
   private actions: ActionMap
@@ -52,6 +49,8 @@ class State {
     this.reducer = createReducer(initial, this.actionTypes, reducers)
     this.selectors = createSelectors(stateName, initial, selectors)
 
+    this.effects = {}
+
     this.connectedProps = this.selectors
     this.connectedReducers = this.reducers
   }
@@ -68,7 +67,7 @@ class State {
   public getConnectedReducers = (): ReducerMap<any> => this.connectedReducers
 
   public setEffects = (effects: Effects): void => {
-    this.effects = effects
+    this.effects = R.merge(effects, this.effects)
   }
 
   public setConnectedProps = (selectors: SelectorMap<any>) => {

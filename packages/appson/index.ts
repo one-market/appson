@@ -14,5 +14,5 @@ export { default as pick } from './src/state/pick'
 export { default as omit } from './src/state/omit'
 
 /* hocs */
-export { default as withState } from './src/hocs/with-state'
-export { default as withEffects } from './src/hocs/with-effects'
+export { default as addState } from './src/hocs/add-state'
+export { default as addEffects } from './src/hocs/add-effects'

@@ -1,6 +1,6 @@
 import R from 'ramda'
 import React from 'react'
-import { Routes, Route, Link, withState, withEffects } from 'appson'
+import { Routes, Route, Link, addState, addEffects } from 'appson'
 
 import main from './states/main'
 import logAction from './effects/log-action'
@@ -28,8 +28,8 @@ const Simple = () => (
 )
 
 const enhance = R.compose(
-  withState(main),
-  withEffects({ logAction }),
+  addState(main),
+  addEffects({ logAction }),
 )
 
 export default enhance(Simple)

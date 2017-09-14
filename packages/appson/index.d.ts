@@ -107,3 +107,14 @@ export interface Effects {
 export interface App {
   render: (el: string) => void
 }
+
+/*
+  Hocs
+**/
+
+export interface AddHoc<T> {
+  (toAdd: T): (resource: React.ComponentType | State) => React.ComponentType | State
+}
+
+export type AddState = AddHoc<State>
+export type AddEffects = AddHoc<Effects>
