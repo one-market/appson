@@ -20,6 +20,7 @@ class Link extends PureComponent<LinkProps, {}> {
   render(): JSX.Element {
     const { basePath } = this.context
     const { relative, to, ...props } = this.props
+
     const path = relative ? mountPath(basePath, to) : to
 
     return (
