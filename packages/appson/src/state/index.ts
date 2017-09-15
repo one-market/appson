@@ -52,15 +52,15 @@ class State {
   public getSelectors = (): SelectorMap => this._selectors
   public getEffects = (): Effects => this._effects
 
-  public setParent = (state: State): void => {
+  public setParent(state: State): void {
     this._parent = state
   }
 
-  public addEffects = (effects: Effects): void => {
+  public addEffects(effects: Effects): void {
     this._effects = R.merge(effects, this._effects)
   }
 
-  public addChildren = (state: State): void => {
+  public addChildren(state: State): void {
     this._children = R.assoc(state.getName(), state, this._children)
     state.setParent(this)
   }
