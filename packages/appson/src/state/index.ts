@@ -22,14 +22,11 @@ class State {
   private stateName: string
   private initialState: any
   private reducers: ReducerMap
-
   private actionTypes: ActionTypes
   private actions: ActionMap
   private reducer: Reducer
   private selectors: SelectorMap
-
   private effects: Effects
-
   private parent: StateParent
   private children: StateMap
 
@@ -50,7 +47,6 @@ class State {
     this.selectors = createSelectors(stateName, initial, selectors)
 
     this.effects = {}
-
     this.parent = null
     this.children = {}
   }

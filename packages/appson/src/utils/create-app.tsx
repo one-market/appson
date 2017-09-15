@@ -7,13 +7,11 @@ import { Route } from 'react-router-dom'
 
 import Provider from './Provider'
 
-type Props = {
-  Module: ComponentType,
-  store: AppStore,
-  history: History,
+interface CreateAppFn {
+  (Module: ComponentType, store: AppStore, history: History): JSX.Element
 }
 
-const createApp = ({ Module, store, history }: Props): JSX.Element => (
+const createApp: CreateAppFn = (Module, store, history) => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <Route path="/" component={Module} />

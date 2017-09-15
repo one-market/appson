@@ -105,10 +105,6 @@ export interface Effects {
   [effect: string]: Effect
 }
 
-export interface App {
-  render: (el: string) => void
-}
-
 /*
   Internal
 **/
