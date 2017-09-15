@@ -44,8 +44,10 @@ export class App {
   }
 
   public render(el: string): void {
-    const store: AppStore = createStore(this.middlewares, this.defaultReducers)
-    const app: JSX.Element = createApp(this.RootModule, store, this.history)
+    const { RootModule, middlewares, defaultReducers, history } = this
+
+    const store: AppStore = createStore(middlewares, defaultReducers)
+    const app: JSX.Element = createApp(RootModule, store, history)
 
     sagaMiddleware.run(rootSaga, store)
     render(app, document.querySelector(el))
