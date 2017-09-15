@@ -1,10 +1,7 @@
 import t from 'prop-types'
 import React, { PureComponent } from 'react'
-import { connect } from 'react-redux'
-import { reducersFrom } from 'appson'
+import { connect } from 'appson'
 import { v4 } from 'uuid'
-
-import products from '../states/products'
 
 class AddProducts extends PureComponent {
   static propTypes = {
@@ -30,6 +27,4 @@ class AddProducts extends PureComponent {
   }
 }
 
-const enhance = connect(null, reducersFrom(products))
-
-export default enhance(AddProducts)
+export default connect(['products'], ({ add }) => ({ add }))(AddProducts)

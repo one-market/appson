@@ -1,8 +1,7 @@
 import R from 'ramda'
 import t from 'prop-types'
 import React from 'react'
-import { connect } from 'react-redux'
-import { addState, propsFrom, pick } from 'appson'
+import { addState, connect } from 'appson'
 
 import products from './states/products'
 import AddProducts from './components/AddProduct'
@@ -22,9 +21,9 @@ Products.propTypes = {
 
 const enhance = R.compose(
   addState(products),
-  connect(
-    propsFrom(pick(products, ['list:products']))
-  )
+  connect(['products'], (products) => ({
+    products: products.list,
+  }))
 )
 
 export default enhance(Products)
