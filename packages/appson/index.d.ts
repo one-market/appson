@@ -90,6 +90,7 @@ export interface StateParams {
 }
 
 export type StateParent = State | null
+export type StateChildren = StateMap | null
 
 export interface StateMap {
   [stateName: string]: State

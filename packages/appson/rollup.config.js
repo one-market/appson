@@ -44,8 +44,6 @@ const plugins = [
     typescript: require('typescript'),
   }),
   babel({
-    runtimeHelpers: true,
-    externalHelpers: true,
     exclude: [
       '../../node_modules/**',
       './node_modules/**',

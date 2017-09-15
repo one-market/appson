@@ -18,7 +18,7 @@ type Context = {
 }
 
 const atComponent = (state: State, WrappedComponent: ComponentType) => {
-  const stateName: string = state.getStateName()
+  const stateName: string = state.getName()
   const effects: Effects = state.getEffects()
   const action: Action<StateMap> = toggleState({ [stateName]: state })
 

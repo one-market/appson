@@ -2,6 +2,7 @@
   "presets": ["appson"],
   "plugins": [
     "ramda",
+    "transform-private-underscore",
     "external-helpers"
   ]
 }

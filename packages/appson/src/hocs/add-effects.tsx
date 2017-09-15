@@ -36,7 +36,7 @@ const atComponent = (effects: Effects, WrappedComponent: ComponentType): Compone
   }
 
 const atState = (effects: Effects, state: State): State => {
-  if (effects) state.setEffects(effects)
+  if (effects) state.addEffects(effects)
   return state
 }
 

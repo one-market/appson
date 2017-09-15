@@ -1,11 +1,9 @@
 import {
   StateParams,
   StateParent,
-  StateMap,
-  ActionTypes,
+  StateChildren,
   ActionMap,
   Reducer,
-  ReducerMap,
   SelectorMap,
   Effects,
 } from '../../index.d'
@@ -19,16 +17,13 @@ import createTypes from './create-types'
 import createSelectors from './create-selectors'
 
 class State {
-  private stateName: string
-  private initialState: any
-  private reducers: ReducerMap
-  private actionTypes: ActionTypes
-  private actions: ActionMap
-  private reducer: Reducer
-  private selectors: SelectorMap
-  private effects: Effects
-  private parent: StateParent
-  private children: StateMap
+  private _name: string
+  private _actions: ActionMap
+  private _reducer: Reducer
+  private _selectors: SelectorMap
+  private _effects: Effects
+  private _parent: StateParent
+  private _children: StateChildren
 
   constructor({ name: stateName, initial = {}, reducers = {}, selectors = {} }: StateParams) {
     invariant.isString('name', stateName)
@@ -37,42 +32,37 @@ class State {
     invariant.hasAllValuesAsFunction('reducers', reducers)
     invariant.hasAllValuesAsFunction('selectors', selectors)
 
-    this.stateName = stateName
-    this.initialState = initial
-    this.reducers = reducers
+    const actionTypes = createTypes(stateName, reducers)
+    const actions = createActions(actionTypes, reducers)
+    const reducer = createReducer(initial, actionTypes, reducers)
+    const newSelectors = createSelectors(stateName, initial, selectors)
 
-    this.actionTypes = createTypes(stateName, reducers)
-    this.actions = createActions(this.actionTypes, reducers)
-    this.reducer = createReducer(initial, this.actionTypes, reducers)
-    this.selectors = createSelectors(stateName, initial, selectors)
-
-    this.effects = {}
-    this.parent = null
-    this.children = {}
+    this._name = stateName
+    this._actions = actions
+    this._reducer = reducer
+    this._selectors = newSelectors
+    this._effects = {}
+    this._parent = null
+    this._children = null
   }
 
-  public getStateName = (): string => this.stateName
-  public getInitialState = (): any => this.initialState
-  public getActionTypes = (): ActionTypes => this.actionTypes
-  public getReducer = (): Reducer => this.reducer
-  public getReducers = (): ReducerMap => this.reducers
-  public getActions = (): ActionMap => this.actions
-  public getSelectors = (): SelectorMap => this.selectors
-  public getEffects = (): Effects => this.effects
-  public getParent = (): StateParent => this.parent
-  public getChildren = (): StateMap => this.children
+  public getName = (): string => this._name
+  public getActions = (): ActionMap => this._actions
+  public getReducer = (): Reducer => this._reducer
+  public getSelectors = (): SelectorMap => this._selectors
+  public getEffects = (): Effects => this._effects
 
   public setParent = (state: State): void => {
-    this.parent = state
+    this._parent = state
   }
 
-  public setEffects = (effects: Effects): void => {
-    this.effects = R.merge(effects, this.effects)
+  public addEffects = (effects: Effects): void => {
+    this._effects = R.merge(effects, this._effects)
   }
 
   public addChildren = (state: State): void => {
+    this._children = R.assoc(state.getName(), state, this._children)
     state.setParent(this)
-    this.children = R.assoc(state.getStateName(), state, this.children)
   }
 }
 
