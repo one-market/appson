@@ -2,21 +2,21 @@ import React from 'react'
 import { createProvider, ProviderProps } from 'react-redux'
 
 import effects from '../stores/effects'
-import reducers from '../stores/reducers'
+import states from '../stores/states'
 
 const Provider = ({ children, store }: ProviderProps): JSX.Element => {
   const Redux = createProvider('store')
-  const Reducers = createProvider('reducers')
+  const States = createProvider('states')
   const Effects = createProvider('effects')
 
   return (
-    <Reducers store={reducers}>
+    <States store={states}>
       <Effects store={effects}>
         <Redux store={store}>
           {children}
         </Redux>
       </Effects>
-    </Reducers>
+    </States>
   )
 }
 

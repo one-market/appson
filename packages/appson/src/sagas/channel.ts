@@ -1,19 +1,24 @@
-import { Store, Channel } from '../../index.d'
+import { InternalStore, StoresChannel, StoresChannelAction } from '../../index.d'
 
 import { eventChannel } from 'redux-saga'
-import reducers from '../stores/reducers'
+import states from '../stores/states'
 import effects from '../stores/effects'
 
-const emitFrom = (emitter: Function) => ({ name, getState }: Store) => () =>
-  emitter({ type: name, payload: getState() })
+type EmitterFn = (data: StoresChannelAction) => void
+type EmitFn = (store: InternalStore) => () => void
 
-const appsonChannel = (): Channel => eventChannel((emitter: Function) => {
+type Channel = () => StoresChannel
+
+const emitFrom = (emitter: EmitterFn): EmitFn => ({ name, getState }) => () =>
+  emitter({ storeName: name, state: getState() })
+
+const channel: Channel = () => eventChannel((emitter: EmitterFn): () => void => {
   const emit = emitFrom(emitter)
 
-  reducers.subscribe(emit(reducers))
+  states.subscribe(emit(states))
   effects.subscribe(emit(effects))
 
   return () => null
 })
 
-export default appsonChannel
+export default channel

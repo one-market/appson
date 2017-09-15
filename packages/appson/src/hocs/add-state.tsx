@@ -1,37 +1,36 @@
 import {
-  Action as BaseAction,
-  ReducerMap,
+  StateMap,
+  Action,
   Effects,
-  AddState,
+  AddStateFn,
+  InternalStore,
 } from '../../index.d'
 
 import t from 'prop-types'
-import { Store } from 'redux'
 import React, { ComponentType, PureComponent } from 'react'
 
 import State from '../state'
 import addEffects from './add-effects'
-import { toggleReducer } from '../stores/reducers'
-
-type Action = BaseAction<ReducerMap<any>, any>
+import { toggleState } from '../stores/states'
 
 type Context = {
-  reducers: Store<any>
+  states: InternalStore
 }
 
 const atComponent = (state: State, WrappedComponent: ComponentType) => {
+  const stateName: string = state.getStateName()
   const effects: Effects = state.getEffects()
-  const action: Action = toggleReducer({ [state.getStateName()]: state.getReducer() })
+  const action: Action<StateMap> = toggleState({ [stateName]: state })
 
   class AddStateComponent extends PureComponent {
     context: Context
 
     static contextTypes = {
-      reducers: t.object,
+      states: t.object,
     }
 
     dispatchActions = () =>
-      this.context.reducers.dispatch(action)
+      this.context.states.dispatch(action)
 
     componentWillMount() {
       this.dispatchActions()
@@ -56,7 +55,7 @@ const atState = (childState: State, state: State): State => {
   return state
 }
 
-const addState: AddState = (state) => (resource) =>
+const addState: AddStateFn = (state) => (resource) =>
   resource instanceof State ? atState(state, resource) : atComponent(state, resource)
 
 export default addState

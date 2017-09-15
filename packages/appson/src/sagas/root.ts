@@ -1,4 +1,4 @@
-import { Store } from '../../index.d'
+import { AppStore, StoresChannel, StoresChannelAction } from '../../index.d'
 
 import R from 'ramda'
 import { fork, take, call } from 'redux-saga/effects'
@@ -6,20 +6,18 @@ import { SagaIterator } from 'redux-saga';
 
 import appsonChannel from './channel'
 import effectsSaga from './effects'
-import reducersSaga from './reducers'
+import statesSaga from './states'
 
-const isReducers = R.equals('reducers')
+const isStates = R.equals('states')
 const isEffects = R.equals('effects')
 
-function* rootSaga(store: Store): SagaIterator {
-  const channel = yield call(appsonChannel)
+export default function* rootSaga(store: AppStore): SagaIterator {
+  const channel: StoresChannel = yield call(appsonChannel)
 
   while (true) {
-    const { type, payload } = yield take(channel)
+    const { storeName, state }: StoresChannelAction = yield take(channel)
 
-    if (isEffects(type)) yield fork(effectsSaga, payload)
-    if (isReducers(type)) yield fork(reducersSaga, { store, reducers: payload })
+    if (isEffects(storeName)) yield fork(effectsSaga, state)
+    if (isStates(storeName)) yield fork(statesSaga, store, state)
   }
 }
-
-export default rootSaga
