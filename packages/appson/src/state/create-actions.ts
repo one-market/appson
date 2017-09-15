@@ -1,16 +1,15 @@
-import {
-  ActionTypes,
-  Action,
-  ActionMap,
-  ReducerMap,
-} from '../../index.d'
+import { ActionTypes, Action, ActionMap, ReducerMap } from '../../index.d'
 
 import R from 'ramda'
 
 const isError = R.is(Error)
 const reduceIndexed = R.addIndex(R.reduce)
 
-const createAction = (type: string) => (payload: any, meta?: object): Action<any, any> => {
+interface CreateActionFn {
+  (type: string): (payload: any, meta: any) => Action
+}
+
+const createAction: CreateActionFn = (type) => (payload, meta) => {
   let action = { type }
 
   if (isError(payload)) {
@@ -28,8 +27,8 @@ const createAction = (type: string) => (payload: any, meta?: object): Action<any
   return action
 }
 
-const createActions = (types: ActionTypes, reducers: ReducerMap<any>): ActionMap =>
-  reduceIndexed((obj: object, key: string, idx: number) =>
+const createActions = (types: ActionTypes, reducers: ReducerMap): ActionMap =>
+  reduceIndexed((obj: object, key: string, idx: number): object =>
     R.assoc(key, createAction(R.nth(idx, types)), obj), {}, R.keys(reducers)
   )
 

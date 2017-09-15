@@ -1,12 +1,13 @@
 import {
   StateParams,
+  StateParent,
+  StateMap,
   ActionTypes,
-  Action as BaseAction,
-  Reducer as BaseReducer,
-  Effects,
   ActionMap,
-  SelectorMap,
+  Reducer,
   ReducerMap,
+  SelectorMap,
+  Effects,
 } from '../../index.d'
 
 import R from 'ramda'
@@ -17,23 +18,22 @@ import createReducer from './create-reducer'
 import createTypes from './create-types'
 import createSelectors from './create-selectors'
 
-type Action = BaseAction<any, any>
-type Reducer = BaseReducer<any, Action>
-
 class State {
   private stateName: string
   private initialState: any
+  private reducers: ReducerMap
+
   private actionTypes: ActionTypes
   private actions: ActionMap
   private reducer: Reducer
-  private reducers: ReducerMap<any>
-  private selectors: SelectorMap<any>
+  private selectors: SelectorMap
+
   private effects: Effects
 
-  private connectedProps: SelectorMap<any>
-  private connectedReducers: SelectorMap<any>
+  private parent: StateParent
+  private children: StateMap
 
-  constructor({ name: stateName, initial = {}, reducers = {}, selectors = {} }: StateParams<any>) {
+  constructor({ name: stateName, initial = {}, reducers = {}, selectors = {} }: StateParams) {
     invariant.isString('name', stateName)
     invariant.isPlainObject('reducers', reducers)
     invariant.isPlainObject('selectors', selectors)
@@ -51,31 +51,32 @@ class State {
 
     this.effects = {}
 
-    this.connectedProps = this.selectors
-    this.connectedReducers = this.reducers
+    this.parent = null
+    this.children = {}
   }
 
   public getStateName = (): string => this.stateName
   public getInitialState = (): any => this.initialState
   public getActionTypes = (): ActionTypes => this.actionTypes
   public getReducer = (): Reducer => this.reducer
-  public getReducers = (): ReducerMap<any> => this.reducers
+  public getReducers = (): ReducerMap => this.reducers
   public getActions = (): ActionMap => this.actions
-  public getSelectors = (): SelectorMap<any> => this.selectors
+  public getSelectors = (): SelectorMap => this.selectors
   public getEffects = (): Effects => this.effects
-  public getConnectedProps = (): SelectorMap<any> => this.connectedProps
-  public getConnectedReducers = (): ReducerMap<any> => this.connectedReducers
+  public getParent = (): StateParent => this.parent
+  public getChildren = (): StateMap => this.children
+
+  public setParent = (state: State): void => {
+    this.parent = state
+  }
 
   public setEffects = (effects: Effects): void => {
     this.effects = R.merge(effects, this.effects)
   }
 
-  public setConnectedProps = (selectors: SelectorMap<any>) => {
-    this.connectedProps = selectors
-  }
-
-  public setConnectedReducers = (reducers: ReducerMap<any>) => {
-    this.connectedReducers = reducers
+  public addChildren = (state: State): void => {
+    state.setParent(this)
+    this.children = R.assoc(state.getStateName(), state, this.children)
   }
 }
 

@@ -1,17 +1,8 @@
-import {
-  ActionTypes,
-  Action as BaseAction,
-  Reducer as BaseReducer,
-  ReducerMap as BaseReducerMap,
-} from '../../index.d'
+import { ActionTypes, Action, Reducer, ReducerMap } from '../../index.d'
 
 import R from 'ramda'
 import invariant from 'invariant'
 import reduceReducers from 'reduce-reducers'
-
-type Action = BaseAction<any, any>
-type Reducer = BaseReducer<any, Action>
-type ReducerMap = BaseReducerMap<any>
 
 const reduceIndexed = R.addIndex(R.reduce)
 
@@ -21,7 +12,7 @@ const handleAction = (type: string, reducer: Reducer = R.identity, initialState:
     `initialState for reducer handling ${type} should be defined`
   )
 
-  return (state: any = initialState, action: Action) => {
+  return (state: any = initialState, action: Action): any => {
     if (R.isNil(action.type) || R.not(R.equals(action.type, type))) return state
     return reducer(state, action)
   }
@@ -33,7 +24,7 @@ const reducersArr = (reducerMap: ReducerMap, initialState: any): Reducer[] =>
   )
 
 const reducerMap = (types: ActionTypes, reducers: ReducerMap): ReducerMap =>
-  reduceIndexed((obj: object, key: string, idx: number) =>
+  reduceIndexed((obj: object, key: string, idx: number): ReducerMap =>
     R.assoc(key, R.nth(idx, R.values(reducers)), obj), {}, types
   )
 

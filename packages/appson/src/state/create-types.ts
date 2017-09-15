@@ -9,7 +9,7 @@ const snakeCase = (str: string): string =>
 const typeByHandlersKeys = (name: string) => (type: string): string =>
   `${PREFIX}/${name}/${snakeCase(type).toUpperCase()}`
 
-const createTypes = (name: string, reducers: ReducerMap<any>): ActionTypes =>
+const createTypes = (name: string, reducers: ReducerMap): ActionTypes =>
   R.keys(reducers).map(typeByHandlersKeys(name))
 
 export default createTypes

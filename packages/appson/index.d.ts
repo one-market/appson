@@ -1,31 +1,23 @@
 import * as Redux from 'redux';
 import * as ReduxSaga from 'redux-saga'
 import * as ReactRouter from 'react-router'
-import * as History from 'history'
 
 import State from './src/state'
-
-/*
-  Internal
-**/
-
-export type ChannelAction = {
-  type: string,
-  payload: any,
-}
-
-export type Channel = ReduxSaga.Channel<ChannelAction>
-
-export interface Store extends Redux.Store<any> {
-  name: string
-}
 
 /*
   Components
 **/
 
+type LocationObject = {
+  pathname?: string
+  search?: string
+  state?: any
+  hash?: string
+  key?: string
+}
+
 export interface IsActiveFn {
-  (match: ReactRouter.match<any>, location: History.LocationDescriptorObject): boolean
+  (match: ReactRouter.match<any>, location: LocationObject): boolean
 }
 
 export interface LinkProps {
@@ -37,8 +29,8 @@ export interface LinkProps {
   className?: string,
   activeStyle?: object,
   style?: object,
-  to: string | History.LocationDescriptorObject
-  location?: History.LocationDescriptorObject,
+  to: string
+  location?: LocationObject,
   isActive?: IsActiveFn,
   ariaCurrent?: 'page' | 'step' | 'location' | 'true'
 }
@@ -55,44 +47,53 @@ export interface RoutesProps {
   State
 **/
 
+export interface Meta {
+  [key: string]: any
+}
+
 export type ActionTypes = string[]
 
-export interface ActionFn<Action, Payload, Meta> {
-  (payload?: Payload, meta?: Meta): Action
-}
-
-export interface BaseAction<Payload> extends Redux.Action {
+export interface Action<Payload = any> extends Redux.Action {
   payload?: Payload
-}
-
-export interface Action<Payload, Meta> extends BaseAction<Payload> {
   meta?: Meta
 }
 
-export interface Reducer<States, Action> {
-  (state: States, action: Action): States
+export interface ActionFn<Payload = any> {
+  <A extends Action>(payload?: Payload, meta?: any): A
 }
 
-export interface Selector<States, Props, Return> {
-  (state: States, props?: Props): Return
+export interface ActionMap {
+  [actionName: string]: ActionFn
 }
 
-interface Map<Type> {
-  [key: string]: Type
+export interface Reducer<State = any> {
+  <A extends Action>(state: State, action: A): State
 }
 
-export interface ActionMap extends Map<ActionFn<Action<any, any>, any, any>> {}
-export interface ReducerMap<States> extends Map<Reducer<States, any>> {}
-export interface SelectorMap<States> extends Map<Selector<States, any, any>> {}
+export interface ReducerMap {
+  [reducerName: string]: Reducer
+}
 
-export interface StateParams<States> {
+export interface Selector<State = any, Props = any, PropValue = any> {
+  (state: State, props?: Props): PropValue
+}
+
+export interface SelectorMap {
+  [selectorName: string]: Selector
+}
+
+export interface StateParams {
   name: string
   initial?: any
-  reducers?: ReducerMap<States>
-  selectors?: SelectorMap<States>
+  reducers?: ReducerMap
+  selectors?: SelectorMap
 }
 
-export interface StateMap extends Map<State> {}
+export type StateParent = State | null
+
+export interface StateMap {
+  [stateName: string]: State
+}
 
 /*
   Effects
@@ -109,12 +110,42 @@ export interface App {
 }
 
 /*
+  Internal
+**/
+
+export type StoresChannelAction = {
+  storeName: string,
+  state: any,
+}
+
+export type StoresChannel = ReduxSaga.Channel<StoresChannelAction>
+
+export interface InternalStore extends Redux.Store<any> {
+  name: string
+}
+
+export interface AppStore extends Redux.Store<any> {
+  defaultReducers: Redux.ReducersMapObject
+}
+
+/*
   Hocs
 **/
 
-export interface AddHoc<T> {
-  (toAdd: T): (resource: React.ComponentType | State) => React.ComponentType | State
+type AddReturnedFn = (resource: React.ComponentType | State) => React.ComponentType | State
+
+export type AddStateFn = (state: State) => AddReturnedFn
+export type AddEffectsFn = (effects: Effects) => AddReturnedFn
+
+export declare function addState(state: State): AddReturnedFn
+export declare function addEffects(effects: Effects): AddReturnedFn
+
+export interface ConnectPredicateFn {
+  (...states: object[]): object
 }
 
-export type AddState = AddHoc<State>
-export type AddEffects = AddHoc<Effects>
+export interface ConnectFn {
+  (states: string[], predicate: ConnectPredicateFn): (WrappedComponent: React.ComponentType) => React.ComponentType
+}
+
+export function connect(states: string[], predicate: ConnectPredicateFn): React.ComponentType

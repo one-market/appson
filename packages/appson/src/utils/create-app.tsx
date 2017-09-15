@@ -1,5 +1,6 @@
+import { AppStore } from '../../index.d'
+
 import React, { ComponentType } from 'react'
-import { Store } from 'redux'
 import { History } from 'history'
 import { ConnectedRouter } from 'react-router-redux'
 import { Route } from 'react-router-dom'
@@ -8,7 +9,7 @@ import Provider from './Provider'
 
 type Props = {
   Module: ComponentType,
-  store: Store<any>,
+  store: AppStore,
   history: History,
 }
 

@@ -1,13 +1,12 @@
-import { Effects, AddEffects } from '../../index.d'
+import { Effects, AddEffectsFn, InternalStore } from '../../index.d'
 
 import t from 'prop-types'
 import React, { ComponentType, PureComponent } from 'react'
-import { Store } from 'redux'
 import State from '../state'
 import { toggleEffects } from '../stores/effects'
 
 type Context = {
-  effects: Store<any>,
+  effects: InternalStore,
 }
 
 const atComponent = (effects: Effects, WrappedComponent: ComponentType): ComponentType =>
@@ -41,7 +40,7 @@ const atState = (effects: Effects, state: State): State => {
   return state
 }
 
-const addEffects: AddEffects = (effects) => (resource) =>
+const addEffects: AddEffectsFn = (effects) => (resource) =>
   resource instanceof State ? atState(effects, resource) : atComponent(effects, resource)
 
 export default addEffects

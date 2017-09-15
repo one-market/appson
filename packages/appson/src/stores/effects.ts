@@ -1,4 +1,4 @@
-import { Effects, BaseAction } from '../../index.d'
+import { Effects, Action } from '../../index.d'
 
 import R from 'ramda'
 import { createStore, combineReducers, Store, Reducer } from 'redux'
@@ -6,10 +6,10 @@ import { createStore, combineReducers, Store, Reducer } from 'redux'
 import { symmetricDiff } from '../utils/object/diff'
 
 type EffectsState = Effects
-type EffectsAction = BaseAction<Effects>
+type EffectsAction = Action<Effects>
 
 type ActiveState = object
-type ActiveAction = BaseAction<object>
+type ActiveAction = Action<object>
 
 const effects = (state: EffectsState = {}, { type, payload = {} }: EffectsAction): EffectsState =>
   /TOGGLE_EFFECTS/.test(type) ? symmetricDiff(state, payload) : state
