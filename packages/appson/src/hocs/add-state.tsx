@@ -18,9 +18,8 @@ type Context = {
 }
 
 const atComponent = (state: State, WrappedComponent: ComponentType) => {
-  const stateName: string = state.getName()
   const effects: Effects = state.getEffects()
-  const action: Action<StateMap> = toggleState({ [stateName]: state })
+  const action: Action<StateMap> = toggleState({ [state.name]: state })
 
   class AddStateComponent extends PureComponent {
     context: Context
@@ -51,7 +50,7 @@ const atComponent = (state: State, WrappedComponent: ComponentType) => {
 }
 
 const atState = (childState: State, state: State): State => {
-  if (childState) state.addChildren(childState)
+  if (childState) state.addChild(childState)
   return state
 }
 
