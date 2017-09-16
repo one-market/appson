@@ -1,64 +1,29 @@
-import {
-  ActionFn,
-  ActionMap,
-  Selector,
-  SelectorMap,
-  StateMap,
-  ConnectFn,
-  AppStore,
-} from '../../index.d'
+import { ActionMap, ConnectFn, AppStore } from '../../index.d'
 
 import t from 'prop-types'
 import R from 'ramda'
 import React, { PureComponent } from 'react'
 import { Dispatch } from 'redux'
+import deepEqual from 'fast-deep-equal'
 
-import statesStore from '../stores/states'
 import State from '../state'
-
-type Selectors = SelectorMap | Selector
-
-const isFunc = R.is(Function)
-const reduceIndexed = R.addIndex(R.reduce)
-
-const selectorsMap = (globalState: any, selectors: Selectors): Selectors =>
-  reduceIndexed((obj: object, key: string, idx: number): object => {
-    const selector: Selector = R.nth(idx, R.values(selectors))
-    const newSelector: Selectors = isFunc(selector) ?
-      selector(globalState) :
-      selectorsMap(globalState, selector)
-
-    return R.assoc(key, newSelector, obj)
-  }, {}, R.keys(selectors))
-
-const actionsMap = (dispatch: Dispatch<any>, actions: ActionMap): ActionMap =>
-  reduceIndexed((obj: object, key: string, idx: number): object => {
-    const action: ActionFn = R.nth(idx, R.values(actions))
-
-    return R.assoc(key, (...args: any[]) => dispatch(action(...args)), obj)
-  }, {}, R.keys(actions))
-
-const argsFromStates = (store: AppStore, states: StateMap): object[] =>
-  R.map((state: State): object => ({
-    ...selectorsMap(store.getState(), state.getSelectors()),
-    ...actionsMap(store.dispatch, state.getActions()),
-  }), R.values(states))
 
 type Context = {
   store: AppStore,
 }
 
-interface Subscriber {
-  (): void
-}
-
 type ConnectState = {
-  subscriber: Subscriber,
   props: object,
+  args: object,
 }
 
-const connect: ConnectFn = (states, predicate) => (WrappedComponent) =>
-  class Connect extends PureComponent<{}, ConnectState> {
+
+const reduceIndexed = R.addIndex(R.reduce)
+
+const connect: ConnectFn = (states, predicate) => (WrappedComponent) => {
+  let unsubscribe: () => void;
+
+  return class Connect extends PureComponent<{}, ConnectState> {
     context: Context
 
     static contextTypes = {
@@ -66,45 +31,69 @@ const connect: ConnectFn = (states, predicate) => (WrappedComponent) =>
     }
 
     state = {
-      subscriber: () => null,
-      props: {}
+      args: {},
+      props: {},
     }
 
-    updateProps = (): void => {
-      const { store } = this.context
-      const stateMap: StateMap = R.pick(states, statesStore.getState())
-      const args: object[] = argsFromStates(store, stateMap)
+    updateProps = (args: object): void =>
+      this.setState({ props: predicate(...R.values(args)) })
 
-      args.length && this.setState({ props: predicate(...args) })
+    stateObject = (globalState: any, dispatch: Dispatch<any>) =>
+      (obj: object, path: string, idx: number): object => {
+        if (!State.exist(path)) return obj
+
+        const state: State = State.find(path)
+        const actions: ActionMap = state.mapDispatch(dispatch)
+        const props: any = state.mapProps(globalState)
+
+        return R.assoc(idx.toString(), { ...actions, ...props }, obj)
     }
 
-    checkStatesInNewStates = (newState: any): boolean =>
-      R.any((key: string) => R.contains(key, states), R.keys(newState))
+    updateArgs = (globalState: any, dispatch: Dispatch<any>): void => {
+      const { args } = this.state
+
+      const reducePredicate = this.stateObject(globalState, dispatch)
+      const newArgs: object = reduceIndexed(reducePredicate, args, states)
+      const hasArgs: boolean = R.not(R.isNil(newArgs))
+      const hasChanges: boolean = R.not(deepEqual(args, newArgs))
+
+      if (hasArgs && hasChanges) {
+        this.setState({ args: newArgs })
+        this.updateProps(newArgs)
+      }
+
+      if (hasArgs && !hasChanges) {
+        this.updateProps(args)
+      }
+    }
+
+    checkStatesChange = (oldState: any, newState: any): boolean =>
+      R.any((statePath: string): boolean => {
+        const path = State.find(statePath).getPath()
+        const valueInOldState = R.path(path, oldState)
+        const valueInNewState = R.path(path, newState)
+
+        return R.not(deepEqual(valueInNewState, valueInOldState))
+      }, states)
 
     subscribeStates = (): void => {
       const { store } = this.context
-      let prevState: any = store.getState()
+      let oldState: any = store.getState()
 
-      const subscriber: Subscriber = store.subscribe((): void => {
+      unsubscribe = store.subscribe((): void => {
         const newState: any = store.getState()
-        const hasStatesInNewStates: boolean = this.checkStatesInNewStates(newState)
+        const hasChanges: boolean = this.checkStatesChange(oldState, newState)
 
-        if (hasStatesInNewStates) {
-          for (const state of states) {
-            if (R.not(R.equals(prevState[state], newState[state]))) {
-              this.updateProps()
-            }
-          }
-
-          prevState = newState
+        if (hasChanges) {
+          this.updateArgs(newState, store.dispatch)
+          oldState = newState
         }
       })
-
-      this.setState({ subscriber })
     }
 
     componentWillMount() {
-      this.updateProps()
+      const { dispatch, getState} = this.context.store
+      this.updateArgs(getState(), dispatch)
     }
 
     componentDidMount() {
@@ -112,7 +101,7 @@ const connect: ConnectFn = (states, predicate) => (WrappedComponent) =>
     }
 
     componentWillUnmount() {
-      this.state.subscriber()
+      unsubscribe()
     }
 
     render(): JSX.Element {
@@ -121,5 +110,6 @@ const connect: ConnectFn = (states, predicate) => (WrappedComponent) =>
       )
     }
   }
+}
 
 export default connect

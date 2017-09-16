@@ -34,7 +34,8 @@
     "react-router-dom": "^4.1.2",
     "react-router-redux": "^5.0.0-alpha.6",
     "redux-devtools-extension": "^2.13.2",
-    "reduce-reducers": "^0.1.2"
+    "reduce-reducers": "^0.1.2",
+    "fast-deep-equal": "^1.0.0"
   },
   "devDependencies": {
     "typescript": "^2.5.2",

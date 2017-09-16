@@ -2,20 +2,27 @@ import {
   StateParams,
   StateParent,
   StateChildren,
+  ActionFn,
   ActionMap,
   Reducer,
+  Selector,
   SelectorMap,
   Effects,
 } from '../../index.d'
 
 import R from 'ramda'
 import reduceReducers from 'reduce-reducers'
+import { Dispatch } from 'redux'
 
 import * as invariant from '../utils/invariant'
 import createActions from './create-actions'
 import createReducer from './create-reducer'
 import createTypes from './create-types'
 import createSelectors from './create-selectors'
+import statesStore from '../stores/states'
+
+const isStr = R.is(String)
+const isFn = R.is(Function)
 
 class State {
   public name: string
@@ -51,13 +58,30 @@ class State {
     this._parent = null
   }
 
+  // static methods
+
+  static find(path: string | string[]): State {
+    const globalState = statesStore.getState()
+    const parsedPath = R.join('.', isStr(path) ? [path] : [...path])
+    const pathWithChildren: string[] = R.intersperse('children', R.split('.', parsedPath))
+
+    return R.path(pathWithChildren, globalState)
+  }
+
+  static exist(path: string | string[]): boolean {
+    return !!State.find(path)
+  }
+
+  // getter methods
+
+  get effects(): Effects { return this._effects }
+
   // public methods
 
   public getInitial(): any { return this._initial }
   public getActions(): ActionMap { return this._actions }
   public getReducer(): Reducer { return this._reducer }
   public getSelectors(): SelectorMap { return this._selectors }
-  public getEffects(): Effects { return this._effects }
 
   public getPath(): string[] {
     return this._parent ? R.append(this.name, this._parent.getPath()) : [this.name]
@@ -77,6 +101,31 @@ class State {
     this._updateChildren(child)
     this._updateInitial(child)
     this._updateReducerWithChild(child)
+  }
+
+  public mapDispatch(dispatch: Dispatch<any>): ActionMap {
+    const actions: ActionMap = this._actions
+
+    const reduceActions = R.reduce((obj: object, key: string): object => {
+      const action: ActionFn = R.prop(key, actions)
+      return R.assoc(key, (...args: any[]) => dispatch(action(...args)), obj)
+    }, {})
+
+    return reduceActions(R.keys(actions))
+  }
+
+  public mapProps(globalState: any): any {
+    const selectors: SelectorMap = this._selectors
+    const state: any = R.path(this.getPath(), globalState)
+
+    const reduceSelectors = R.reduce((obj: object, key: string): object => {
+      const selector: Selector = R.prop(key, selectors)
+      const newSelector = isFn(selector) ? selector(state) : reduceSelectors(R.keys(selector))
+
+      return R.assoc(key, newSelector, obj)
+    }, {})
+
+    return reduceSelectors(R.keys(selectors))
   }
 
   // private methods

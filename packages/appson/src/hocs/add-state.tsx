@@ -18,7 +18,7 @@ type Context = {
 }
 
 const atComponent = (state: State, WrappedComponent: ComponentType) => {
-  const effects: Effects = state.getEffects()
+  const effects: Effects = state.effects
   const action: Action<StateMap> = toggleState({ [state.name]: state })
 
   class AddStateComponent extends PureComponent {
