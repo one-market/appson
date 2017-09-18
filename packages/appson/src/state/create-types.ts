@@ -1,15 +1,13 @@
-import { ActionTypes, ReducerMap } from '../../index.d'
+import { ActionTypes, HandlerMap } from '../../index.d'
 import R from 'ramda'
 
-const PREFIX = '@@states'
-
 const snakeCase = (str: string): string =>
-  str.replace(/([A-Z])/g, (char) => `_${char.toLowerCase()}`)
+  str.replace(/([A-Z])/g, (char: string): string => `_${char.toLowerCase()}`)
 
-const typeByHandlersKeys = (name: string) => (type: string): string =>
-  `${PREFIX}/${name}/${snakeCase(type).toUpperCase()}`
+const typeByHandlersKeys = (stateName: string) => (type: string): string =>
+  `@@states/${stateName}/${snakeCase(type).toUpperCase()}`
 
-const createTypes = (name: string, reducers: ReducerMap): ActionTypes =>
-  R.keys(reducers).map(typeByHandlersKeys(name))
+const createTypes = (stateName: string, handlers: HandlerMap): ActionTypes =>
+  R.map(typeByHandlersKeys(stateName), R.keys(handlers))
 
 export default createTypes

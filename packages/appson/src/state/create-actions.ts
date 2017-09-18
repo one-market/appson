@@ -1,4 +1,4 @@
-import { ActionTypes, Action, ActionMap, ReducerMap } from '../../index.d'
+import { ActionTypes, Action, ActionMap, HandlerMap } from '../../index.d'
 
 import R from 'ramda'
 
@@ -27,9 +27,9 @@ const createAction: CreateActionFn = (type) => (payload, meta) => {
   return action
 }
 
-const createActions = (types: ActionTypes, reducers: ReducerMap): ActionMap =>
+const createActions = (types: ActionTypes, handlers: HandlerMap): ActionMap =>
   reduceIndexed((obj: object, key: string, idx: number): object =>
-    R.assoc(key, createAction(R.nth(idx, types)), obj), {}, R.keys(reducers)
+    R.assoc(key, createAction(R.nth(idx, types)), obj), {}, R.keys(handlers)
   )
 
 export default createActions

@@ -1,4 +1,4 @@
-import { ActionTypes, Action, Reducer, ReducerMap } from '../../index.d'
+import { ActionTypes, Action, Handler, HandlerMap } from '../../index.d'
 
 import R from 'ramda'
 import invariant from 'invariant'
@@ -6,7 +6,7 @@ import reduceReducers from 'reduce-reducers'
 
 const reduceIndexed = R.addIndex(R.reduce)
 
-const handleAction = (type: string, reducer: Reducer = R.identity, initialState: any): Reducer => {
+const handleAction = (type: string, reducer: Handler = R.identity, initialState: any): Handler => {
   invariant(
     !R.isNil(initialState),
     `initialState for reducer handling ${type} should be defined`
@@ -18,19 +18,19 @@ const handleAction = (type: string, reducer: Reducer = R.identity, initialState:
   }
 }
 
-const reducersArr = (reducerMap: ReducerMap, initialState: any): Reducer[] =>
-  R.map((type: string): Reducer =>
-    handleAction(type, reducerMap[type], initialState), R.keys(reducerMap)
+const reducersArr = (map: HandlerMap, initialState: any): Handler[] =>
+  R.map((type: string): Handler =>
+    handleAction(type, R.prop(type, map), initialState), R.keys(map)
   )
 
-const reducerMap = (types: ActionTypes, reducers: ReducerMap): ReducerMap =>
-  reduceIndexed((obj: object, key: string, idx: number): ReducerMap =>
-    R.assoc(key, R.nth(idx, R.values(reducers)), obj), {}, types
+const handlerMap = (types: ActionTypes, handlers: HandlerMap): HandlerMap =>
+  reduceIndexed((obj: object, key: string, idx: number): HandlerMap =>
+    R.assoc(key, R.nth(idx, R.values(handlers)), obj), {}, types
   )
 
-const createReducer = (initialState: any, types: ActionTypes, reducers: ReducerMap): Reducer => {
-  const map: ReducerMap = reducerMap(types, reducers)
-  const reducer: Reducer = reduceReducers(...reducersArr(map, initialState))
+const createReducer = (initialState: any, types: ActionTypes, handlers: HandlerMap): Handler => {
+  const map: HandlerMap = handlerMap(types, handlers)
+  const reducer: Handler = reduceReducers(...reducersArr(map, initialState))
 
   return (state: any = initialState, action: Action): any => reducer(state, action)
 }

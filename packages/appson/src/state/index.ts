@@ -37,16 +37,16 @@ class State<S> {
 
   private _initial: any
   private _actions: ActionMap
-  private _rootReducer: Reducer<S>
+  private _rootReducer: Reducer
   private _selectors: Selectors<S>
   private _effects: Effects
   private _parent: StateParent<S>
 
-  constructor({ name: stateName, initial = {}, reducers = {}, computed = {} }: StateParams) {
+  constructor({ name: stateName, initial = {}, handlers = {}, computed = {} }: StateParams) {
     invariants.isString('name', stateName)
-    invariants.isPlainObject('reducers', reducers)
+    invariants.isPlainObject('handlers', handlers)
     invariants.isPlainObject('computed', computed)
-    invariants.hasAllValuesAsFunction('reducers', reducers)
+    invariants.hasAllValuesAsFunction('handlers', handlers)
     invariants.hasAllValuesAsFunction('computed', computed)
 
     invariant(
@@ -54,9 +54,9 @@ class State<S> {
       `To use computed props the initial value of state "${stateName}" need to be an object`
     )
 
-    const actionTypes = createTypes(stateName, reducers)
-    const actions = createActions(actionTypes, reducers)
-    const reducer = createReducer(initial, actionTypes, reducers)
+    const actionTypes = createTypes(stateName, handlers)
+    const actions = createActions(actionTypes, handlers)
+    const rootReducer = createReducer(initial, actionTypes, handlers)
     const selectors = createSelectors(stateName, initial, computed)
 
     this.name = stateName
@@ -64,7 +64,7 @@ class State<S> {
 
     this._initial = initial
     this._actions = actions
-    this._rootReducer = reducer
+    this._rootReducer = rootReducer
     this._selectors = selectors
     this._effects = {}
     this._parent = null
@@ -91,7 +91,6 @@ class State<S> {
   // public methods
 
   public getInitial(): any { return this._initial }
-  public getActions(): ActionMap { return this._actions }
   public getRootReducer(): Reducer { return this._rootReducer }
 
   public getPath(): string[] {

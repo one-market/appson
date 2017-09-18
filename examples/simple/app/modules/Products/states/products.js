@@ -10,12 +10,12 @@ const products = new State({
       { id: v4(), name: 'Product #2' },
     ],
   },
-  reducers: {
-    add: (state, { payload }) =>
-      R.evolve({ list: R.append(payload) }, state),
-  },
   computed: {
     quantity: (state) => state.list.length,
+  },
+  handlers: {
+    add: (state, { payload }) =>
+      R.evolve({ list: R.append(payload) }, state),
   },
 })
 

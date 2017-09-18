@@ -66,12 +66,14 @@ export interface ActionMap {
   [actionName: string]: ActionFn
 }
 
-export interface Reducer<State = any> {
+export interface Handler<State = any> {
   <A extends Action>(state: State, action: A): State
 }
 
-export interface ReducerMap<State = any> {
-  [reducerName: string]: Reducer<State>
+export interface Reducer<State = any> extends Handler<State> {}
+
+export interface HandlerMap<State = any> {
+  [reducerName: string]: Handler<State>
 }
 
 export interface Computed<State = any, Props = any, PropValue = any> {
@@ -85,8 +87,8 @@ export interface ComputedMap<State = any> {
 export interface StateParams {
   name: string
   initial?: any
-  reducers?: ReducerMap
   computed?: ComputedMap
+  handlers?: HandlerMap
 }
 
 export type StateParent<S = any> = State<S> | null

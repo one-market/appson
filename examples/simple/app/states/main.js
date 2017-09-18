@@ -6,7 +6,7 @@ export default new State({
   initial: {
     title: 'Appson',
   },
-  reducers: {
+  handlers: {
     setTitle: (state, { payload }) =>
       R.evolve({ text: R.always(payload) }, state),
   },
