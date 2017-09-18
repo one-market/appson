@@ -17,7 +17,7 @@ type Context = {
   states: InternalStore
 }
 
-const atComponent = (state: State, WrappedComponent: ComponentType) => {
+const atComponent = (state: State<any>, WrappedComponent: ComponentType) => {
   const effects: Effects = state.effects
   const action: Action<StateMap> = toggleState({ [state.name]: state })
 
@@ -49,12 +49,12 @@ const atComponent = (state: State, WrappedComponent: ComponentType) => {
   return !!effects ? addEffects(effects)(AddStateComponent) : AddStateComponent
 }
 
-const atState = (childState: State, state: State): State => {
+const atState = (childState: State<any>, state: State<any>): State<any> => {
   if (childState) state.addChild(childState)
   return state
 }
 
-const addState: AddStateFn = (state) => (resource) =>
+const addState: AddStateFn<any> = (state) => (resource) =>
   resource instanceof State ? atState(state, resource) : atComponent(state, resource)
 
 export default addState

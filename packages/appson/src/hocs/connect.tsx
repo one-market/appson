@@ -42,7 +42,7 @@ const connect: ConnectFn = (states, predicate) => (WrappedComponent) => {
       (obj: object, path: string, idx: number): object => {
         if (!State.exist(path)) return obj
 
-        const state: State = State.find(path)
+        const state: State<any> = State.find(path)
         const actions: ActionMap = state.mapDispatch(dispatch)
         const props: any = state.mapProps(globalState)
 

@@ -2,6 +2,7 @@ import {
   StateParams,
   StateParent,
   StateChildren,
+  Action,
   ActionFn,
   ActionMap,
   Reducer,
@@ -24,19 +25,19 @@ import statesStore from '../stores/states'
 const isStr = R.is(String)
 const isFn = R.is(Function)
 
-type Selector = Computed
-type Selectors = ComputedMap
+interface Selector<S> extends Computed<S> {}
+interface Selectors<S> extends ComputedMap<S> {}
 
-class State {
+class State<S> {
   public name: string
   public children: StateChildren
 
   private _initial: any
   private _actions: ActionMap
-  private _reducer: Reducer
-  private _selectors: Selectors
+  private _reducer: Reducer<S>
+  private _selectors: Selectors<S>
   private _effects: Effects
-  private _parent: StateParent
+  private _parent: StateParent<S>
 
   constructor({ name: stateName, initial = {}, reducers = {}, computed = {} }: StateParams) {
     invariant.isString('name', stateName)
@@ -63,7 +64,7 @@ class State {
 
   // static methods
 
-  static find(path: string | string[]): State {
+  static find(path: string | string[]): State<any> {
     const globalState = statesStore.getState()
     const parsedPath = R.join('.', isStr(path) ? [path] : [...path])
     const pathWithChildren: string[] = R.intersperse('children', R.split('.', parsedPath))
@@ -89,7 +90,7 @@ class State {
     return this._parent ? R.append(this.name, this._parent.getPath()) : [this.name]
   }
 
-  public setParent(state: State): void {
+  public setParent(state: State<S>): void {
     this._parent = state
   }
 
@@ -97,7 +98,7 @@ class State {
     this._effects = R.merge(effects, this._effects)
   }
 
-  public addChild(child: State): void {
+  public addChild(child: State<any>): void {
     child.setParent(this)
 
     this._updateChildren(child)
@@ -117,11 +118,11 @@ class State {
   }
 
   public mapProps(globalState: any): any {
-    const selectors: Selectors = this._selectors
+    const selectors: Selectors<S> = this._selectors
     const state: any = R.path(this.getPath(), globalState)
 
     const reduceSelectors = R.reduce((obj: object, key: string): object => {
-      const selector: Selector = R.prop(key, selectors)
+      const selector: Selector<S> = R.prop(key, selectors)
       const newSelector = isFn(selector) ? selector(state) : reduceSelectors(R.keys(selector))
 
       return R.assoc(key, newSelector, obj)
@@ -132,19 +133,19 @@ class State {
 
   // private methods
 
-  private _updateChildren(child: State): void {
+  private _updateChildren(child: State<any>): void {
     this.children = R.assoc(child.name, child, this.children)
   }
 
-  private _updateInitial(child: State): void {
+  private _updateInitial(child: State<any>): void {
     this._initial = R.assoc(child.name, child.getInitial(), this._initial)
   }
 
-  private _updateReducerWithChild(child: State): void {
-    const childReducer = child.getReducer()
+  private _updateReducerWithChild(child: State<any>): void {
+    const childReducer: Reducer = child.getReducer()
 
-    this._reducer = reduceReducers(this._reducer, (state, action): any =>
-      R.assoc(child.name, childReducer(state[child.name], action), state)
+    this._reducer = reduceReducers(this._reducer, (state: any, action: Action): any =>
+      R.assoc(child.name, childReducer(R.prop(child.name, state), action), state)
     )
   }
 }

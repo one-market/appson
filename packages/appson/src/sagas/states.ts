@@ -5,7 +5,7 @@ import { combineReducers, ReducersMapObject } from 'redux'
 import State from '../state'
 
 const reducersFrom = (defaultReducers: ReducersMapObject, states: StateMap): ReducersMapObject =>
-  R.reduce((reducers: ReducersMapObject, state: State): ReducersMapObject =>
+  R.reduce((reducers: ReducersMapObject, state: State<any>): ReducersMapObject =>
     R.assoc(state.name, state.getReducer(), reducers), defaultReducers, R.values(states)
   )
 

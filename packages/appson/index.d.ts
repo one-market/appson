@@ -89,11 +89,11 @@ export interface StateParams {
   computed?: ComputedMap
 }
 
-export type StateParent = State | null
+export type StateParent<S = any> = State<S> | null
 export type StateChildren = StateMap | null
 
 export interface StateMap {
-  [stateName: string]: State
+  [stateName: string]: State<any>
 }
 
 /*
@@ -129,13 +129,20 @@ export interface AppStore extends Redux.Store<any> {
   Hocs
 **/
 
-type AddReturnedFn = (resource: React.ComponentType | State) => React.ComponentType | State
+interface AddReturnedFn {
+  (resource: React.ComponentType | State<any>): React.ComponentType | State<any>
+}
 
-export type AddStateFn = (state: State) => AddReturnedFn
-export type AddEffectsFn = (effects: Effects) => AddReturnedFn
+export interface AddStateFn<S> {
+  (state: State<S>): AddReturnedFn
+}
 
-export declare function addState(state: State): AddReturnedFn
-export declare function addEffects(effects: Effects): AddReturnedFn
+export interface AddEffectsFn<E extends Effects> {
+  (effects: E): AddReturnedFn
+}
+
+export declare function addState<S>(state: State<S>): AddReturnedFn
+export declare function addEffects<E extends Effects>(effects: E): AddReturnedFn
 
 export interface ConnectPredicateFn {
   (...states: object[]): object
