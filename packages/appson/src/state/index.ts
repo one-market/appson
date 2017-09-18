@@ -14,14 +14,17 @@ import {
 import R from 'ramda'
 import reduceReducers from 'reduce-reducers'
 import { Dispatch } from 'redux'
+import deepEqual from 'fast-deep-equal'
+import invariant from 'invariant'
 
-import * as invariant from '../utils/invariant'
+import * as invariants from '../utils/invariants'
 import createActions from './create-actions'
 import createReducer from './create-reducer'
 import createTypes from './create-types'
 import createSelectors from './create-selectors'
 import statesStore from '../stores/states'
 
+const isObj = R.is(Object)
 const isStr = R.is(String)
 const isFn = R.is(Function)
 
@@ -34,17 +37,22 @@ class State<S> {
 
   private _initial: any
   private _actions: ActionMap
-  private _reducer: Reducer<S>
+  private _rootReducer: Reducer<S>
   private _selectors: Selectors<S>
   private _effects: Effects
   private _parent: StateParent<S>
 
   constructor({ name: stateName, initial = {}, reducers = {}, computed = {} }: StateParams) {
-    invariant.isString('name', stateName)
-    invariant.isPlainObject('reducers', reducers)
-    invariant.isPlainObject('computed', computed)
-    invariant.hasAllValuesAsFunction('reducers', reducers)
-    invariant.hasAllValuesAsFunction('computed', computed)
+    invariants.isString('name', stateName)
+    invariants.isPlainObject('reducers', reducers)
+    invariants.isPlainObject('computed', computed)
+    invariants.hasAllValuesAsFunction('reducers', reducers)
+    invariants.hasAllValuesAsFunction('computed', computed)
+
+    invariant(
+      isObj(initial) && R.not(R.isNil(computed)),
+      `To use computed props the initial value of state "${stateName}" need to be an object`
+    )
 
     const actionTypes = createTypes(stateName, reducers)
     const actions = createActions(actionTypes, reducers)
@@ -56,7 +64,7 @@ class State<S> {
 
     this._initial = initial
     this._actions = actions
-    this._reducer = reducer
+    this._rootReducer = reducer
     this._selectors = selectors
     this._effects = {}
     this._parent = null
@@ -84,7 +92,7 @@ class State<S> {
 
   public getInitial(): any { return this._initial }
   public getActions(): ActionMap { return this._actions }
-  public getReducer(): Reducer { return this._reducer }
+  public getRootReducer(): Reducer { return this._rootReducer }
 
   public getPath(): string[] {
     return this._parent ? R.append(this.name, this._parent.getPath()) : [this.name]
@@ -131,6 +139,15 @@ class State<S> {
     return reduceSelectors(R.keys(selectors))
   }
 
+  public hasChanges(oldState: any, newState: any): boolean {
+    const path = this.getPath()
+    const omitChildren = R.omit(R.keys(this.children))
+    const oldValue = omitChildren(R.path(path, oldState))
+    const newValue = omitChildren(R.path(path, newState))
+
+    return R.not(deepEqual(oldValue, newValue))
+  }
+
   // private methods
 
   private _updateChildren(child: State<any>): void {
@@ -142,9 +159,9 @@ class State<S> {
   }
 
   private _updateReducerWithChild(child: State<any>): void {
-    const childReducer: Reducer = child.getReducer()
+    const childReducer: Reducer = child.getRootReducer()
 
-    this._reducer = reduceReducers(this._reducer, (state: any, action: Action): any =>
+    this._rootReducer = reduceReducers(this._rootReducer, (state: any, action: Action): any =>
       R.assoc(child.name, childReducer(R.prop(child.name, state), action), state)
     )
   }

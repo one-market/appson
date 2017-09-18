@@ -12,6 +12,7 @@ import React, { ComponentType, PureComponent } from 'react'
 import State from '../state'
 import addEffects from './add-effects'
 import { toggleState } from '../stores/states'
+import getDisplayName from '../utils/get-display-name'
 
 type Context = {
   states: InternalStore
@@ -23,6 +24,8 @@ const atComponent = (state: State<any>, WrappedComponent: ComponentType) => {
 
   class AddStateComponent extends PureComponent {
     context: Context
+
+    static displayName: string = getDisplayName(WrappedComponent)
 
     static contextTypes = {
       states: t.object,

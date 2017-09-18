@@ -1,17 +1,18 @@
-import R from 'ramda'
 import { AppStore, StateMap } from '../../index.d'
-import { combineReducers, ReducersMapObject } from 'redux'
+
+import R from 'ramda'
+import { combineReducers, Reducer } from 'redux'
 
 import State from '../state'
 
-const reducersFrom = (defaultReducers: ReducersMapObject, states: StateMap): ReducersMapObject =>
-  R.reduce((reducers: ReducersMapObject, state: State<any>): ReducersMapObject =>
-    R.assoc(state.name, state.getReducer(), reducers), defaultReducers, R.values(states)
+const statesSaga = (store: AppStore, states: StateMap): void => {
+  const statesReducers = R.mapObjIndexed(
+    (state: State<any>): Reducer<any> => state.getRootReducer(), states
   )
 
-const statesSaga = (store: AppStore, states: StateMap): void =>
   store.replaceReducer(
-    combineReducers(reducersFrom(store.defaultReducers, states))
+    combineReducers({ ...store.defaultReducers, ...statesReducers })
   )
+}
 
 export default statesSaga

@@ -29,3 +29,5 @@ export const hasAllValuesAsFunction = (name: string, obj: object) =>
     !R.isNil(obj) && R.all(isFunc, R.values(obj)),
     `Expected all values of object ${name} to be a function`
   )
+
+export default invariant

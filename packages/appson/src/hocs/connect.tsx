@@ -7,6 +7,7 @@ import { Dispatch } from 'redux'
 import deepEqual from 'fast-deep-equal'
 
 import State from '../state'
+import getDisplayName from '../utils/get-display-name'
 
 type Context = {
   store: AppStore,
@@ -25,6 +26,8 @@ const connect: ConnectFn = (states, predicate) => (WrappedComponent) => {
 
   return class Connect extends PureComponent<{}, ConnectState> {
     context: Context
+
+    static displayName: string = getDisplayName(WrappedComponent)
 
     static contextTypes = {
       store: t.object,
@@ -67,22 +70,16 @@ const connect: ConnectFn = (states, predicate) => (WrappedComponent) => {
       }
     }
 
-    checkStatesChange = (oldState: any, newState: any): boolean =>
-      R.any((statePath: string): boolean => {
-        const path = State.find(statePath).getPath()
-        const valueInOldState = R.path(path, oldState)
-        const valueInNewState = R.path(path, newState)
-
-        return R.not(deepEqual(valueInNewState, valueInOldState))
-      }, states)
-
     subscribeStates = (): void => {
       const { store } = this.context
       let oldState: any = store.getState()
 
       unsubscribe = store.subscribe((): void => {
         const newState: any = store.getState()
-        const hasChanges: boolean = this.checkStatesChange(oldState, newState)
+
+        const hasChanges: boolean = R.any((statePath: string): boolean =>
+          State.find(statePath).hasChanges(oldState, newState), states
+        )
 
         if (hasChanges) {
           this.updateArgs(newState, store.dispatch)

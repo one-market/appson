@@ -2,8 +2,10 @@ import { Effects, AddEffectsFn, InternalStore } from '../../index.d'
 
 import t from 'prop-types'
 import React, { ComponentType, PureComponent } from 'react'
+
 import State from '../state'
 import { toggleEffects } from '../stores/effects'
+import getDisplayName from '../utils/get-display-name'
 
 type Context = {
   effects: InternalStore,
@@ -12,6 +14,8 @@ type Context = {
 const atComponent = (effects: Effects, WrappedComponent: ComponentType): ComponentType =>
   class AddEffectsComponent extends PureComponent {
     context: Context
+
+    static displayName: string = getDisplayName(WrappedComponent)
 
     static contextTypes = {
       effects: t.object,

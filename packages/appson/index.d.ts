@@ -137,8 +137,8 @@ export interface AddStateFn<S> {
   (state: State<S>): AddReturnedFn
 }
 
-export interface AddEffectsFn<E extends Effects> {
-  (effects: E): AddReturnedFn
+export interface AddEffectsFn {
+  <E extends Effects>(effects: E): AddReturnedFn
 }
 
 export declare function addState<S>(state: State<S>): AddReturnedFn
