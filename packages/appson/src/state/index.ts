@@ -5,8 +5,8 @@ import {
   ActionFn,
   ActionMap,
   Reducer,
-  Selector,
-  SelectorMap,
+  Computed,
+  ComputedMap,
   Effects,
 } from '../../index.d'
 
@@ -24,6 +24,9 @@ import statesStore from '../stores/states'
 const isStr = R.is(String)
 const isFn = R.is(Function)
 
+type Selector = Computed
+type Selectors = ComputedMap
+
 class State {
   public name: string
   public children: StateChildren
@@ -31,21 +34,21 @@ class State {
   private _initial: any
   private _actions: ActionMap
   private _reducer: Reducer
-  private _selectors: SelectorMap
+  private _selectors: Selectors
   private _effects: Effects
   private _parent: StateParent
 
-  constructor({ name: stateName, initial = {}, reducers = {}, selectors = {} }: StateParams) {
+  constructor({ name: stateName, initial = {}, reducers = {}, computed = {} }: StateParams) {
     invariant.isString('name', stateName)
     invariant.isPlainObject('reducers', reducers)
-    invariant.isPlainObject('selectors', selectors)
+    invariant.isPlainObject('computed', computed)
     invariant.hasAllValuesAsFunction('reducers', reducers)
-    invariant.hasAllValuesAsFunction('selectors', selectors)
+    invariant.hasAllValuesAsFunction('computed', computed)
 
     const actionTypes = createTypes(stateName, reducers)
     const actions = createActions(actionTypes, reducers)
     const reducer = createReducer(initial, actionTypes, reducers)
-    const newSelectors = createSelectors(stateName, initial, selectors)
+    const selectors = createSelectors(stateName, initial, computed)
 
     this.name = stateName
     this.children = null
@@ -53,7 +56,7 @@ class State {
     this._initial = initial
     this._actions = actions
     this._reducer = reducer
-    this._selectors = newSelectors
+    this._selectors = selectors
     this._effects = {}
     this._parent = null
   }
@@ -81,7 +84,6 @@ class State {
   public getInitial(): any { return this._initial }
   public getActions(): ActionMap { return this._actions }
   public getReducer(): Reducer { return this._reducer }
-  public getSelectors(): SelectorMap { return this._selectors }
 
   public getPath(): string[] {
     return this._parent ? R.append(this.name, this._parent.getPath()) : [this.name]
@@ -115,7 +117,7 @@ class State {
   }
 
   public mapProps(globalState: any): any {
-    const selectors: SelectorMap = this._selectors
+    const selectors: Selectors = this._selectors
     const state: any = R.path(this.getPath(), globalState)
 
     const reduceSelectors = R.reduce((obj: object, key: string): object => {

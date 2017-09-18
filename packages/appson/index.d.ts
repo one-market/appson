@@ -47,8 +47,8 @@ export interface RoutesProps {
   State
 **/
 
-export interface Meta {
-  [key: string]: any
+export interface Meta<Data = any> {
+  [key: string]: Data
 }
 
 export type ActionTypes = string[]
@@ -70,23 +70,23 @@ export interface Reducer<State = any> {
   <A extends Action>(state: State, action: A): State
 }
 
-export interface ReducerMap {
-  [reducerName: string]: Reducer
+export interface ReducerMap<State = any> {
+  [reducerName: string]: Reducer<State>
 }
 
-export interface Selector<State = any, Props = any, PropValue = any> {
+export interface Computed<State = any, Props = any, PropValue = any> {
   (state: State, props?: Props): PropValue
 }
 
-export interface SelectorMap {
-  [selectorName: string]: Selector
+export interface ComputedMap<State = any> {
+  [selectorName: string]: Computed<State>
 }
 
 export interface StateParams {
   name: string
   initial?: any
   reducers?: ReducerMap
-  selectors?: SelectorMap
+  computed?: ComputedMap
 }
 
 export type StateParent = State | null

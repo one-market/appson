@@ -1,4 +1,7 @@
-import { Selector, SelectorMap } from '../../index.d'
+import { Computed, ComputedMap } from '../../index.d'
+
+type Selector = Computed
+type SelectorMap = ComputedMap
 
 import R from 'ramda'
 
