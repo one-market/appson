@@ -1,7 +1,7 @@
 import R from 'ramda'
 import t from 'prop-types'
 import React from 'react'
-import { addState, connectProps } from 'appson'
+import { addState, connectProps } from '@appson/react'
 
 import products from './states/products'
 import AddProduct from './components/AddProduct'

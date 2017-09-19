@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "shazam start",
-    "build": "shazam build"
+    "start": "appson start",
+    "build": "appson build"
   },
   "dependencies": {
-    "appson": "^0.0.1",
+    "@appson/react": "^0.0.1",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
@@ -17,7 +17,6 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "babel-preset-appson": "^0.0.1",
-    "shazamjs": "^0.21.0"
+    "@appson/cli": "^0.0.1"
   }
 }

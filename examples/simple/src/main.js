@@ -1,4 +1,4 @@
-import { appson } from 'appson'
+import { appson } from '@appson/react'
 import Simple from './'
 
 const app = appson(Simple)
