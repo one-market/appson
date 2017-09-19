@@ -1,0 +1,53 @@
+{
+  "name": "@appson/cli",
+  "version": "0.0.1",
+  "description": "An opinionated and usefull react app management",
+  "bin": {
+    "appson": "./bin/appson.js"
+  },
+  "preferGlobal": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">= 8.0.0"
+  },
+  "dependencies": {
+    "autoprefixer": "^7.1.4",
+    "babel-core": "^6.26.0",
+    "babel-preset-appson": "^0.0.1",
+    "babel-loader": "^7.1.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-minify-webpack-plugin": "^0.2.0",
+    "case-sensitive-paths-webpack-plugin": "^2.1.1",
+    "chalk": "^2.1.0",
+    "css-loader": "^0.28.7",
+    "connect-history-api-fallback": "^1.3.0",
+    "deepmerge": "^1.5.1",
+    "duplicate-package-checker-webpack-plugin": "^1.2.5",
+    "eslint": "^4.7.1",
+    "eslint-config-appson": "^0.0.1",
+    "eslint-loader": "^1.9.0",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "friendly-errors-webpack-plugin": "^1.6.1",
+    "file-loader": "^0.11.2",
+    "fs-extra": "^4.0.2",
+    "html-webpack-plugin": "^2.30.1",
+    "postcss-flexbugs-fixes": "^3.2.0",
+    "postcss-loader": "^2.0.6",
+    "ramda": "^0.24.1",
+    "react-dev-utils": "^4.0.1",
+    "react-hot-loader": "^3.0.0-beta.7",
+    "simple-progress-webpack-plugin": "^1.0.4",
+    "stats-webpack-plugin": "^0.6.1",
+    "style-loader": "^0.18.2",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "url-loader": "^0.5.9",
+    "webpack": "^3.6.0",
+    "webpack-config": "^7.4.0",
+    "webpack-dev-server": "^2.8.2",
+    "yargs": "^9.0.1"
+  },
+  "devDependencies": {
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  }
+}
