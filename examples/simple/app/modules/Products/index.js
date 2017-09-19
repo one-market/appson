@@ -1,10 +1,10 @@
 import R from 'ramda'
 import t from 'prop-types'
 import React from 'react'
-import { addState, connect } from 'appson'
+import { addState, connectProps } from 'appson'
 
 import products from './states/products'
-import AddProducts from './components/AddProduct'
+import AddProduct from './components/AddProduct'
 
 const Products = ({ products, quantity }) => (
   <div>
@@ -13,7 +13,7 @@ const Products = ({ products, quantity }) => (
       {products.map(product => (
         <li key={product.id}>{product.name}</li>
       ))}
-      <AddProducts />
+      <AddProduct />
     </ul>
   </div>
 )
@@ -25,9 +25,9 @@ Products.propTypes = {
 
 const enhance = R.compose(
   addState(products),
-  connect(['products'], (products) => ({
+  connectProps(['products'], (products) => ({
+    ...products,
     products: products.list,
-    quantity: products.quantity,
   }))
 )
 

@@ -18,6 +18,12 @@ export const isString = (name: string, value: string) =>
     `Expected ${name} to be a string`
   )
 
+export const isFn = (name: string, value: Function | undefined) =>
+  invariant(
+    !R.isNil(value) && isFunc(value),
+    `Expected ${name} to be a function`
+  )
+
 export const isPlainObject = (name: string, obj: object) =>
   invariant(
     !R.isNil(obj) && isObj(obj),

@@ -12,4 +12,5 @@ export { default as State } from './src/state'
 /* hocs */
 export { default as addState } from './src/hocs/add-state'
 export { default as addEffects } from './src/hocs/add-effects'
-export { default as connect } from './src/hocs/connect'
+export { default as connectProps } from './src/hocs/connect-props'
+export { default as connectHandlers } from './src/hocs/connect-handlers'

@@ -1,13 +1,13 @@
-import { ActionMap, ConnectFn, AppStore } from '../../index.d'
+import { ConnectFn, AppStore } from '../../index.d'
 
 import t from 'prop-types'
 import R from 'ramda'
 import React, { PureComponent } from 'react'
-import { Dispatch } from 'redux'
 import deepEqual from 'fast-deep-equal'
 
 import State from '../state'
 import getDisplayName from '../utils/get-display-name'
+import * as invariants from '../utils/invariants'
 
 type Context = {
   store: AppStore,
@@ -18,45 +18,42 @@ type ConnectState = {
   args: object,
 }
 
-
 const reduceIndexed = R.addIndex(R.reduce)
 
-const connect: ConnectFn = (states, predicate) => (WrappedComponent) => {
+const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
+  if (mapProps) {
+    invariants.isFn('mapProps', mapProps)
+  }
+
   let unsubscribe: () => void;
 
-  return class Connect extends PureComponent<{}, ConnectState> {
+  return class ConnectProps extends PureComponent<{}, ConnectState> {
     context: Context
 
-    static displayName: string = getDisplayName(WrappedComponent)
+    static displayName: string = `ConnectProps(${getDisplayName(WrappedComponent)})`
 
     static contextTypes = {
       store: t.object,
     }
 
     state = {
-      args: {},
       props: {},
+      args: {},
     }
 
     updateProps = (args: object): void =>
-      this.setState({ props: predicate(...R.values(args)) })
+      this.setState({
+        props: mapProps ? mapProps(...R.values(args)) : R.mergeAll(R.values(args))
+      })
 
-    stateObject = (globalState: any, dispatch: Dispatch<any>) =>
-      (obj: object, path: string, idx: number): object => {
-        if (!State.exist(path)) return obj
+    getArgs = (globalState: any) =>
+      (obj: object, path: string, idx: number): object =>
+        State.exist(path) ? R.assoc(`${idx}`, State.find(path).mapProps(globalState), obj) : obj
 
-        const state: State<any> = State.find(path)
-        const actions: ActionMap = state.mapDispatch(dispatch)
-        const props: any = state.mapProps(globalState)
-
-        return R.assoc(idx.toString(), { ...actions, ...props }, obj)
-    }
-
-    updateArgs = (globalState: any, dispatch: Dispatch<any>): void => {
+    updateArgs = (globalState: any): void => {
       const { args } = this.state
 
-      const reducePredicate = this.stateObject(globalState, dispatch)
-      const newArgs: object = reduceIndexed(reducePredicate, args, states)
+      const newArgs: object = reduceIndexed(this.getArgs(globalState), args, states)
       const hasArgs: boolean = R.not(R.isNil(newArgs))
       const hasChanges: boolean = R.not(deepEqual(args, newArgs))
 
@@ -82,15 +79,14 @@ const connect: ConnectFn = (states, predicate) => (WrappedComponent) => {
         )
 
         if (hasChanges) {
-          this.updateArgs(newState, store.dispatch)
+          this.updateArgs(newState)
           oldState = newState
         }
       })
     }
 
     componentWillMount() {
-      const { dispatch, getState} = this.context.store
-      this.updateArgs(getState(), dispatch)
+      this.updateArgs(this.context.store.getState())
     }
 
     componentDidMount() {
@@ -103,10 +99,10 @@ const connect: ConnectFn = (states, predicate) => (WrappedComponent) => {
 
     render(): JSX.Element {
       return (
-        <WrappedComponent {...this.props} {...this.state.props} />
+        <WrappedComponent {...this.state.props} {...this.props} />
       )
     }
   }
 }
 
-export default connect
+export default connectProps

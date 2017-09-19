@@ -151,7 +151,8 @@ export interface ConnectPredicateFn {
 }
 
 export interface ConnectFn {
-  (states: string[], predicate: ConnectPredicateFn): (WrappedComponent: React.ComponentType) => React.ComponentType
+  (states: string[], mapper?: ConnectPredicateFn):
+    (WrappedComponent: React.ComponentType) => React.ComponentType
 }
 
 export function connect(states: string[], predicate: ConnectPredicateFn): React.ComponentType
