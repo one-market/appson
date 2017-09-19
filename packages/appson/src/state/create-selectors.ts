@@ -26,9 +26,9 @@ const stateAsProp = (name: string): SelectorMap => ({
   [name]: (state: any): any => getInState(state, name)
 })
 
-const createSelectors = (name: string, initial: any, selectors: SelectorMap): any => {
+const createSelectors = (name: string, initial: any, computed: SelectorMap | null): any => {
   if (isPrimitive(initial)) return stateAsProp(name)
-  return R.merge(reduceState(initial), selectors || null)
+  return R.merge(reduceState(initial), computed)
 }
 
 export default createSelectors

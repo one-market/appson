@@ -42,17 +42,19 @@ class State<S> {
   private _effects: Effects
   private _parent: StateParent<S>
 
-  constructor({ name: stateName, initial = {}, handlers = {}, computed = {} }: StateParams) {
+  constructor({ name: stateName, initial = {}, handlers = {}, computed = null }: StateParams) {
     invariants.isString('name', stateName)
     invariants.isPlainObject('handlers', handlers)
-    invariants.isPlainObject('computed', computed)
+    invariants.isPlainObject('computed', computed || {})
     invariants.hasAllValuesAsFunction('handlers', handlers)
-    invariants.hasAllValuesAsFunction('computed', computed)
+    invariants.hasAllValuesAsFunction('computed', computed || {})
 
-    invariant(
-      isObj(initial) && R.not(R.isNil(computed)),
-      `To use computed props the initial value of state "${stateName}" need to be an object`
-    )
+    if (!R.isNil(computed)) {
+      invariant(
+        isObj(initial),
+        `To use computed props the initial value of state "${stateName}" need to be an object`
+      )
+    }
 
     const actionTypes = createTypes(stateName, handlers)
     const actions = createActions(actionTypes, handlers)
