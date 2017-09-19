@@ -6,7 +6,6 @@
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
   "files": [
-    "dist",
     "lib",
     "es",
     "src",
@@ -37,7 +36,6 @@
     "fast-deep-equal": "^1.0.0"
   },
   "devDependencies": {
-    "typescript": "^2.5.2",
     "@types/history": "^4.6.0",
     "@types/invariant": "^2.2.29",
     "@types/ramda": "^0.24.11",
@@ -50,11 +48,9 @@
     "@types/react-router-dom": "^4.0.7",
     "@types/redux-saga": "^0.10.5",
     "@types/prop-types": "^15.5.1",
-    "babel-preset-appson": "^0.0.1",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-private-underscore": "^0.1.3",
     "babel-plugin-ramda": "^1.4.3",
-    "cross-env": "^5.0.5",
     "rollup": "^0.49.2",
     "rollup-plugin-visualizer": "^0.3.1",
     "rollup-plugin-babel": "^3.0.2",
