@@ -75,7 +75,7 @@ const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
         const newState: any = store.getState()
 
         const hasChanges: boolean = R.any((statePath: string): boolean =>
-          State.find(statePath).hasChanges(oldState, newState), states
+          State.exist(statePath) && State.find(statePath).hasChanges(oldState, newState), states
         )
 
         if (hasChanges) {

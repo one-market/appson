@@ -4,6 +4,7 @@ import React, { ComponentType } from 'react'
 import { History } from 'history'
 import { ConnectedRouter } from 'react-router-redux'
 import { Route } from 'react-router-dom'
+import ReactHotLoader from 'react-hot-loader/lib/ReactHotLoader'
 
 import createProvider from './create-provider'
 import effects from '../stores/effects'
@@ -17,11 +18,13 @@ const createApp: CreateAppFn = (Module, store, history) => {
   const Provider: ComponentType = createProvider({ store, states, effects })
 
   return (
-    <Provider>
-      <ConnectedRouter history={history}>
-        <Route path="/" component={Module} />
-      </ConnectedRouter>
-    </Provider>
+    <ReactHotLoader key={Math.random()}>
+      <Provider>
+        <ConnectedRouter history={history}>
+          <Route path="/" component={Module} />
+        </ConnectedRouter>
+      </Provider>
+    </ReactHotLoader>
   )
 }
 
