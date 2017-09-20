@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "bs": "lerna bootstrap",
-    "np": "lerna publish"
+    "np": "lerna publish --conventional-commits"
   },
   "workspaces": [
     "packages/*",
