@@ -1,6 +1,6 @@
 /* eslint no-use-before-define: 0, react/jsx-no-bind: 0, brace-style: 0 */
 
-import { AppStore } from '../index.d'
+import { WrapperComponent, AppStore } from '../index.d'
 
 import R from 'ramda'
 import { ComponentType } from 'react'
@@ -14,10 +14,8 @@ import createStore, { sagaMiddleware } from './utils/create-store'
 import createApp from './utils/create-app'
 import rootSaga from './sagas/root'
 
-type Wrapper = ComponentType<{ children: any }>
-
 export class App {
-  private Wrapper: Wrapper
+  private Wrapper: WrapperComponent
   private RootModule: ComponentType
   private history: History
   private middlewares: Middleware[]
@@ -47,7 +45,7 @@ export class App {
     return this
   }
 
-  public wrapper(Component: Wrapper): App {
+  public wrapper(Component: WrapperComponent): App {
     this.Wrapper = Component
     return this
   }

@@ -1,4 +1,4 @@
-import { AppStore } from '../../index.d'
+import { WrapperComponent, AppStore } from '../../index.d'
 
 import React, { ComponentType } from 'react'
 import { History } from 'history'
@@ -11,7 +11,7 @@ import effects from '../stores/effects'
 import states from '../stores/states'
 
 interface CreateAppFn {
-  (Wrapper: ComponentType, Module: ComponentType, store: AppStore, history: History): JSX.Element
+  (Wrapper: WrapperComponent, Module: ComponentType, store: AppStore, history: History): JSX.Element
 }
 
 const createApp: CreateAppFn = (Wrapper, Module, store, history) => {
@@ -19,7 +19,7 @@ const createApp: CreateAppFn = (Wrapper, Module, store, history) => {
 
   return (
     <ReactHotLoader key={Math.random()}>
-      <Wrapper>
+      <Wrapper store={store}>
         <Provider>
           <ConnectedRouter history={history}>
             <Route path="/" component={Module} />

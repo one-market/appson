@@ -19,6 +19,11 @@ export interface AppStore extends Redux.Store<any> {
   defaultReducers: Redux.ReducersMapObject
 }
 
+export type WrapperComponent = React.ComponentType<{
+  children: any,
+  store: AppStore,
+}>
+
 declare module '@onemarket/appson' {
   /*
     Components
@@ -62,8 +67,6 @@ declare module '@onemarket/appson' {
   /*
     State
   **/
-
-  export { State }
 
   export interface Meta<Data = any> {
     [key: string]: Data
