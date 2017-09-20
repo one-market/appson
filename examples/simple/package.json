@@ -1,13 +1,13 @@
 {
   "name": "example-simple",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {
     "start": "appson start",
     "build": "appson build"
   },
   "dependencies": {
-    "@onemarket/appson": "^0.0.2",
+    "@onemarket/appson": "^0.1.0",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
@@ -17,6 +17,6 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "@onemarket/appson-cli": "^0.0.2"
+    "@onemarket/appson-cli": "^0.1.0"
   }
 }
