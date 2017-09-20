@@ -1,7 +1,7 @@
 {
-  "name": "@appson/cli",
+  "name": "@onemarket/appson-cli",
   "version": "0.0.1",
-  "description": "An opinionated and usefull react app management",
+  "description": "CLI to manage your appson applications",
   "bin": {
     "appson": "./bin/appson.js"
   },
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "autoprefixer": "^7.1.4",
+    "babel-runtime": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-preset-appson": "^0.0.1",
     "babel-loader": "^7.1.2",
@@ -23,8 +24,6 @@
     "connect-history-api-fallback": "^1.3.0",
     "deepmerge": "^1.5.1",
     "duplicate-package-checker-webpack-plugin": "^1.2.5",
-    "eslint": "^4.7.1",
-    "eslint-config-appson": "^0.0.1",
     "eslint-loader": "^1.9.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "friendly-errors-webpack-plugin": "^1.6.1",

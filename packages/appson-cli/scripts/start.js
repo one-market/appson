@@ -25,12 +25,7 @@ const clearConsole = require('react-dev-utils/clearConsole')
 const WebpackDevServer = require('webpack-dev-server')
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles')
 const openBrowser = require('react-dev-utils/openBrowser')
-const {
-  choosePort,
-  createCompiler,
-  prepareProxy,
-  prepareUrls,
-} = require('react-dev-utils/WebpackDevServerUtils')
+const devServerUtils = require('react-dev-utils/WebpackDevServerUtils')
 
 const createDevServerConfig = require('../config/dev-server')
 const config = require('../config/webpack.config')
@@ -45,9 +40,11 @@ if (!checkRequiredFiles([paths.app.assets.htmlFile, paths.app.src.mainFile])) {
   process.exit(1)
 }
 
-choosePort(HOST, DEFAULT_PORT)
+devServerUtils.choosePort(HOST, DEFAULT_PORT)
   .then((port) => {
     if (port === null) return
+
+    const { createCompiler, prepareProxy, prepareUrls } = devServerUtils
 
     const protocol = process.env.HTTPS === 'true' ? 'https' : 'http'
     const appName = require(paths.app.packageJson).name
