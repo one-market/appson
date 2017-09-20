@@ -5,11 +5,11 @@
     "examples/*"
   ],
   "dependencies": {
-    "babel-preset-appson": "^0.0.1",
+    "babel-preset-appson": "^0.0.2",
     "cross-env": "^5.0.5",
     "eslint": "4.3.0",
-    "eslint-config-appson": "^0.0.1",
-    "tslint-config-appson": "^0.0.1",
+    "eslint-config-appson": "^0.0.2",
+    "tslint-config-appson": "^0.0.2",
     "typescript": "^2.5.2"
   },
   "name": "appson",

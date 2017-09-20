@@ -1,6 +1,6 @@
 {
   "name": "@onemarket/appson-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "CLI to manage your appson applications",
   "bin": {
     "appson": "./bin/appson.js"
@@ -14,7 +14,7 @@
     "autoprefixer": "^7.1.4",
     "babel-runtime": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-preset-appson": "^0.0.1",
+    "babel-preset-appson": "^0.0.2",
     "babel-loader": "^7.1.2",
     "babel-polyfill": "^6.26.0",
     "babel-minify-webpack-plugin": "^0.2.0",
