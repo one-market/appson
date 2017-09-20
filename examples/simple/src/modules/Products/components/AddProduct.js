@@ -1,6 +1,6 @@
 import t from 'prop-types'
 import React, { PureComponent } from 'react'
-import { connectHandlers } from '@appson/react'
+import { connectHandlers } from '@onemarket/appson-react'
 import { v4 } from 'uuid'
 
 class AddProducts extends PureComponent {

@@ -1,5 +1,5 @@
 import R from 'ramda'
-import { State } from '@appson/react'
+import { State } from '@onemarket/appson-react'
 import { v4 } from 'uuid'
 
 const products = new State({

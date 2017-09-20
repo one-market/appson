@@ -1,6 +1,6 @@
 import R from 'ramda'
 import React from 'react'
-import { Routes, Route, Link, addState, addEffects } from '@appson/react'
+import { Routes, Route, Link, addState, addEffects } from '@onemarket/appson-react'
 
 import main from './states/main'
 import logAction from './effects/log-action'
