@@ -1,5 +1,5 @@
 import R from 'ramda'
-import { State } from '@onemarket/appson-react'
+import { State } from '@onemarket/appson'
 
 export default new State({
   name: 'main',

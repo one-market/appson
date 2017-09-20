@@ -7,7 +7,7 @@
     "build": "appson build"
   },
   "dependencies": {
-    "@onemarket/appson-react": "^0.0.2",
+    "@onemarket/appson": "^0.0.2",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
