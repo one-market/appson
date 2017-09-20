@@ -1,5 +1,5 @@
 {
-  "name": "@onemarket/appson-react",
+  "name": "@onemarket/appson",
   "version": "0.0.2",
   "main": "lib/index.js",
   "browser": "lib/index.js",
