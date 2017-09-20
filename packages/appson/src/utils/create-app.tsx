@@ -11,19 +11,21 @@ import effects from '../stores/effects'
 import states from '../stores/states'
 
 interface CreateAppFn {
-  (Module: ComponentType, store: AppStore, history: History): JSX.Element
+  (Wrapper: ComponentType, Module: ComponentType, store: AppStore, history: History): JSX.Element
 }
 
-const createApp: CreateAppFn = (Module, store, history) => {
+const createApp: CreateAppFn = (Wrapper, Module, store, history) => {
   const Provider: ComponentType = createProvider({ store, states, effects })
 
   return (
     <ReactHotLoader key={Math.random()}>
-      <Provider>
-        <ConnectedRouter history={history}>
-          <Route path="/" component={Module} />
-        </ConnectedRouter>
-      </Provider>
+      <Wrapper>
+        <Provider>
+          <ConnectedRouter history={history}>
+            <Route path="/" component={Module} />
+          </ConnectedRouter>
+        </Provider>
+      </Wrapper>
     </ReactHotLoader>
   )
 }

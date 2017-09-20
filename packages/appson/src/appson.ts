@@ -14,13 +14,17 @@ import createStore, { sagaMiddleware } from './utils/create-store'
 import createApp from './utils/create-app'
 import rootSaga from './sagas/root'
 
+type Wrapper = ComponentType<{ children: any }>
+
 export class App {
+  private Wrapper: Wrapper
   private RootModule: ComponentType
   private history: History
   private middlewares: Middleware[]
   private defaultReducers: ReducersMapObject
 
   constructor(Module: ComponentType) {
+    this.Wrapper = ({ children }) => children
     this.RootModule = Module
     this.history = createHistory()
 
@@ -43,11 +47,16 @@ export class App {
     return this
   }
 
+  public wrapper(Component: Wrapper): App {
+    this.Wrapper = Component
+    return this
+  }
+
   public render(el: string): void {
-    const { RootModule, middlewares, defaultReducers, history } = this
+    const { Wrapper, RootModule, middlewares, defaultReducers, history } = this
 
     const store: AppStore = createStore(middlewares, defaultReducers)
-    const app: JSX.Element = createApp(RootModule, store, history)
+    const app: JSX.Element = createApp(Wrapper, RootModule, store, history)
 
     sagaMiddleware.run(rootSaga, store)
     render(app, document.querySelector(el))

@@ -4,6 +4,21 @@ import * as ReactRouter from 'react-router'
 
 import State from './src/state'
 
+export type StoresChannelAction = {
+  storeName: string,
+  state: any,
+}
+
+export type StoresChannel = ReduxSaga.Channel<StoresChannelAction>
+
+export interface InternalStore extends Redux.Store<any> {
+  name: string
+}
+
+export interface AppStore extends Redux.Store<any> {
+  defaultReducers: Redux.ReducersMapObject
+}
+
 declare module '@onemarket/appson' {
   /*
     Components
@@ -109,25 +124,6 @@ declare module '@onemarket/appson' {
 
   export interface Effects {
     [effect: string]: Effect
-  }
-
-  /*
-    Internal
-  **/
-
-  export type StoresChannelAction = {
-    storeName: string,
-    state: any,
-  }
-
-  export type StoresChannel = ReduxSaga.Channel<StoresChannelAction>
-
-  export interface InternalStore extends Redux.Store<any> {
-    name: string
-  }
-
-  export interface AppStore extends Redux.Store<any> {
-    defaultReducers: Redux.ReducersMapObject
   }
 
   /*
