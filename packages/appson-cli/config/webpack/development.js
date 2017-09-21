@@ -11,7 +11,7 @@ const paths = require('../paths')
 const loadConfig = require('../../utils/load-config')
 
 const config = new Config().extend(resolve(__dirname, './common.js')).merge({
-  devtool: 'eval',
+  devtool: 'cheap-module-eval-source-map',
   entry: {
     main: [
       require.resolve('react-hot-loader/patch'),
@@ -30,10 +30,7 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
   module: {
     rules: [{
       test: /\.css$/,
-      include: [
-        paths.app.assets.stylesheets,
-        paths.app.src.root,
-      ],
+      include: [paths.app.assets.stylesheets, paths.app.src.root],
       exclude: /node_modules/,
       use: [{
         loader: require.resolve('style-loader'),

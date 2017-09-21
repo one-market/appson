@@ -14,7 +14,6 @@
     "node": ">= 8.0.0"
   },
   "dependencies": {
-    "awesome-typescript-loader": "^3.2.3",
     "autoprefixer": "^7.1.4",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -44,9 +43,11 @@
     "simple-progress-webpack-plugin": "^1.0.4",
     "stats-webpack-plugin": "^0.6.1",
     "style-loader": "^0.18.2",
+    "source-map-loader": "^0.2.1",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.9",
     "typescript": "^2.5.2",
+    "ts-loader": "^2.3.7",
     "tslint": "^5.7.0",
     "tslint-loader": "^3.5.3",
     "tslint-config-appson": "^0.1.0",

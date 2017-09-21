@@ -98,6 +98,11 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     new ExtractTextPlugin('static/css/style.[contenthash:8].css'),
     new webpack.LoaderOptionsPlugin({
       debug: false,
+      options: {
+        resolve: {
+          extensions: ['.css', '.json', '.js', '.jsx', '.ts', '.tsx'],
+        },
+      },
     }),
   ],
 })

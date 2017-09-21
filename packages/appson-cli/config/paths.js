@@ -19,6 +19,7 @@ const getNodePaths = R.pipe(
 
 module.exports = {
   app: {
+    root: resolveApp(''),
     src: {
       root: resolveApp('src'),
       modules: resolveApp('src/modules'),

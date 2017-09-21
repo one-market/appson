@@ -61,10 +61,9 @@ const tslintLoader = {
 }
 
 const tsLoader = {
-  loader: require.resolve('awesome-typescript-loader'),
+  loader: require.resolve('ts-loader'),
   options: {
-    compiler: require.resolve('typescript'),
-    configFileName: paths.app.tsconfig,
+    configFile: paths.app.tsconfig,
   },
 }
 
@@ -86,27 +85,35 @@ const config = new Config().merge({
       'babel-runtime/regenerator': require.resolve('babel-runtime/regenerator'),
     },
     plugins: [
-      new ModuleScopePlugin(paths.app.src.root, [paths.app.packageJson]),
+      new ModuleScopePlugin(paths.app.root, [paths.app.packageJson]),
     ],
   },
   module: {
     rules: [...HAS_TS ? [{
       test: /\.(ts|tsx)$/,
-      include: [paths.app.src.root],
-      exclude: /node_modules/,
-      use: [babelLoader, tsLoader],
-    }, {
-      test: /\.(ts|tsx)$/,
       enforce: 'pre',
       include: [paths.app.src.root],
       exclude: /node_modules/,
-      use: [tslintLoader],
+      use: tslintLoader,
+    }, {
+      test: /\.(ts|tsx)$/,
+      include: [paths.app.src.root],
+      exclude: /node_modules/,
+      use: [babelLoader, tsLoader],
     }] : [], {
+      test: /\.(js|jsx)$/,
+      include: [paths.app.src.root],
+      exclude: /node_modules/,
+      enforce: 'pre',
+      use: {
+        loader: require.resolve('source-map-loader'),
+      },
+    }, {
       test: /\.(js|jsx)$/,
       enforce: 'pre',
       include: [paths.app.src.root],
       exclude: /node_modules/,
-      use: [eslintLoader],
+      use: eslintLoader,
     }, {
       test: /\.(js|jsx)$/,
       include: [paths.app.src.root],
@@ -126,6 +133,7 @@ const config = new Config().merge({
         /\.ejs$/,
         /\.html$/,
         /\.(js|jsx)$/,
+        /\.(ts|tsx)$/,
         /\.css$/,
         /\.json$/,
         /\.svg$/,
