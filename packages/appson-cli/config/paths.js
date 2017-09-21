@@ -24,8 +24,6 @@ module.exports = {
       components: resolveApp('src/components'),
       effects: resolveApp('src/effects'),
       states: resolveApp('src/states'),
-      mainFile: resolveApp('src/main.js'),
-      rootModule: resolveApp('src/index.js'),
     },
     assets: {
       root: resolveApp('assets'),

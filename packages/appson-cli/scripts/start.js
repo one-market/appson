@@ -36,7 +36,7 @@ const DEFAULT_PORT = argv.port
 const IS_INTERACTIVE = process.stdout.isTTY
 const USE_YARN = fs.existsSync(paths.app.yarnLock)
 
-if (!checkRequiredFiles([paths.app.assets.htmlFile, paths.app.src.mainFile])) {
+if (!checkRequiredFiles([paths.app.assets.htmlFile])) {
   process.exit(1)
 }
 

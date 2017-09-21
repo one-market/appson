@@ -41,6 +41,16 @@ const getEslintRc = () => {
   return eslintrc
 }
 
+const babelLoader = {
+  loader: 'babel-loader',
+  options: merge(getAppBabelRc(), {
+    babelrc: false,
+    cacheDirectory: true,
+    presets: [require.resolve('babel-preset-appson')],
+    plugins: [require.resolve('react-hot-loader/babel')],
+  }),
+}
+
 const config = new Config().merge({
   output: {
     pathinfo: true,
@@ -48,7 +58,7 @@ const config = new Config().merge({
     publicPath: PUBLIC_PATH,
   },
   resolve: {
-    extensions: ['.css', '.json', '.js', '.jsx'],
+    extensions: ['.css', '.json', '.js', '.jsx', '.ts', '.tsx'],
     modules: [
       paths.app.src.root,
       paths.app.nodeModules,
@@ -64,6 +74,13 @@ const config = new Config().merge({
   },
   module: {
     rules: [{
+      test: /\.(ts|tsx)$/,
+      enforce: 'pre',
+      include: [paths.app.src.root],
+      use: [{
+        loader: require.resolve('tslint-loader')
+      }],
+    }, {
       test: /\.(js|jsx)$/,
       enforce: 'pre',
       include: [paths.app.src.root],
@@ -80,18 +97,17 @@ const config = new Config().merge({
         },
       }],
     }, {
+      test: /\.(ts|tsx)$/,
+      include: [paths.app.src.root],
+      exclude: /node_modules/,
+      use: [babelLoader, {
+        loader: 'awesome-typescript-loader'
+      }],
+    }, {
       test: /\.(js|jsx)$/,
       include: [paths.app.src.root],
       exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader',
-        options: merge(getAppBabelRc(), {
-          babelrc: false,
-          cacheDirectory: true,
-          presets: [require.resolve('babel-preset-appson')],
-          plugins: [require.resolve('react-hot-loader/babel')],
-        }),
-      },
+      use: babelLoader,
     }, {
       test: /\.svg$/,
       include: [paths.app.assets.images, paths.app.nodeModules],
