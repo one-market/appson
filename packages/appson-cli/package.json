@@ -7,6 +7,9 @@
   },
   "preferGlobal": true,
   "license": "MIT",
+  "scripts": {
+    "lint": "eslint ./"
+  },
   "engines": {
     "node": ">= 8.0.0"
   },
@@ -43,8 +46,10 @@
     "style-loader": "^0.18.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.9",
+    "typescript": "^2.5.2",
     "tslint": "^5.7.0",
     "tslint-loader": "^3.5.3",
+    "tslint-config-appson": "^0.1.0",
     "webpack": "^3.6.0",
     "webpack-config": "^7.4.0",
     "webpack-dev-server": "^2.8.2",
