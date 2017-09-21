@@ -1,10 +1,14 @@
 const R = require('ramda')
+const fs = require('fs')
 const path = require('path')
 
-const ENV_PUBLIC_URL = process.env.PUBLIC_URL;
+const ENV_PUBLIC_URL = process.env.PUBLIC_URL
 
-const resolveOwn = (relativePath) => path.resolve(__dirname, relativePath)
-const resolveApp = (relativePath) => path.resolve(relativePath)
+const appDirectory = fs.realpathSync(process.cwd())
+
+const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
+const resolveOwn = (relativePath) => path.resolve(__dirname, '..', relativePath)
+const getPublicUrl = (appPackageJson) => ENV_PUBLIC_URL || require(appPackageJson).homepage
 
 const getNodePaths = R.pipe(
   R.split(process.platform === 'win32' ? ';' : ':'),
@@ -12,9 +16,6 @@ const getNodePaths = R.pipe(
   R.filter(folder => !path.isAbsolute(folder)),
   R.map(resolveApp),
 )
-
-const getPublicUrl = appPackageJson =>
-  ENV_PUBLIC_URL || require(appPackageJson).homepage
 
 module.exports = {
   app: {
@@ -35,6 +36,8 @@ module.exports = {
     yarnLock: resolveApp('yarn.lock'),
     babelrc: resolveApp('.babelrc'),
     eslintrc: resolveApp('.eslintrc'),
+    tsconfig: resolveApp('tsconfig.json'),
+    tslint: resolveApp('tslint.json'),
     config: resolveApp('config'),
     build: resolveApp('build'),
     appsonConfig: resolveApp('appson.config.js'),
