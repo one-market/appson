@@ -45,8 +45,10 @@ const connectHandlers: ConnectFn = (states, mapHandlers) => (WrappedComponent) =
       })
 
     getArgs = (dispatch: Dispatch<any>) =>
-      (obj: object, path: string, idx: number): object =>
-        State.exist(path) ? R.assoc(`${idx}`, State.find(path).mapDispatch(dispatch), obj) : obj
+      (obj: object, path: string, idx: number): object => {
+        const state: State<any> = State.find(path)
+        return state ? R.assoc(`${idx}`, state.mapDispatch(dispatch), obj) : obj
+      }
 
     updateArgs = (globalState: any): void => {
       const { args } = this.state

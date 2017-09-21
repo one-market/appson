@@ -26,7 +26,6 @@ import createSelectors from './create-selectors'
 import statesStore from '../stores/states'
 
 const isObj = R.is(Object)
-const isStr = R.is(String)
 const isFn = R.is(Function)
 
 interface Selector<S> extends Computed<S> {}
@@ -75,16 +74,11 @@ class State<S> {
 
   // static methods
 
-  static find(path: string | string[]): State<any> {
+  static find(path: string): State<any> {
     const globalState = statesStore.getState()
-    const parsedPath = R.join('.', isStr(path) ? [path] : [...path])
-    const pathWithChildren: string[] = R.intersperse('children', R.split('.', parsedPath))
+    const pathWithChildren: string[] = R.intersperse('children', R.split('.', path))
 
     return R.path(pathWithChildren, globalState)
-  }
-
-  static exist(path: string | string[]): boolean {
-    return !!State.find(path)
   }
 
   // getter methods

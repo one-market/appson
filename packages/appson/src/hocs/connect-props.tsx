@@ -47,8 +47,10 @@ const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
       })
 
     getArgs = (globalState: any) =>
-      (obj: object, path: string, idx: number): object =>
-        State.exist(path) ? R.assoc(`${idx}`, State.find(path).mapProps(globalState), obj) : obj
+      (obj: object, path: string, idx: number): object => {
+        const state: State<any> = State.find(path)
+        return state ? R.assoc(`${idx}`, state.mapProps(globalState), obj) : obj
+      }
 
     updateArgs = (globalState: any): void => {
       const { args } = this.state
@@ -74,11 +76,12 @@ const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
       unsubscribe = store.subscribe((): void => {
         const newState: any = store.getState()
 
-        const hasChanges: boolean = R.any((statePath: string): boolean =>
-          State.exist(statePath) && State.find(statePath).hasChanges(oldState, newState), states,
-        )
+        const hasChanges = R.any((path: string): boolean => {
+          const state: State<any> = State.find(path)
+          return state && state.hasChanges(oldState, newState)
+        })
 
-        if (hasChanges) {
+        if (hasChanges(states)) {
           this.updateArgs(newState)
           oldState = newState
         }
