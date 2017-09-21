@@ -1,9 +1,9 @@
 /* eslint new-cap: 0 */
 process.noDeprecation = true
 
-const fs = require('fs')
 const webpack = require('webpack')
 const merge = require('deepmerge')
+const { argv } = require('yargs')
 const { Config } = require('webpack-config')
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
@@ -12,43 +12,60 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter')
 const paths = require('../paths')
 const env = require('../env')
 const loadConfig = require('../../utils/load-config')
+const parseConfigFile = require('../../utils/parse-config-file')
 
+const HAS_TS = argv.ts
 const IS_PROD = (process.env.NODE_ENV === 'production')
 const PUBLIC_URL = process.env.PUBLIC_URL || ''
 const PUBLIC_PATH = '/'
 
-const getAppBabelRc = () => {
-  let babelrc
+const BABELRC = parseConfigFile(paths.app.babelrc) || {}
+const ESLINTRC = parseConfigFile(paths.app.eslintrc)
+const TSLINT = parseConfigFile(paths.app.tslint)
 
-  try {
-    babelrc = JSON.parse(fs.readFileSync(paths.app.babelrc, 'utf8'))
-  } catch (error) {
-    babelrc = {}
-  }
-
-  return babelrc
-}
-
-const getEslintRc = () => {
-  let eslintrc
-
-  try {
-    eslintrc = JSON.parse(fs.readFileSync(paths.app.eslintrc, 'utf8'))
-  } catch (error) {
-    eslintrc = {}
-  }
-
-  return eslintrc
+const eslintLoader = {
+  loader: require.resolve('eslint-loader'),
+  options: {
+    eslintPath: require.resolve('eslint'),
+    formatter: eslintFormatter,
+    baseConfig: ESLINTRC || {
+      extends: [require.resolve('eslint-config-appson')],
+    },
+    ignore: false,
+    useEslintrc: false,
+  },
 }
 
 const babelLoader = {
-  loader: 'babel-loader',
-  options: merge(getAppBabelRc(), {
+  loader: require.resolve('babel-loader'),
+  options: merge(BABELRC, {
     babelrc: false,
     cacheDirectory: true,
     presets: [require.resolve('babel-preset-appson')],
-    plugins: [require.resolve('react-hot-loader/babel')],
+    env: {
+      development: {
+        plugins: [require.resolve('react-hot-loader/babel')],
+      },
+    },
   }),
+}
+
+const tslintLoader = {
+  loader: require.resolve('tslint-loader'),
+  options: {
+    tsConfigFile: paths.app.tsconfig,
+    configuration: TSLINT || {
+      extends: require.resolve('tslint-config-appson'),
+    },
+  },
+}
+
+const tsLoader = {
+  loader: require.resolve('awesome-typescript-loader'),
+  options: {
+    compiler: require.resolve('typescript'),
+    configFileName: paths.app.tsconfig,
+  },
 }
 
 const config = new Config().merge({
@@ -73,36 +90,23 @@ const config = new Config().merge({
     ],
   },
   module: {
-    rules: [{
-      test: /\.(ts|tsx)$/,
-      enforce: 'pre',
-      include: [paths.app.src.root],
-      use: [{
-        loader: require.resolve('tslint-loader')
-      }],
-    }, {
-      test: /\.(js|jsx)$/,
-      enforce: 'pre',
-      include: [paths.app.src.root],
-      use: [{
-        loader: require.resolve('eslint-loader'),
-        options: {
-          eslintPath: require.resolve('eslint'),
-          formatter: eslintFormatter,
-          baseConfig: merge(getEslintRc(), {
-            extends: [require.resolve('eslint-config-appson')],
-          }),
-          ignore: false,
-          useEslintrc: false,
-        },
-      }],
-    }, {
+    rules: [...HAS_TS ? [{
       test: /\.(ts|tsx)$/,
       include: [paths.app.src.root],
       exclude: /node_modules/,
-      use: [babelLoader, {
-        loader: 'awesome-typescript-loader'
-      }],
+      use: [babelLoader, tsLoader],
+    }, {
+      test: /\.(ts|tsx)$/,
+      enforce: 'pre',
+      include: [paths.app.src.root],
+      exclude: /node_modules/,
+      use: [tslintLoader],
+    }] : [], {
+      test: /\.(js|jsx)$/,
+      enforce: 'pre',
+      include: [paths.app.src.root],
+      exclude: /node_modules/,
+      use: [eslintLoader],
     }, {
       test: /\.(js|jsx)$/,
       include: [paths.app.src.root],
@@ -112,7 +116,7 @@ const config = new Config().merge({
       test: /\.svg$/,
       include: [paths.app.assets.images, paths.app.nodeModules],
       use: {
-        loader: 'file-loader',
+        loader: require.resolve('file-loader'),
         options: {
           name: 'static/media/[name].[hash:8].[ext]',
         },
@@ -127,7 +131,7 @@ const config = new Config().merge({
         /\.svg$/,
       ],
       use: {
-        loader: 'url-loader',
+        loader: require.resolve('url-loader'),
         options: {
           limit: 10000,
           name: 'static/media/[name].[hash:8].[ext]',

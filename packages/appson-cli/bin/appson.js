@@ -4,7 +4,7 @@
 const yargs = require('yargs')
 
 const commonArgs = {
-  port: {
+  'port': {
     alias: 'p',
     default: 3000,
   },
@@ -15,6 +15,10 @@ const commonArgs = {
 }
 
 const start = Object.assign({}, commonArgs, {
+  'typescript': {
+    alias: 'ts',
+    default: false,
+  },
   'css-modules': {
     alias: 'cm',
     default: false,
@@ -22,12 +26,12 @@ const start = Object.assign({}, commonArgs, {
 })
 
 const build = Object.assign({}, commonArgs, {
-  minify: {
+  'minify': {
     alias: 'm',
     choices: ['uglify', 'babili'],
     default: 'babili',
   },
-  sourceMap: {
+  'sourceMap': {
     alias: 'sm',
     default: 'cheap-module-source-map',
     choices: [

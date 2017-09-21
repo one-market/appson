@@ -35,21 +35,20 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
         paths.app.src.root,
       ],
       exclude: /node_modules/,
-      use: [
-        require.resolve('style-loader'),
-        {
-          loader: require.resolve('css-loader'),
-          options: {
-            importLoaders: 1,
-          },
-        }, {
-          loader: require.resolve('postcss-loader'),
-          options: {
-            ident: 'postcss',
-            plugins: () => loadConfig('postcss').concat(postcss),
-          },
+      use: [{
+        loader: require.resolve('style-loader'),
+      }, {
+        loader: require.resolve('css-loader'),
+        options: {
+          importLoaders: 1,
         },
-      ],
+      }, {
+        loader: require.resolve('postcss-loader'),
+        options: {
+          ident: 'postcss',
+          plugins: () => loadConfig('postcss').concat(postcss),
+        },
+      }],
     }],
   },
   performance: {
