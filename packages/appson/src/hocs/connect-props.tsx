@@ -3,9 +3,9 @@ import { ConnectFn, AppStore } from '../../index.d'
 import t from 'prop-types'
 import R from 'ramda'
 import React, { PureComponent } from 'react'
-import deepEqual from 'fast-deep-equal'
 
 import State from '../state'
+import deepEqual from '../utils/object/deep-equal'
 import getDisplayName from '../utils/get-display-name'
 import * as invariants from '../utils/invariants'
 

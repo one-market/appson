@@ -14,10 +14,11 @@ import {
 import R from 'ramda'
 import reduceReducers from 'reduce-reducers'
 import { Dispatch } from 'redux'
-import deepEqual from 'fast-deep-equal'
 import invariant from 'invariant'
 
+import deepEqual from '../utils/object/deep-equal'
 import * as invariants from '../utils/invariants'
+
 import createActions from './create-actions'
 import createReducer from './create-reducer'
 import createTypes from './create-types'

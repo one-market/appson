@@ -37,7 +37,6 @@
     "dist"
   ],
   "include": [
-    "./typings.d.ts",
     "./index.d.ts",
     "./index.ts",
     "./src/**/*"
