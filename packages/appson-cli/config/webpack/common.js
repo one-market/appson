@@ -2,70 +2,22 @@
 process.noDeprecation = true
 
 const webpack = require('webpack')
-const merge = require('deepmerge')
 const { argv } = require('yargs')
 const { Config } = require('webpack-config')
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
-const eslintFormatter = require('react-dev-utils/eslintFormatter')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const HappyPack = require('happypack')
 
 const paths = require('../paths')
 const env = require('../env')
+const loaders = require('../loaders')
 const loadConfig = require('../../utils/load-config')
-const parseConfigFile = require('../../utils/parse-config-file')
 
-const HAS_TS = argv.ts
-const IS_PROD = (process.env.NODE_ENV === 'production')
-const PUBLIC_URL = process.env.PUBLIC_URL || ''
 const PUBLIC_PATH = '/'
-
-const BABELRC = parseConfigFile(paths.app.babelrc) || {}
-const ESLINTRC = parseConfigFile(paths.app.eslintrc)
-const TSLINT = parseConfigFile(paths.app.tslint)
-
-const eslintLoader = {
-  loader: require.resolve('eslint-loader'),
-  options: {
-    eslintPath: require.resolve('eslint'),
-    formatter: eslintFormatter,
-    baseConfig: ESLINTRC || {
-      extends: [require.resolve('eslint-config-appson')],
-    },
-    ignore: false,
-    useEslintrc: false,
-  },
-}
-
-const babelLoader = {
-  loader: require.resolve('babel-loader'),
-  options: merge(BABELRC, {
-    babelrc: false,
-    cacheDirectory: true,
-    presets: [require.resolve('babel-preset-appson')],
-    env: {
-      development: {
-        plugins: [require.resolve('react-hot-loader/babel')],
-      },
-    },
-  }),
-}
-
-const tslintLoader = {
-  loader: require.resolve('tslint-loader'),
-  options: {
-    tsConfigFile: paths.app.tsconfig,
-    configuration: TSLINT || {
-      extends: require.resolve('tslint-config-appson'),
-    },
-  },
-}
-
-const tsLoader = {
-  loader: require.resolve('ts-loader'),
-  options: {
-    configFile: paths.app.tsconfig,
-  },
-}
+const PUBLIC_URL = process.env.PUBLIC_URL || ''
+const IS_PROD = (process.env.NODE_ENV === 'production')
+const HAPPY_THREAD_POOL = HappyPack.ThreadPool({ size: 7 })
 
 const config = new Config().merge({
   output: {
@@ -89,45 +41,27 @@ const config = new Config().merge({
     ],
   },
   module: {
-    rules: [...HAS_TS ? [{
-      test: /\.(ts|tsx)$/,
-      enforce: 'pre',
-      include: [paths.app.src.root],
-      exclude: /node_modules/,
-      use: tslintLoader,
-    }, {
-      test: /\.(ts|tsx)$/,
-      include: [paths.app.src.root],
-      exclude: /node_modules/,
-      use: [babelLoader, tsLoader],
-    }] : [], {
+    rules: [{
       test: /\.(js|jsx)$/,
       include: [paths.app.src.root],
       exclude: /node_modules/,
       enforce: 'pre',
-      use: {
-        loader: require.resolve('source-map-loader'),
-      },
+      use: loaders.sourcemap,
     }, {
       test: /\.(js|jsx)$/,
       enforce: 'pre',
       include: [paths.app.src.root],
       exclude: /node_modules/,
-      use: eslintLoader,
+      use: loaders.eslint,
     }, {
       test: /\.(js|jsx)$/,
       include: [paths.app.src.root],
       exclude: /node_modules/,
-      use: babelLoader,
+      use: 'happypack/loader?id=js',
     }, {
       test: /\.svg$/,
       include: [paths.app.assets.images, paths.app.nodeModules],
-      use: {
-        loader: require.resolve('file-loader'),
-        options: {
-          name: 'static/media/[name].[hash:8].[ext]',
-        },
-      },
+      use: loaders.file,
     }, {
       exclude: [
         /\.ejs$/,
@@ -138,16 +72,15 @@ const config = new Config().merge({
         /\.json$/,
         /\.svg$/,
       ],
-      use: {
-        loader: require.resolve('url-loader'),
-        options: {
-          limit: 10000,
-          name: 'static/media/[name].[hash:8].[ext]',
-        },
-      },
+      use: loaders.url,
     }],
   },
   plugins: [
+    new HappyPack({
+      id: 'js',
+      threadPool: HAPPY_THREAD_POOL,
+      loaders: [loaders.babel],
+    }),
     new webpack.NamedModulesPlugin(),
     new webpack.DefinePlugin(env),
     new webpack.DefinePlugin({
@@ -161,5 +94,29 @@ const config = new Config().merge({
     }),
   ],
 })
+
+if (argv.ts) {
+  config.module.rules.unshift({
+    test: /\.(ts|tsx)$/,
+    enforce: 'pre',
+    include: [paths.app.src.root],
+    exclude: /node_modules/,
+    use: loaders.tslint,
+  }, {
+    test: /\.(ts|tsx)$/,
+    include: [paths.app.src.root],
+    exclude: /node_modules/,
+    use: 'happypack/loader?id=ts',
+  })
+
+  config.plugins.unshift(
+    new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+    new HappyPack({
+      id: 'ts',
+      threadPool: HAPPY_THREAD_POOL,
+      loaders: [loaders.babel, loaders.ts],
+    })
+  )
+}
 
 module.exports = config

@@ -11,9 +11,9 @@ const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack
 const MinifyPlugin = require('babel-minify-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
-const postcss = require('../postcss')
 
 const paths = require('../paths')
+const loaders = require('../loaders')
 const loadConfig = require('../../utils/load-config')
 
 const chooseMinifySystem = () =>
@@ -58,26 +58,18 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
       include: [paths.app.assets.stylesheets, paths.app.nodeModules],
       use: ExtractTextPlugin.extract({
         fallback: require.resolve('style-loader'),
-        use: [{
-          loader: require.resolve('css-loader'),
-          options: { minimize: true },
-        }, {
-          loader: require.resolve('postcss-loader'),
-          options: {
-            ident: 'postcss',
-            plugins: () => loadConfig('postcss').concat(postcss),
-          },
-        }],
+        use: [loaders.css, loaders.postcss],
       }),
     }],
   },
   plugins: [
+    chooseMinifySystem(),
     new SimpleProgressWebpackPlugin({
       format: 'expanded',
     }),
-    chooseMinifySystem(),
     new DuplicatePackageCheckerPlugin(),
     new StatsPlugin('bundle-stats.json', { chunkModules: true }),
+    new ExtractTextPlugin('static/css/style.[contenthash:8].css'),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.app.htmlFile,
@@ -95,7 +87,6 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
         minifyURLs: true,
       },
     }),
-    new ExtractTextPlugin('static/css/style.[contenthash:8].css'),
     new webpack.LoaderOptionsPlugin({
       debug: false,
       options: {

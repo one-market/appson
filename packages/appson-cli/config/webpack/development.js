@@ -6,8 +6,8 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
 
-const postcss = require('../postcss')
 const paths = require('../paths')
+const loaders = require('../loaders')
 const loadConfig = require('../../utils/load-config')
 
 const config = new Config().extend(resolve(__dirname, './common.js')).merge({
@@ -32,20 +32,7 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
       test: /\.css$/,
       include: [paths.app.assets.stylesheets, paths.app.src.root],
       exclude: /node_modules/,
-      use: [{
-        loader: require.resolve('style-loader'),
-      }, {
-        loader: require.resolve('css-loader'),
-        options: {
-          importLoaders: 1,
-        },
-      }, {
-        loader: require.resolve('postcss-loader'),
-        options: {
-          ident: 'postcss',
-          plugins: () => loadConfig('postcss').concat(postcss),
-        },
-      }],
+      use: [loaders.style, loaders.css, loaders.postcss],
     }],
   },
   performance: {
