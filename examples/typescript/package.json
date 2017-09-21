@@ -1,0 +1,21 @@
+{
+  "name": "@onemarket/appson-example-typescript",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "appson start --ts",
+    "build": "appson build"
+  },
+  "dependencies": {
+    "@onemarket/appson": "^0.1.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-router": "^4.2.0",
+    "redux": "^3.7.2",
+    "redux-saga": "^0.15.6",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "@onemarket/appson-cli": "^0.1.0"
+  }
+}
