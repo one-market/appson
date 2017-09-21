@@ -39,7 +39,11 @@ const plugins = [
     jsnext: true,
     extensions: ['.js', '.ts', '.tsx'],
   }),
-  commonjs(),
+  commonjs({
+    namedExports: {
+      '../../node_modules/react-hot-loader/index.js': ['AppContainer'],
+    },
+  }),
   typescript({
     typescript: require('typescript'),
   }),

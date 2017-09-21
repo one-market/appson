@@ -4,7 +4,7 @@ import React, { ComponentType } from 'react'
 import { History } from 'history'
 import { ConnectedRouter } from 'react-router-redux'
 import { Route } from 'react-router-dom'
-import ReactHotLoader from 'react-hot-loader/lib/AppContainer'
+import { AppContainer as ReactHotLoader } from 'react-hot-loader'
 
 import createProvider from './create-provider'
 import effects from '../stores/effects'
