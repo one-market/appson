@@ -3,28 +3,28 @@ import * as ReduxSaga from 'redux-saga'
 import * as ReactRouter from 'react-router'
 
 import State from './src/state'
-
-export type StoresChannelAction = {
-  storeName: string,
-  state: any,
-}
-
-export type StoresChannel = ReduxSaga.Channel<StoresChannelAction>
-
-export interface InternalStore extends Redux.Store<any> {
-  name: string
-}
-
-export interface AppStore extends Redux.Store<any> {
-  defaultReducers: Redux.ReducersMapObject
-}
-
-export type WrapperComponent = React.ComponentType<{
-  children: any,
-  store: AppStore,
-}>
+export * from './index'
 
 declare module '@onemarket/appson' {
+  /*
+    Internal
+  **/
+
+  export type StoresChannelAction = {
+    storeName: string,
+    state: any,
+  }
+
+  export type StoresChannel = ReduxSaga.Channel<StoresChannelAction>
+
+  export interface InternalStore extends Redux.Store<any> {
+    name: string
+  }
+
+  export interface AppStore extends Redux.Store<any> {
+    defaultReducers: Redux.ReducersMapObject
+  }
+
   /*
     Components
   **/
@@ -61,8 +61,13 @@ declare module '@onemarket/appson' {
   }
 
   export interface RoutesProps {
-    children: React.ReactChild
+    children: any
   }
+
+  export type WrapperComponent = React.ComponentType<{
+    children: any,
+    store: AppStore,
+  }>
 
   /*
     State
@@ -112,7 +117,7 @@ declare module '@onemarket/appson' {
     handlers?: HandlerMap
   }
 
-  export type StateParent<S = any> = State<S> | null
+  export type StateParent = State<any> | null
   export type StateChildren = StateMap | null
 
   export interface StateMap {
@@ -145,10 +150,7 @@ declare module '@onemarket/appson' {
     <E extends Effects>(effects: E): AddReturnedFn
   }
 
-  export function addState<S>(state: State<S>): AddReturnedFn
-  export function addEffects<E extends Effects>(effects: E): AddReturnedFn
-
-  export interface ConnectPredicateFn {
+  interface ConnectPredicateFn {
     (...states: object[]): object
   }
 
@@ -156,11 +158,4 @@ declare module '@onemarket/appson' {
     (states: string[], mapper?: ConnectPredicateFn):
       (WrappedComponent: React.ComponentType) => React.ComponentType
   }
-
-  interface ConnectReturnFn {
-    (WrappedComponent: React.ComponentType): React.ComponentType
-  }
-
-  export function connectProps(states: string[], predicate: ConnectPredicateFn): ConnectReturnFn
-  export function connectHandlers(states: string[], predicate: ConnectPredicateFn): ConnectReturnFn
 }
