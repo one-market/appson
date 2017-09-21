@@ -5,7 +5,7 @@ type DiffObj = object | null | undefined
 const normalize = R.reduce((obj, { name, fn }) => R.assoc(name, fn, obj), {})
 
 const denormalize = (items: DiffObj) =>
-  R.map(name => ({ name, fn: R.prop(name, items) }), R.keys(items))
+  R.map((name) => ({ name, fn: R.prop(name, items) }), R.keys(items))
 
 const denormalizedDiff = (prev: DiffObj, current: DiffObj) => R.differenceWith(
   R.eqProps('name'),

@@ -27,11 +27,11 @@ export class App {
     this.history = createHistory()
 
     this.middlewares = [
-      routerMiddleware(this.history)
+      routerMiddleware(this.history),
     ]
 
     this.defaultReducers = {
-      router: routerReducer
+      router: routerReducer,
     }
   }
 

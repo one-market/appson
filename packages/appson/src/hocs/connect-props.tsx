@@ -25,7 +25,7 @@ const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
     invariants.isFn('mapProps', mapProps)
   }
 
-  let unsubscribe: () => void;
+  let unsubscribe: () => void
 
   return class ConnectProps extends PureComponent<{}, ConnectState> {
     context: Context
@@ -43,7 +43,7 @@ const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
 
     updateProps = (args: object): void =>
       this.setState({
-        props: mapProps ? mapProps(...R.values(args)) : R.mergeAll(R.values(args))
+        props: mapProps ? mapProps(...R.values(args)) : R.mergeAll(R.values(args)),
       })
 
     getArgs = (globalState: any) =>
@@ -75,7 +75,7 @@ const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
         const newState: any = store.getState()
 
         const hasChanges: boolean = R.any((statePath: string): boolean =>
-          State.exist(statePath) && State.find(statePath).hasChanges(oldState, newState), states
+          State.exist(statePath) && State.find(statePath).hasChanges(oldState, newState), states,
         )
 
         if (hasChanges) {

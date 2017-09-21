@@ -9,7 +9,7 @@ type StoreMap = {
 }
 
 type ChildContext = {
-  [key: string]: AppStore | InternalStore
+  [key: string]: AppStore | InternalStore,
 }
 
 const createProvider = (storeMap: StoreMap): ComponentType =>

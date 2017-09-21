@@ -5,11 +5,7 @@ import R from 'ramda'
 const isError = R.is(Error)
 const reduceIndexed = R.addIndex(R.reduce)
 
-interface CreateActionFn {
-  (type: string): (payload: any, meta: any) => Action
-}
-
-const createAction: CreateActionFn = (type) => (payload, meta) => {
+const createAction = (type: string) => (payload: any, meta: any): Action => {
   let action = { type }
 
   if (isError(payload)) {
@@ -29,7 +25,7 @@ const createAction: CreateActionFn = (type) => (payload, meta) => {
 
 const createActions = (types: ActionTypes, handlers: HandlerMap): ActionMap =>
   reduceIndexed((obj: object, key: string, idx: number): object =>
-    R.assoc(key, createAction(R.nth(idx, types)), obj), {}, R.keys(handlers)
+    R.assoc(key, createAction(R.nth(idx, types)), obj), {}, R.keys(handlers),
   )
 
 export default createActions

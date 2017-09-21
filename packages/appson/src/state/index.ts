@@ -41,7 +41,7 @@ class State<S> {
   private _rootReducer: Reducer
   private _selectors: Selectors<S>
   private _effects: Effects
-  private _parent: StateParent<S>
+  private _parent: StateParent
 
   constructor({ name: stateName, initial = {}, handlers = {}, computed = null }: StateParams) {
     invariants.isString('name', stateName)
@@ -53,7 +53,7 @@ class State<S> {
     if (!R.isNil(computed)) {
       invariant(
         isObj(initial),
-        `To use computed props the initial value of state "${stateName}" need to be an object`
+        `To use computed props the initial value of state "${stateName}" need to be an object`,
       )
     }
 
@@ -100,7 +100,7 @@ class State<S> {
     return this._parent ? R.append(this.name, this._parent.getPath()) : [this.name]
   }
 
-  public setParent(state: State<S>): void {
+  public setParent(state: State<any>): void {
     this._parent = state
   }
 
@@ -164,7 +164,7 @@ class State<S> {
     const childReducer: Reducer = child.getRootReducer()
 
     this._rootReducer = reduceReducers(this._rootReducer, (state: any, action: Action): any =>
-      R.assoc(child.name, childReducer(R.prop(child.name, state), action), state)
+      R.assoc(child.name, childReducer(R.prop(child.name, state), action), state),
     )
   }
 }

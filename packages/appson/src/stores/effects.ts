@@ -23,11 +23,11 @@ const store: Store<any> = createStore(root)
 export default R.merge(store, { name: 'effects' })
 
 export const toggleEffects = (payload: Effects): EffectsAction => ({
-  type: '@@appson/TOGGLE_EFFECTS',
   payload,
+  type: '@@appson/TOGGLE_EFFECTS',
 })
 
 export const setActiveEffects = (payload: object): ActiveAction => ({
-  type: '@@appson/SET_ACTIVE_EFFECTS',
   payload,
+  type: '@@appson/SET_ACTIVE_EFFECTS',
 })

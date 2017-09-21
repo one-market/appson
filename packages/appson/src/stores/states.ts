@@ -12,6 +12,6 @@ const store: Store<any> = createStore(states)
 export default R.merge(store, { name: 'states' })
 
 export const toggleState = (payload: StateMap): Action<StateMap> => ({
-  type: '@@appson/TOGGLE_STATE',
   payload,
+  type: '@@appson/TOGGLE_STATE',
 })

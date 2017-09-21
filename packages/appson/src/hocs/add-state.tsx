@@ -15,7 +15,7 @@ import { toggleState } from '../stores/states'
 import getDisplayName from '../utils/get-display-name'
 
 type Context = {
-  states: InternalStore
+  states: InternalStore,
 }
 
 const atComponent = (state: State<any>, WrappedComponent: ComponentType) => {

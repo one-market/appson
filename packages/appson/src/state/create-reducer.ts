@@ -9,7 +9,7 @@ const reduceIndexed = R.addIndex(R.reduce)
 const handleAction = (type: string, reducer: Handler = R.identity, initialState: any): Handler => {
   invariant(
     !R.isNil(initialState),
-    `initialState for reducer handling ${type} should be defined`
+    `initialState for reducer handling ${type} should be defined`,
   )
 
   return (state: any = initialState, action: Action): any => {
@@ -20,12 +20,12 @@ const handleAction = (type: string, reducer: Handler = R.identity, initialState:
 
 const reducersArr = (map: HandlerMap, initialState: any): Handler[] =>
   R.map((type: string): Handler =>
-    handleAction(type, R.prop(type, map), initialState), R.keys(map)
+    handleAction(type, R.prop(type, map), initialState), R.keys(map),
   )
 
 const handlerMap = (types: ActionTypes, handlers: HandlerMap): HandlerMap =>
   reduceIndexed((obj: object, key: string, idx: number): HandlerMap =>
-    R.assoc(key, R.nth(idx, R.values(handlers)), obj), {}, types
+    R.assoc(key, R.nth(idx, R.values(handlers)), obj), {}, types,
   )
 
 const createReducer = (initialState: any, types: ActionTypes, handlers: HandlerMap): Handler => {

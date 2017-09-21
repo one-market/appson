@@ -19,11 +19,11 @@ const createSelector = (key: string): Selector => (state: any): any =>
 
 const reduceState = (initial: any): SelectorMap =>
   R.reduce((obj: SelectorMap, key: string): SelectorMap =>
-    R.assoc(key, createSelector(key), obj), {}, R.keys(initial)
+    R.assoc(key, createSelector(key), obj), {}, R.keys(initial),
   )
 
 const stateAsProp = (name: string): SelectorMap => ({
-  [name]: (state: any): any => getInState(state, name)
+  [name]: (state: any): any => getInState(state, name),
 })
 
 const createSelectors = (name: string, initial: any, computed: SelectorMap | null): any => {
