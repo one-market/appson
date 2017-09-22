@@ -1,9 +1,10 @@
+import * as React from 'react'
 import * as Redux from 'redux';
 import * as ReduxSaga from 'redux-saga'
 import * as ReactRouter from 'react-router'
 
-import State from './src/state'
-export * from './index'
+import { App } from './src/appson'
+import BaseState from './src/state'
 
 declare module '@onemarket/appson' {
   /*
@@ -24,6 +25,8 @@ declare module '@onemarket/appson' {
   export interface AppStore extends Redux.Store<any> {
     defaultReducers: Redux.ReducersMapObject
   }
+
+  export function appson(Module: React.ComponentType): App
 
   /*
     Components
@@ -68,6 +71,10 @@ declare module '@onemarket/appson' {
     children: any,
     store: AppStore,
   }>
+
+  export class Routes<P extends RoutesProps = RoutesProps> extends React.PureComponent<P> {}
+  export class Route<P extends RouteProps = RouteProps> extends React.PureComponent<P> {}
+  export class Link<P extends LinkProps = LinkProps> extends React.PureComponent<P> {}
 
   /*
     State
@@ -117,6 +124,8 @@ declare module '@onemarket/appson' {
     handlers?: HandlerMap
   }
 
+  export class State<S> extends BaseState<S> {}
+
   export type StateParent = State<any> | null
   export type StateChildren = StateMap | null
 
@@ -138,24 +147,33 @@ declare module '@onemarket/appson' {
     Hocs
   **/
 
-  interface AddReturnedFn {
+  interface AddReturnFn {
     (resource: React.ComponentType | State<any>): React.ComponentType | State<any>
   }
 
   export interface AddStateFn<S> {
-    (state: State<S>): AddReturnedFn
+    (state: State<S>): AddReturnFn
   }
 
   export interface AddEffectsFn {
-    <E extends Effects>(effects: E): AddReturnedFn
+    <E extends Effects>(effects: E): AddReturnFn
   }
 
   interface ConnectPredicateFn {
     (...states: object[]): object
   }
 
-  export interface ConnectFn {
-    (states: string[], mapper?: ConnectPredicateFn):
-      (WrappedComponent: React.ComponentType) => React.ComponentType
+  interface ConnectReturnFn {
+    (WrappedComponent: React.ComponentType): React.ComponentType
   }
+
+  export interface ConnectFn {
+    (states: string[], mapper?: ConnectPredicateFn): ConnectReturnFn
+  }
+
+  export function addState<S>(state: State<S>): AddReturnFn
+  export function addEffects<E extends Effects = Effects>(effects: Effects): AddReturnFn
+
+  export function connectProps(states: string[], mapper?: ConnectPredicateFn): ConnectReturnFn
+  export function connectHandlers(states: string[], mapper?: ConnectPredicateFn): ConnectReturnFn
 }
