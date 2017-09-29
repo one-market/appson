@@ -69,7 +69,7 @@ declare module '@onemarket/appson' {
 
   export type WrapperComponent = React.ComponentType<{
     children: any,
-    store: AppStore,
+    store?: AppStore,
   }>
 
   export class Routes<P extends RoutesProps = RoutesProps> extends React.PureComponent<P> {}
