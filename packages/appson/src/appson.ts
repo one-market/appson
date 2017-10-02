@@ -12,19 +12,20 @@ import createHistory from 'history/createBrowserHistory'
 
 import createStore, { sagaMiddleware } from './utils/create-store'
 import createApp from './utils/create-app'
+import getDisplayName from './utils/get-display-name'
 import rootSaga from './sagas/root'
 
 export class App {
-  private Wrapper: WrapperComponent
+  private wrappers: WrapperComponent[]
   private RootModule: ComponentType
   private history: History
   private middlewares: Middleware[]
   private defaultReducers: ReducersMapObject
 
   constructor(Module: ComponentType) {
-    this.Wrapper = ({ children }) => children
     this.RootModule = Module
     this.history = createHistory()
+    this.wrappers = []
 
     this.middlewares = [
       routerMiddleware(this.history),
@@ -46,15 +47,17 @@ export class App {
   }
 
   public wrapper(Component: WrapperComponent): App {
-    this.Wrapper = Component
+    Component.displayName = Component.displayName || Component.name || 'AppsonWrapper'
+    this.wrappers.push(Component)
+
     return this
   }
 
   public render(el: string): void {
-    const { Wrapper, RootModule, middlewares, defaultReducers, history } = this
+    const { wrappers, RootModule, middlewares, defaultReducers, history } = this
 
     const store: AppStore = createStore(middlewares, defaultReducers)
-    const app: JSX.Element = createApp(Wrapper, RootModule, store, history)
+    const app: JSX.Element = createApp(RootModule, wrappers, store, history)
 
     sagaMiddleware.run(rootSaga, store)
     render(app, document.querySelector(el))

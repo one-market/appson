@@ -1,5 +1,6 @@
-import { WrapperComponent, AppStore } from '../../index.d'
+import { WrapperComponent as WC, WrapperProps, AppStore } from '../../index.d'
 
+import R from 'ramda'
 import React, { ComponentType } from 'react'
 import { History } from 'history'
 import { ConnectedRouter } from 'react-router-redux'
@@ -10,12 +11,25 @@ import createProvider from './create-provider'
 import effects from '../stores/effects'
 import states from '../stores/states'
 
-interface CreateAppFn {
-  (Wrapper: WrapperComponent, Module: ComponentType, store: AppStore, history: History): JSX.Element
+interface RecursiveWrappersFn {
+  (wrappers: WC[], props: WrapperProps): JSX.Element
 }
 
-const createApp: CreateAppFn = (Wrapper, Module, store, history) => {
+interface CreateAppFn {
+  (Module: ComponentType, wrappers: WC[], store: AppStore, history: History): JSX.Element
+}
+
+const recursiveWrappers: RecursiveWrappersFn = ([Wrapper, ...rest], props) => (
+  <Wrapper {...props}>
+    {rest.length ? recursiveWrappers(rest, props) : props.children}
+  </Wrapper>
+)
+
+const createApp: CreateAppFn = (Module, wrappers, store, history) => {
   const Provider: ComponentType = createProvider({ store, states, effects })
+
+  const Wrapper: WC = (props) =>
+    wrappers.length ? recursiveWrappers(wrappers, props) : props.children
 
   return (
     <ReactHotLoader key={Math.random()}>
