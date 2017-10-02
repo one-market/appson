@@ -24,8 +24,8 @@
   },
   "peerDependencies": {
     "@onemarket/appson-cli": "^0.2.0",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "react-router": "^4.2.0",
     "redux": "^3.7.2",
     "redux-saga": "^0.15.6"
