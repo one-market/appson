@@ -51,7 +51,7 @@ const atState = (childState: State<any>, state: State<any>): State<any> => {
 }
 
 export interface AddStateFn<S> {
-  (state: State<S>): (resource: React.ComponentType | State<any>) => ComponentType | State<any>
+  (state: State<S>): (resource: React.ComponentType | State<any>) => any
 }
 
 const addState: AddStateFn<any> = (state) => (resource) =>

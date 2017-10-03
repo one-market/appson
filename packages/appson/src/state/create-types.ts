@@ -1,4 +1,4 @@
-import { ActionTypes, HandlerMap } from './'
+import { ActionTypes, HandlerMap } from '../state'
 import R from 'ramda'
 
 const snakeCase = (str: string): string =>

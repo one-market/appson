@@ -1,4 +1,4 @@
-import { ActionTypes, Action, Handler, HandlerMap } from './'
+import { ActionTypes, Action, Handler, HandlerMap } from '../state'
 
 import R from 'ramda'
 import invariant from 'invariant'

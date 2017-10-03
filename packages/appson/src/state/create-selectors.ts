@@ -1,4 +1,4 @@
-import { Computed, ComputedMap } from './'
+import { Computed, ComputedMap } from '../state'
 
 type Selector = Computed
 type SelectorMap = ComputedMap

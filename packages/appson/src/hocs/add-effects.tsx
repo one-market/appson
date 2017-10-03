@@ -44,8 +44,7 @@ const atState = (effects: Effects, state: State<any>): State<any> => {
 }
 
 export interface AddEffectsFn {
-  <E extends Effects>(effects: E):
-    (resource: React.ComponentType | State<any>) => ComponentType | State<any>
+  <E extends Effects>(effects: E): (resource: React.ComponentType | State<any>) => any
 }
 
 const addEffects: AddEffectsFn = (effects) => (resource) =>
