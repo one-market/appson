@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.2.7"></a>
+## [0.2.7](https://github.com/one-market/appson/compare/v0.2.6...v0.2.7) (2017-10-03)
+
+
+
+
+**Note:** Version bump only for package @onemarket/appson-example-graphql
+
 <a name="0.2.6"></a>
 ## [0.2.6](https://github.com/one-market/appson/compare/v0.2.5...v0.2.6) (2017-10-03)
 
