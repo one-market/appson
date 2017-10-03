@@ -17,10 +17,11 @@
     "lint": "tslint -p ./",
     "prebuild:dev": "yarn run lint",
     "prebuild:prod": "yarn run lint",
+    "dts": "node ./scripts/dts",
     "build": "lib build --sm --gzip",
     "build:prod": "yarn run build --p",
     "build:watch": "yarn run build --w",
-    "dts": "dts-generator --name @onemarket/appson --project ./ --out ./index.d.ts"
+    "postbuild": "yarn run dts"
   },
   "peerDependencies": {
     "@onemarket/appson-cli": "^0.2.0",
@@ -50,6 +51,7 @@
     "dts-generator": "^2.1.0",
     "eslint": "^4.7.2",
     "eslint-config-appson": "^0.2.0",
+    "shelljs": "^0.7.8",
     "tslint": "^5.7.0",
     "tslint-config-appson": "^0.2.0"
   }

@@ -33,22 +33,22 @@ declare module '@onemarket/appson/lib/utils/invariants' {
 
 }
 declare module '@onemarket/appson/lib/state/create-actions' {
-	import { ActionMap, HandlerMap } from '@onemarket/appson/lib/state/'; const createActions: (types: string[], handlers: HandlerMap<any>) => ActionMap;
+	import { ActionMap, HandlerMap } from '@onemarket/appson/lib/state'; const createActions: (types: string[], handlers: HandlerMap<any>) => ActionMap;
 	export default createActions;
 
 }
 declare module '@onemarket/appson/lib/state/create-reducer' {
-	import { Handler, HandlerMap } from '@onemarket/appson/lib/state/'; const createReducer: (initialState: any, types: string[], handlers: HandlerMap<any>) => Handler<any>;
+	import { Handler, HandlerMap } from '@onemarket/appson/lib/state'; const createReducer: (initialState: any, types: string[], handlers: HandlerMap<any>) => Handler<any>;
 	export default createReducer;
 
 }
 declare module '@onemarket/appson/lib/state/create-types' {
-	import { HandlerMap } from '@onemarket/appson/lib/state/'; const createTypes: (stateName: string, handlers: HandlerMap<any>) => string[];
+	import { HandlerMap } from '@onemarket/appson/lib/state'; const createTypes: (stateName: string, handlers: HandlerMap<any>) => string[];
 	export default createTypes;
 
 }
 declare module '@onemarket/appson/lib/state/create-selectors' {
-	import { ComputedMap } from '@onemarket/appson/lib/state/'; const createSelectors: (name: string, initial: any, computed: ComputedMap<any> | null) => any;
+	import { ComputedMap } from '@onemarket/appson/lib/state'; const createSelectors: (name: string, initial: any, computed: ComputedMap<any> | null) => any;
 	export default createSelectors;
 
 }
@@ -316,19 +316,19 @@ declare module '@onemarket/appson/lib/utils/get-display-name' {
 
 }
 declare module '@onemarket/appson/lib/hocs/add-effects' {
-	import React, { ComponentType } from 'react';
+	import React from 'react';
 	import State, { Effects } from '@onemarket/appson/lib/state';
 	export interface AddEffectsFn {
-	    <E extends Effects>(effects: E): (resource: React.ComponentType | State<any>) => ComponentType | State<any>;
+	    <E extends Effects>(effects: E): (resource: React.ComponentType | State<any>) => any;
 	} const addEffects: AddEffectsFn;
 	export default addEffects;
 
 }
 declare module '@onemarket/appson/lib/hocs/add-state' {
-	import React, { ComponentType } from 'react';
+	import React from 'react';
 	import State from '@onemarket/appson/lib/state';
 	export interface AddStateFn<S> {
-	    (state: State<S>): (resource: React.ComponentType | State<any>) => ComponentType | State<any>;
+	    (state: State<S>): (resource: React.ComponentType | State<any>) => any;
 	} const addState: AddStateFn<any>;
 	export default addState;
 
