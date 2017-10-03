@@ -1,21 +1,25 @@
-import { RouteProps } from '../../index.d'
-
 import t from 'prop-types'
 import React, { PureComponent } from 'react'
-import { Route as RRoute } from 'react-router'
+import * as ReactRouter from 'react-router'
 
-type Context = {
+export interface RouteComponentProps<P> extends ReactRouter.RouteComponentProps<P> {}
+
+export interface RouteProps extends ReactRouter.RouteProps {
+  basePath?: string | null,
+}
+
+export type RouteContext = {
   basePath: string,
 }
 
 class Route extends PureComponent<RouteProps, {}> {
-  childContext: Context
+  childContext: RouteContext
 
   static childContextTypes = {
     basePath: t.string,
   }
 
-  getChildContext(): Context {
+  getChildContext(): RouteContext {
     return {
       basePath: this.props.basePath || '',
     }
@@ -23,7 +27,7 @@ class Route extends PureComponent<RouteProps, {}> {
 
   render(): JSX.Element {
     return (
-      <RRoute {...this.props} />
+      <ReactRouter.Route {...this.props} />
     )
   }
 }

@@ -2,10 +2,10 @@
   "name": "@onemarket/appson",
   "description": "Frontend framework to manage React applications",
   "version": "0.2.7",
-  "main": "lib/index.js",
-  "browser": "lib/index.js",
-  "module": "es/index.js",
-  "jsnext:main": "es/index.js",
+  "main": "./lib/index.js",
+  "browser": "./lib/index.js",
+  "module": "./es/index.js",
+  "jsnext:main": "./es/index.js",
   "typings": "./index.d.ts",
   "files": [
     "lib",
@@ -19,7 +19,8 @@
     "prebuild:prod": "yarn run lint",
     "build:dev": "cross-env NODE_ENV=development rollup -c",
     "build:prod": "cross-env NODE_ENV=production rollup -c",
-    "build:watch": "yarn run build:dev --watch"
+    "build:watch": "yarn run build:dev --watch",
+    "dts": "dts-generator --name @onemarket/appson --project ./ --out ./index.d.ts"
   },
   "peerDependencies": {
     "@onemarket/appson-cli": "^0.2.0",
@@ -44,6 +45,7 @@
     "babel-plugin-ramda": "^1.4.3",
     "babel-plugin-transform-private-underscore": "^0.1.3",
     "babel-preset-appson": "^0.2.0",
+    "dts-generator": "^2.1.0",
     "eslint": "^4.7.2",
     "eslint-config-appson": "^0.2.0",
     "rollup": "^0.49.2",

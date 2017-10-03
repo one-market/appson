@@ -1,4 +1,4 @@
-import { Computed, ComputedMap } from '../../index.d'
+import { Computed, ComputedMap } from './'
 
 type Selector = Computed
 type SelectorMap = ComputedMap

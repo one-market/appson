@@ -1,4 +1,4 @@
-import { StateMap, Action } from '../../index.d'
+import { StateMap, Action } from '../state'
 
 import R from 'ramda'
 import { createStore, Store } from 'redux'

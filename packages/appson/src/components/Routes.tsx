@@ -1,5 +1,3 @@
-import { RoutesProps } from '../../index.d'
-
 import R from 'ramda'
 import t from 'prop-types'
 import React, { PureComponent, Children, ReactElement } from 'react'
@@ -12,6 +10,10 @@ const mergePath = (basePath: string, path: string): string =>
 
 export const mountPath = (basePath: string, path: string): string =>
   R.not(R.isNil(path)) ? mergePath(basePath, path) : ''
+
+export interface RoutesProps {
+  children: any
+}
 
 type Child = ReactElement<{
   path: string,

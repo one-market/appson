@@ -1,18 +1,11 @@
-import {
-  StateMap,
-  Action,
-  Effects,
-  AddStateFn,
-  InternalStore,
-} from '../../index.d'
-
 import t from 'prop-types'
 import React, { ComponentType, PureComponent } from 'react'
 
-import State from '../state'
-import addEffects from './add-effects'
+import { InternalStore } from '../appson'
+import State, { StateMap, Action, Effects } from '../state'
 import { toggleState } from '../stores/states'
 import getDisplayName from '../utils/get-display-name'
+import addEffects from './add-effects'
 
 type Context = {
   states: InternalStore,
@@ -55,6 +48,10 @@ const atComponent = (state: State<any>, WrappedComponent: ComponentType) => {
 const atState = (childState: State<any>, state: State<any>): State<any> => {
   if (childState) state.addChild(childState)
   return state
+}
+
+export interface AddStateFn<S> {
+  (state: State<S>): (resource: React.ComponentType | State<any>) => ComponentType | State<any>
 }
 
 const addState: AddStateFn<any> = (state) => (resource) =>

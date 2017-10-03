@@ -1,9 +1,8 @@
-import { Effects, AddEffectsFn, InternalStore } from '../../index.d'
-
 import t from 'prop-types'
 import React, { ComponentType, PureComponent } from 'react'
 
-import State from '../state'
+import { InternalStore } from '../appson'
+import State, { Effects } from '../state'
 import { toggleEffects } from '../stores/effects'
 import getDisplayName from '../utils/get-display-name'
 
@@ -42,6 +41,11 @@ const atComponent = (effects: Effects, WrappedComponent: ComponentType): Compone
 const atState = (effects: Effects, state: State<any>): State<any> => {
   if (effects) state.addEffects(effects)
   return state
+}
+
+export interface AddEffectsFn {
+  <E extends Effects>(effects: E):
+    (resource: React.ComponentType | State<any>) => ComponentType | State<any>
 }
 
 const addEffects: AddEffectsFn = (effects) => (resource) =>

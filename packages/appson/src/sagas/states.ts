@@ -1,9 +1,8 @@
-import { AppStore, StateMap } from '../../index.d'
-
 import R from 'ramda'
 import { combineReducers, Reducer } from 'redux'
 
-import State from '../state'
+import { AppStore } from '../appson'
+import State, { StateMap } from '../state'
 
 const statesSaga = (store: AppStore, states: StateMap): void => {
   const statesReducers = R.mapObjIndexed(

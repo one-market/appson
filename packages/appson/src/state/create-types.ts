@@ -1,4 +1,4 @@
-import { ActionTypes, HandlerMap } from '../../index.d'
+import { ActionTypes, HandlerMap } from './'
 import R from 'ramda'
 
 const snakeCase = (str: string): string =>

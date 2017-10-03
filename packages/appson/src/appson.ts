@@ -1,10 +1,7 @@
 /* eslint no-use-before-define: 0, react/jsx-no-bind: 0, brace-style: 0 */
-
-import { WrapperComponent, AppStore } from '../index.d'
-
 import R from 'ramda'
 import { ComponentType } from 'react'
-import { ReducersMapObject, Middleware } from 'redux'
+import { ReducersMapObject, Middleware, Store } from 'redux'
 import { History } from 'history'
 import { render } from 'react-dom'
 import { routerReducer, routerMiddleware } from 'react-router-redux'
@@ -13,6 +10,21 @@ import createHistory from 'history/createBrowserHistory'
 import createStore, { sagaMiddleware } from './utils/create-store'
 import createApp from './utils/create-app'
 import rootSaga from './sagas/root'
+
+export interface InternalStore extends Store<any> {
+  name: string
+}
+
+export interface AppStore extends Store<any> {
+  defaultReducers: ReducersMapObject
+}
+
+export type WrapperProps = {
+  children: any,
+  store?: AppStore,
+}
+
+export type WrapperComponent = React.ComponentType<WrapperProps>
 
 export class App {
   private wrappers: WrapperComponent[]

@@ -1,8 +1,7 @@
-import { Effects, Action } from '../../index.d'
+import { Effects, Action } from '../state'
 
 import R from 'ramda'
 import { createStore, combineReducers, Store, Reducer } from 'redux'
-
 import { symmetricDiff } from '../utils/object/diff'
 
 type EffectsState = Effects

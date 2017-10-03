@@ -1,20 +1,8 @@
-import {
-  StateParams,
-  StateParent,
-  StateChildren,
-  Action,
-  ActionFn,
-  ActionMap,
-  Reducer,
-  Computed,
-  ComputedMap,
-  Effects,
-} from '../../index.d'
-
 import R from 'ramda'
 import reduceReducers from 'reduce-reducers'
-import { Dispatch } from 'redux'
 import invariant from 'invariant'
+import * as Redux from 'redux'
+import * as ReduxSaga from 'redux-saga'
 
 import deepEqual from '../utils/object/deep-equal'
 import * as invariants from '../utils/invariants'
@@ -28,19 +16,73 @@ import statesStore from '../stores/states'
 const isObj = R.is(Object)
 const isFn = R.is(Function)
 
+export interface Meta<Data = any> {
+  [key: string]: Data
+}
+
+export type ActionTypes = string[]
+
+export interface Action<Payload = any> extends Redux.Action {
+  payload?: Payload
+  meta?: Meta
+}
+
+export interface ActionFn<Payload = any> {
+  <A extends Action>(payload?: Payload, meta?: any): A
+}
+
+export interface ActionMap {
+  [actionName: string]: ActionFn
+}
+
+export interface Handler<State = any> {
+  <A extends Action>(state: State, action: A): State
+}
+
+export interface Reducer<State = any> extends Handler<State> {}
+
+export interface HandlerMap<State = any> {
+  [reducerName: string]: Handler<State>
+}
+
+export interface Computed<State = any, Props = any, PropValue = any> {
+  (state: State, props?: Props): PropValue
+}
+
+export interface ComputedMap<State = any> {
+  [selectorName: string]: Computed<State>
+}
+
+export interface StateParams {
+  name: string
+  initial?: any
+  computed?: ComputedMap
+  handlers?: HandlerMap
+}
+
+export interface StateMap {
+  [stateName: string]: State<any>
+}
+
+export type Effect = ReduxSaga.SagaIterator
+
+export interface Effects {
+  [effect: string]: Effect
+}
+
 interface Selector<S> extends Computed<S> {}
 interface Selectors<S> extends ComputedMap<S> {}
 
-class State<S> {
+export class State<S> {
   public name: string
-  public children: StateChildren
+  public children: StateMap | null
 
   private _initial: any
   private _actions: ActionMap
   private _rootReducer: Reducer
   private _selectors: Selectors<S>
   private _effects: Effects
-  private _parent: StateParent
+  private _parent: State<any> | null
 
   constructor({ name: stateName, initial = {}, handlers = {}, computed = null }: StateParams) {
     invariants.isString('name', stateName)
@@ -110,7 +152,7 @@ class State<S> {
     this._updateReducerWithChild(child)
   }
 
-  public mapDispatch(dispatch: Dispatch<any>): ActionMap {
+  public mapDispatch(dispatch: Redux.Dispatch<any>): ActionMap {
     const actions: ActionMap = this._actions
 
     const reduceActions = R.reduce((obj: object, key: string): object => {

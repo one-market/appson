@@ -7,12 +7,12 @@ import effectsStore, { setActiveEffects } from '../stores/effects'
 
 const sDiffAndFilterByFn = R.pipe(symmetricDiff, R.pickBy(R.is(Function)))
 
-type Params = {
+export type EffectsSagaParams = {
   active: object,
   effects: object,
 }
 
-export default function* effectsSaga({ effects, active }: Params): SagaIterator {
+export default function* effectsSaga({ effects, active }: EffectsSagaParams): SagaIterator {
   const tasksToCancel = diff(active, effects)
   const activeWithoutCanceled = diff(active, tasksToCancel)
   const effectsToFork = sDiffAndFilterByFn(active, effects)

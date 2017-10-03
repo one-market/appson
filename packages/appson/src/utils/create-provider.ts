@@ -1,8 +1,8 @@
-import { AppStore, InternalStore } from '../../index.d'
-
 import R from 'ramda'
 import t from 'prop-types'
 import { Children, ComponentType, PureComponent } from 'react'
+
+import { AppStore, InternalStore } from '../appson'
 
 type StoreMap = {
   [key: string]: AppStore | InternalStore,

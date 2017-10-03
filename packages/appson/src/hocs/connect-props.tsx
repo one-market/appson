@@ -1,21 +1,29 @@
-import { ConnectFn, AppStore } from '../../index.d'
-
 import t from 'prop-types'
 import R from 'ramda'
 import React, { PureComponent } from 'react'
 
+import { AppStore } from '../appson'
 import State from '../state'
 import deepEqual from '../utils/object/deep-equal'
 import getDisplayName from '../utils/get-display-name'
 import * as invariants from '../utils/invariants'
 
-type Context = {
-  store: AppStore,
-}
-
-type ConnectState = {
+export type ConnectPropsState = {
   props: object,
   args: object,
+}
+
+export interface MapperFn {
+  (...states: object[]): object
+}
+
+export interface ConnectFn {
+  (states: string[], mapper?: MapperFn):
+    (WrappedComponent: React.ComponentType) => React.ComponentType
+}
+
+export type ConnectPropsContext = {
+  store: AppStore,
 }
 
 const reduceIndexed = R.addIndex(R.reduce)
@@ -27,8 +35,8 @@ const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
 
   let unsubscribe: () => void
 
-  return class ConnectProps extends PureComponent<{}, ConnectState> {
-    context: Context
+  return class ConnectProps extends PureComponent<{}, ConnectPropsState> {
+    context: ConnectPropsContext
 
     static displayName: string = `ConnectProps(${getDisplayName(WrappedComponent)})`
 

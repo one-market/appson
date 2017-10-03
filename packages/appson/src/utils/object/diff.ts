@@ -1,6 +1,6 @@
 import R from 'ramda'
 
-type DiffObj = object | null | undefined
+type DiffObj = any
 
 const normalize = R.reduce((obj, { name, fn }) => R.assoc(name, fn, obj), {})
 

@@ -1,10 +1,9 @@
-import { AppStore, StoresChannel, StoresChannelAction } from '../../index.d'
-
 import R from 'ramda'
 import { fork, take, call } from 'redux-saga/effects'
 import { SagaIterator } from 'redux-saga'
 
-import appsonChannel from './channel'
+import { AppStore } from '../appson'
+import appsonChannel, { StoresChannel, StoresChannelAction } from './channel'
 import effectsSaga from './effects'
 import statesSaga from './states'
 

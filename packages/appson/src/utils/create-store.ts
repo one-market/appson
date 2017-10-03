@@ -1,5 +1,3 @@
-import { AppStore } from '../../index.d'
-
 import R from 'ramda'
 import { devToolsEnhancer } from 'redux-devtools-extension'
 import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
@@ -14,9 +12,11 @@ import {
   applyMiddleware,
 } from 'redux'
 
+import { AppStore } from '../appson'
+
 export const sagaMiddleware: SagaMiddleware<any> = createSagaMiddleware()
 
-interface CreateStoreFn {
+export interface CreateStoreFn {
   (middlewares: Middleware[], defaultReducers: ReducersMapObject): AppStore
 }
 

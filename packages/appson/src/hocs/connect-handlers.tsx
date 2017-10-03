@@ -1,21 +1,29 @@
-import { ConnectFn, AppStore } from '../../index.d'
-
 import t from 'prop-types'
 import R from 'ramda'
 import React, { PureComponent } from 'react'
 import { Dispatch } from 'redux'
 
+import { AppStore } from '../appson'
 import State from '../state'
 import getDisplayName from '../utils/get-display-name'
 import * as invariants from '../utils/invariants'
 
-type Context = {
-  store: AppStore,
-}
-
-type ConnectState = {
+export type ConnectHandlerState = {
   handlers: object,
   args: object,
+}
+
+export interface MapperFn {
+  (...states: object[]): object
+}
+
+export interface ConnectFn {
+  (states: string[], mapper?: MapperFn):
+    (WrappedComponent: React.ComponentType) => React.ComponentType
+}
+
+type ConnectHandlersContext = {
+  store: AppStore,
 }
 
 const reduceIndexed = R.addIndex(R.reduce)
@@ -25,8 +33,8 @@ const connectHandlers: ConnectFn = (states, mapHandlers) => (WrappedComponent) =
     invariants.isFn('mapHandlers', mapHandlers)
   }
 
-  return class ConnectHandlers extends PureComponent<{}, ConnectState> {
-    context: Context
+  return class ConnectHandlers extends PureComponent<{}, ConnectHandlerState> {
+    context: ConnectHandlersContext
 
     static displayName: string = `ConnectHandlers(${getDisplayName(WrappedComponent)})`
 
