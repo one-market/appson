@@ -49,7 +49,7 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
     sourceMapFilename: 'static/js/[name].[chunkhash:8].js.map',
     devtoolModuleFilenameTemplate: info =>
-      relative(paths.appSrc, info.absoluteResourcePath)
+      relative(paths.app.src.root, info.absoluteResourcePath)
         .replace(/\\/g, '/'),
   },
   module: {
@@ -72,7 +72,7 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     new ExtractTextPlugin('static/css/style.[contenthash:8].css'),
     new HtmlWebpackPlugin({
       inject: true,
-      template: paths.app.htmlFile,
+      template: paths.app.assets.htmlFile,
       data: loadConfig('htmlData'),
       minify: {
         removeComments: true,

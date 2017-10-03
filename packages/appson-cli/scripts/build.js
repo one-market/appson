@@ -18,6 +18,8 @@ const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages')
 const printHostingInstructions = require('react-dev-utils/printHostingInstructions')
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter')
 const printBuildError = require('react-dev-utils/printBuildError')
+const PrettyError = require('pretty-error')
+const pe = new PrettyError()
 
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024
@@ -33,18 +35,26 @@ if (!checkRequiredFiles([paths.app.assets.htmlFile])) {
 const build = (previousFileSizes) => {
   console.log('Creating an optimized production build...')
 
-  let compiler = webpack(config)
+  let compiler
+
+  try {
+    compiler = webpack(config)
+  } catch (err) {
+    console.log(pe.render(err))
+    process.exit(1)
+  }
 
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
-      if (err) {
-        return reject(err)
-      }
+      if (err) return reject(err)
+
       const messages = formatWebpackMessages(stats.toJson({}, true))
+
       if (messages.errors.length) {
         if (messages.errors.length > 1) messages.errors.length = 1
         return reject(new Error(messages.errors.join('\n\n')))
       }
+
       if (
         process.env.CI &&
         (typeof process.env.CI !== 'string' ||
@@ -57,8 +67,10 @@ const build = (previousFileSizes) => {
               'Most CI servers set it automatically.\n'
           )
         )
+
         return reject(new Error(messages.warnings.join('\n\n')))
       }
+
       return resolve({
         stats,
         previousFileSizes,

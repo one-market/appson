@@ -96,7 +96,7 @@ const config = new Config().merge({
 })
 
 if (argv.ts) {
-  config.module.rules.unshift({
+  config.module.rules.push({
     test: /\.(ts|tsx)$/,
     enforce: 'pre',
     include: [paths.app.src.root],
