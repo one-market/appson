@@ -12,7 +12,6 @@ import createHistory from 'history/createBrowserHistory'
 
 import createStore, { sagaMiddleware } from './utils/create-store'
 import createApp from './utils/create-app'
-import getDisplayName from './utils/get-display-name'
 import rootSaga from './sagas/root'
 
 export class App {

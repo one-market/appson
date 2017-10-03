@@ -10,7 +10,6 @@
   "files": [
     "lib",
     "es",
-    "src",
     "index.d.ts"
   ],
   "license": "MIT",
