@@ -1,7 +1,7 @@
 {
   "name": "@onemarket/appson",
   "description": "Frontend framework to manage React applications",
-  "version": "0.2.8",
+  "version": "0.3.0",
   "main": "./lib/index.js",
   "browser": "./lib/index.js",
   "module": "./es/index.js",
@@ -24,12 +24,12 @@
   },
   "peerDependencies": {
     "@onemarket/appson-cli": "^0.2.0",
+    "history": "^4.7.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-router": "^4.2.0",
     "redux": "^3.7.2",
-    "redux-saga": "^0.15.6",
-    "history": "^4.7.2"
+    "redux-saga": "^0.15.6"
   },
   "dependencies": {
     "invariant": "^2.2.2",
@@ -42,7 +42,7 @@
     "redux-devtools-extension": "^2.13.2"
   },
   "devDependencies": {
-    "@onemarket/appson-lib": "^0.2.8",
+    "@onemarket/appson-lib": "^0.3.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-ramda": "^1.4.3",
     "babel-plugin-transform-private-underscore": "^0.1.3",
