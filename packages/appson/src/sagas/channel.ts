@@ -1,4 +1,4 @@
-import * as ReduxSaga from 'redux-saga'
+import { Channel, eventChannel } from 'redux-saga'
 
 import { InternalStore } from '../appson'
 import states from '../stores/states'
@@ -9,7 +9,7 @@ export type StoresChannelAction = {
   state: any,
 }
 
-export type StoresChannel = ReduxSaga.Channel<StoresChannelAction>
+export type StoresChannel = Channel<StoresChannelAction>
 
 export interface EmitterFn {
   (data: StoresChannelAction): any
@@ -26,7 +26,7 @@ export interface AppsonChannel {
 const emitFrom = (emitter: EmitterFn): EmitFn => ({ name, getState }) => () =>
   emitter({ storeName: name, state: getState() })
 
-const channel: AppsonChannel = () => ReduxSaga.eventChannel((emitter: EmitterFn): () => void => {
+const channel: AppsonChannel = () => eventChannel((emitter: EmitterFn): () => void => {
   const emit = emitFrom(emitter)
 
   states.subscribe(emit(states))

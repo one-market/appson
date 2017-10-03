@@ -1,10 +1,14 @@
 import t from 'prop-types'
 import React, { PureComponent } from 'react'
-import * as ReactRouter from 'react-router'
+import {
+  Route as RRoute,
+  RouteComponentProps as RRouteComponentProps,
+  RouteProps as RRouteProps,
+} from 'react-router'
 
-export interface RouteComponentProps<P> extends ReactRouter.RouteComponentProps<P> {}
+export interface RouteComponentProps<P> extends RRouteComponentProps<P> {}
 
-export interface RouteProps extends ReactRouter.RouteProps {
+export interface RouteProps extends RRouteProps {
   basePath?: string | null,
 }
 
@@ -27,7 +31,7 @@ class Route extends PureComponent<RouteProps, {}> {
 
   render(): JSX.Element {
     return (
-      <ReactRouter.Route {...this.props} />
+      <RRoute {...this.props} />
     )
   }
 }

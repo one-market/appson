@@ -1,8 +1,8 @@
 import R from 'ramda'
 import reduceReducers from 'reduce-reducers'
 import invariant from 'invariant'
-import * as Redux from 'redux'
-import * as ReduxSaga from 'redux-saga'
+import { Action as ReduxAction, Dispatch } from 'redux'
+import { SagaIterator } from 'redux-saga'
 
 import deepEqual from '../utils/object/deep-equal'
 import * as invariants from '../utils/invariants'
@@ -22,7 +22,7 @@ export interface Meta<Data = any> {
 
 export type ActionTypes = string[]
 
-export interface Action<Payload = any> extends Redux.Action {
+export interface Action<Payload = any> extends ReduxAction {
   payload?: Payload
   meta?: Meta
 }
@@ -64,7 +64,7 @@ export interface StateMap {
   [stateName: string]: State<any>
 }
 
-export type Effect = ReduxSaga.SagaIterator
+export type Effect = SagaIterator
 
 export interface Effects {
   [effect: string]: Effect
@@ -152,7 +152,7 @@ export class State<S> {
     this._updateReducerWithChild(child)
   }
 
-  public mapDispatch(dispatch: Redux.Dispatch<any>): ActionMap {
+  public mapDispatch(dispatch: Dispatch<any>): ActionMap {
     const actions: ActionMap = this._actions
 
     const reduceActions = R.reduce((obj: object, key: string): object => {

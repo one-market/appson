@@ -1,6 +1,6 @@
 import t from 'prop-types'
 import React, { PureComponent } from 'react'
-import * as ReactRouter from 'react-router'
+import { match } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
 import { mountPath } from './Routes'
@@ -14,7 +14,7 @@ export type LocationObject = {
 }
 
 export interface LinkActiveFn {
-  (match: ReactRouter.match<any>, location: LocationObject): boolean
+  (match: match<any>, location: LocationObject): boolean
 }
 
 export interface LinkProps {

@@ -1,7 +1,7 @@
-declare module '@onemarket/appson/src/utils/create-store' {
+declare module '@onemarket/appson/lib/utils/create-store' {
 	import { SagaMiddleware } from 'redux-saga';
 	import { Middleware, ReducersMapObject } from 'redux';
-	import { AppStore } from '@onemarket/appson/src/appson';
+	import { AppStore } from '@onemarket/appson/lib/appson';
 	export const sagaMiddleware: SagaMiddleware<any>;
 	export interface CreateStoreFn {
 	    (middlewares: Middleware[], defaultReducers: ReducersMapObject): AppStore;
@@ -9,20 +9,20 @@ declare module '@onemarket/appson/src/utils/create-store' {
 	export default createStore;
 
 }
-declare module '@onemarket/appson/src/utils/create-provider' {
+declare module '@onemarket/appson/lib/utils/create-provider' {
 	import { ComponentType } from 'react';
-	import { AppStore, InternalStore } from '@onemarket/appson/src/appson'; const createProvider: (storeMap: {
+	import { AppStore, InternalStore } from '@onemarket/appson/lib/appson'; const createProvider: (storeMap: {
 	    [key: string]: AppStore | InternalStore;
 	}) => ComponentType<{}>;
 	export default createProvider;
 
 }
-declare module '@onemarket/appson/src/utils/object/deep-equal' {
+declare module '@onemarket/appson/lib/utils/object/deep-equal' {
 	 const deepEqual: (x: any, y: any) => boolean;
 	export default deepEqual;
 
 }
-declare module '@onemarket/appson/src/utils/invariants' {
+declare module '@onemarket/appson/lib/utils/invariants' {
 	import invariant from 'invariant';
 	export const isArrayOfString: (name: string, array: string[]) => void;
 	export const isString: (name: string, value: string) => void;
@@ -32,33 +32,33 @@ declare module '@onemarket/appson/src/utils/invariants' {
 	export default invariant;
 
 }
-declare module '@onemarket/appson/src/state/create-actions' {
-	import { ActionMap, HandlerMap } from '@onemarket/appson/src/state/'; const createActions: (types: string[], handlers: HandlerMap<any>) => ActionMap;
+declare module '@onemarket/appson/lib/state/create-actions' {
+	import { ActionMap, HandlerMap } from '@onemarket/appson/lib/state/'; const createActions: (types: string[], handlers: HandlerMap<any>) => ActionMap;
 	export default createActions;
 
 }
-declare module '@onemarket/appson/src/state/create-reducer' {
-	import { Handler, HandlerMap } from '@onemarket/appson/src/state/'; const createReducer: (initialState: any, types: string[], handlers: HandlerMap<any>) => Handler<any>;
+declare module '@onemarket/appson/lib/state/create-reducer' {
+	import { Handler, HandlerMap } from '@onemarket/appson/lib/state/'; const createReducer: (initialState: any, types: string[], handlers: HandlerMap<any>) => Handler<any>;
 	export default createReducer;
 
 }
-declare module '@onemarket/appson/src/state/create-types' {
-	import { HandlerMap } from '@onemarket/appson/src/state/'; const createTypes: (stateName: string, handlers: HandlerMap<any>) => string[];
+declare module '@onemarket/appson/lib/state/create-types' {
+	import { HandlerMap } from '@onemarket/appson/lib/state/'; const createTypes: (stateName: string, handlers: HandlerMap<any>) => string[];
 	export default createTypes;
 
 }
-declare module '@onemarket/appson/src/state/create-selectors' {
-	import { ComputedMap } from '@onemarket/appson/src/state/'; const createSelectors: (name: string, initial: any, computed: ComputedMap<any> | null) => any;
+declare module '@onemarket/appson/lib/state/create-selectors' {
+	import { ComputedMap } from '@onemarket/appson/lib/state/'; const createSelectors: (name: string, initial: any, computed: ComputedMap<any> | null) => any;
 	export default createSelectors;
 
 }
-declare module '@onemarket/appson/src/utils/object/diff' {
+declare module '@onemarket/appson/lib/utils/object/diff' {
 	export const diff: (x0: any, x1: any) => {};
 	export const symmetricDiff: (x0: any, x1: any) => {};
 
 }
-declare module '@onemarket/appson/src/stores/states' {
-	import { StateMap, Action } from '@onemarket/appson/src/state';
+declare module '@onemarket/appson/lib/stores/states' {
+	import { StateMap, Action } from '@onemarket/appson/lib/state';
 	import { Store } from 'redux'; const _default: Store<any> & {
 	    name: string;
 	};
@@ -66,14 +66,14 @@ declare module '@onemarket/appson/src/stores/states' {
 	export const toggleState: (payload: StateMap) => Action<StateMap>;
 
 }
-declare module '@onemarket/appson/src/state' {
-	import * as Redux from 'redux';
-	import * as ReduxSaga from 'redux-saga';
+declare module '@onemarket/appson/lib/state' {
+	import { Action as ReduxAction, Dispatch } from 'redux';
+	import { SagaIterator } from 'redux-saga';
 	export interface Meta<Data = any> {
 	    [key: string]: Data;
 	}
 	export type ActionTypes = string[];
-	export interface Action<Payload = any> extends Redux.Action {
+	export interface Action<Payload = any> extends ReduxAction {
 	    payload?: Payload;
 	    meta?: Meta;
 	}
@@ -106,7 +106,7 @@ declare module '@onemarket/appson/src/state' {
 	export interface StateMap {
 	    [stateName: string]: State<any>;
 	}
-	export type Effect = ReduxSaga.SagaIterator;
+	export type Effect = SagaIterator;
 	export interface Effects {
 	    [effect: string]: Effect;
 	}
@@ -128,7 +128,7 @@ declare module '@onemarket/appson/src/state' {
 	    setParent(state: State<any>): void;
 	    addEffects(effects: Effects): void;
 	    addChild(child: State<any>): void;
-	    mapDispatch(dispatch: Redux.Dispatch<any>): ActionMap;
+	    mapDispatch(dispatch: Dispatch<any>): ActionMap;
 	    mapProps(globalState: any): any;
 	    hasChanges(oldState: any, newState: any): boolean;
 	    private _updateChildren(child);
@@ -138,8 +138,8 @@ declare module '@onemarket/appson/src/state' {
 	export default State;
 
 }
-declare module '@onemarket/appson/src/stores/effects' {
-	import { Effects, Action } from '@onemarket/appson/src/state';
+declare module '@onemarket/appson/lib/stores/effects' {
+	import { Effects, Action } from '@onemarket/appson/lib/state';
 	import { Store } from 'redux'; const _default: Store<any> & {
 	    name: string;
 	};
@@ -148,10 +148,10 @@ declare module '@onemarket/appson/src/stores/effects' {
 	export const setActiveEffects: (payload: object) => Action<object>;
 
 }
-declare module '@onemarket/appson/src/utils/create-app' {
+declare module '@onemarket/appson/lib/utils/create-app' {
 	import { ComponentType } from 'react';
 	import { History } from 'history';
-	import { WrapperComponent as WC, WrapperProps, AppStore } from '@onemarket/appson/src/appson';
+	import { WrapperComponent as WC, WrapperProps, AppStore } from '@onemarket/appson/lib/appson';
 	export interface RecursiveWrappersFn {
 	    (wrappers: WC[], props: WrapperProps): JSX.Element;
 	}
@@ -161,14 +161,14 @@ declare module '@onemarket/appson/src/utils/create-app' {
 	export default createApp;
 
 }
-declare module '@onemarket/appson/src/sagas/channel' {
-	import * as ReduxSaga from 'redux-saga';
-	import { InternalStore } from '@onemarket/appson/src/appson';
+declare module '@onemarket/appson/lib/sagas/channel' {
+	import { Channel } from 'redux-saga';
+	import { InternalStore } from '@onemarket/appson/lib/appson';
 	export type StoresChannelAction = {
 	    storeName: string;
 	    state: any;
 	};
-	export type StoresChannel = ReduxSaga.Channel<StoresChannelAction>;
+	export type StoresChannel = Channel<StoresChannelAction>;
 	export interface EmitterFn {
 	    (data: StoresChannelAction): any;
 	}
@@ -181,7 +181,7 @@ declare module '@onemarket/appson/src/sagas/channel' {
 	export default channel;
 
 }
-declare module '@onemarket/appson/src/sagas/effects' {
+declare module '@onemarket/appson/lib/sagas/effects' {
 	import { SagaIterator } from 'redux-saga';
 	export type EffectsSagaParams = {
 	    active: object;
@@ -190,19 +190,19 @@ declare module '@onemarket/appson/src/sagas/effects' {
 	export default function effectsSaga({effects, active}: EffectsSagaParams): SagaIterator;
 
 }
-declare module '@onemarket/appson/src/sagas/states' {
-	import { AppStore } from '@onemarket/appson/src/appson';
-	import { StateMap } from '@onemarket/appson/src/state'; const statesSaga: (store: AppStore, states: StateMap) => void;
+declare module '@onemarket/appson/lib/sagas/states' {
+	import { AppStore } from '@onemarket/appson/lib/appson';
+	import { StateMap } from '@onemarket/appson/lib/state'; const statesSaga: (store: AppStore, states: StateMap) => void;
 	export default statesSaga;
 
 }
-declare module '@onemarket/appson/src/sagas/root' {
+declare module '@onemarket/appson/lib/sagas/root' {
 	import { SagaIterator } from 'redux-saga';
-	import { AppStore } from '@onemarket/appson/src/appson';
+	import { AppStore } from '@onemarket/appson/lib/appson';
 	export default function rootSaga(store: AppStore): SagaIterator;
 
 }
-declare module '@onemarket/appson/src/appson' {
+declare module '@onemarket/appson/lib/appson' {
 	import { ComponentType } from 'react';
 	import { ReducersMapObject, Middleware, Store } from 'redux';
 	export interface InternalStore extends Store<any> {
@@ -231,7 +231,7 @@ declare module '@onemarket/appson/src/appson' {
 	export default appson;
 
 }
-declare module '@onemarket/appson/src/components/Routes' {
+declare module '@onemarket/appson/lib/components/Routes' {
 	import t from 'prop-types';
 	import { PureComponent } from 'react';
 	import { RouterChildContext } from 'react-router';
@@ -248,10 +248,10 @@ declare module '@onemarket/appson/src/components/Routes' {
 	export default Routes;
 
 }
-declare module '@onemarket/appson/src/components/Link' {
+declare module '@onemarket/appson/lib/components/Link' {
 	import t from 'prop-types';
 	import { PureComponent } from 'react';
-	import * as ReactRouter from 'react-router';
+	import { match } from 'react-router';
 	export type LocationObject = {
 	    pathname?: string;
 	    search?: string;
@@ -260,7 +260,7 @@ declare module '@onemarket/appson/src/components/Link' {
 	    key?: string;
 	};
 	export interface LinkActiveFn {
-	    (match: ReactRouter.match<any>, location: LocationObject): boolean;
+	    (match: match<any>, location: LocationObject): boolean;
 	}
 	export interface LinkProps {
 	    replace?: boolean;
@@ -288,13 +288,13 @@ declare module '@onemarket/appson/src/components/Link' {
 	export default Link;
 
 }
-declare module '@onemarket/appson/src/components/Route' {
+declare module '@onemarket/appson/lib/components/Route' {
 	import t from 'prop-types';
 	import { PureComponent } from 'react';
-	import * as ReactRouter from 'react-router';
-	export interface RouteComponentProps<P> extends ReactRouter.RouteComponentProps<P> {
+	import { RouteComponentProps as RRouteComponentProps, RouteProps as RRouteProps } from 'react-router';
+	export interface RouteComponentProps<P> extends RRouteComponentProps<P> {
 	}
-	export interface RouteProps extends ReactRouter.RouteProps {
+	export interface RouteProps extends RRouteProps {
 	    basePath?: string | null;
 	}
 	export type RouteContext = {
@@ -310,32 +310,32 @@ declare module '@onemarket/appson/src/components/Route' {
 	export default Route;
 
 }
-declare module '@onemarket/appson/src/utils/get-display-name' {
+declare module '@onemarket/appson/lib/utils/get-display-name' {
 	 const getDisplayName: (Component: any) => string;
 	export default getDisplayName;
 
 }
-declare module '@onemarket/appson/src/hocs/add-effects' {
+declare module '@onemarket/appson/lib/hocs/add-effects' {
 	import React, { ComponentType } from 'react';
-	import State, { Effects } from '@onemarket/appson/src/state';
+	import State, { Effects } from '@onemarket/appson/lib/state';
 	export interface AddEffectsFn {
 	    <E extends Effects>(effects: E): (resource: React.ComponentType | State<any>) => ComponentType | State<any>;
 	} const addEffects: AddEffectsFn;
 	export default addEffects;
 
 }
-declare module '@onemarket/appson/src/hocs/add-state' {
+declare module '@onemarket/appson/lib/hocs/add-state' {
 	import React, { ComponentType } from 'react';
-	import State from '@onemarket/appson/src/state';
+	import State from '@onemarket/appson/lib/state';
 	export interface AddStateFn<S> {
 	    (state: State<S>): (resource: React.ComponentType | State<any>) => ComponentType | State<any>;
 	} const addState: AddStateFn<any>;
 	export default addState;
 
 }
-declare module '@onemarket/appson/src/hocs/connect-props' {
+declare module '@onemarket/appson/lib/hocs/connect-props' {
 	import React from 'react';
-	import { AppStore } from '@onemarket/appson/src/appson';
+	import { AppStore } from '@onemarket/appson/lib/appson';
 	export type ConnectPropsState = {
 	    props: object;
 	    args: object;
@@ -352,7 +352,7 @@ declare module '@onemarket/appson/src/hocs/connect-props' {
 	export default connectProps;
 
 }
-declare module '@onemarket/appson/src/hocs/connect-handlers' {
+declare module '@onemarket/appson/lib/hocs/connect-handlers' {
 	import React from 'react';
 	export type ConnectHandlerState = {
 	    handlers: object;
@@ -368,14 +368,14 @@ declare module '@onemarket/appson/src/hocs/connect-handlers' {
 
 }
 declare module '@onemarket/appson' {
-	export { default as appson } from '@onemarket/appson/src/appson';
-	export { default as Link } from '@onemarket/appson/src/components/Link';
-	export { default as Route } from '@onemarket/appson/src/components/Route';
-	export { default as Routes } from '@onemarket/appson/src/components/Routes';
-	export { default as State } from '@onemarket/appson/src/state';
-	export { default as addState } from '@onemarket/appson/src/hocs/add-state';
-	export { default as addEffects } from '@onemarket/appson/src/hocs/add-effects';
-	export { default as connectProps } from '@onemarket/appson/src/hocs/connect-props';
-	export { default as connectHandlers } from '@onemarket/appson/src/hocs/connect-handlers';
+	export { default as appson } from '@onemarket/appson/lib/appson';
+	export { default as Link } from '@onemarket/appson/lib/components/Link';
+	export { default as Route } from '@onemarket/appson/lib/components/Route';
+	export { default as Routes } from '@onemarket/appson/lib/components/Routes';
+	export { default as State } from '@onemarket/appson/lib/state';
+	export { default as addState } from '@onemarket/appson/lib/hocs/add-state';
+	export { default as addEffects } from '@onemarket/appson/lib/hocs/add-effects';
+	export { default as connectProps } from '@onemarket/appson/lib/hocs/connect-props';
+	export { default as connectHandlers } from '@onemarket/appson/lib/hocs/connect-handlers';
 
 }
