@@ -2,9 +2,13 @@ const { join, resolve } = require('path')
 const { Config } = require('webpack-config')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
+
+const PUBLIC_PATH = '/'
+const PUBLIC_URL = ''
 
 const paths = require('../paths')
 const loaders = require('../loaders')
@@ -22,6 +26,8 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
   },
   output: {
     pathinfo: true,
+    path: paths.app.build,
+    publicPath: PUBLIC_PATH,
     filename: 'static/js/[name].js',
     sourceMapFilename: 'static/js/[name].js.map',
     devtoolModuleFilenameTemplate: info =>
@@ -42,6 +48,7 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     new SimpleProgressWebpackPlugin({
       format: 'compact',
     }),
+    new InterpolateHtmlPlugin(Object.assign({}, { PUBLIC_URL }, loadConfig('html'))),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.app.assets.htmlFile,

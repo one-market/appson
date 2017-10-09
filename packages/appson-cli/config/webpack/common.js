@@ -4,7 +4,6 @@ process.noDeprecation = true
 const webpack = require('webpack')
 const { argv } = require('yargs')
 const { Config } = require('webpack-config')
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const HappyPack = require('happypack')
@@ -14,17 +13,10 @@ const env = require('../env')
 const loaders = require('../loaders')
 const loadConfig = require('../../utils/load-config')
 
-const PUBLIC_PATH = '/'
-const PUBLIC_URL = process.env.PUBLIC_URL || ''
 const IS_PROD = (process.env.NODE_ENV === 'production')
 const HAPPY_THREAD_POOL = HappyPack.ThreadPool({ size: 7 })
 
 const config = new Config().merge({
-  output: {
-    pathinfo: true,
-    path: paths.app.build,
-    publicPath: PUBLIC_PATH,
-  },
   resolve: {
     extensions: ['.css', '.json', '.js', '.jsx', '.ts', '.tsx'],
     modules: [
@@ -86,7 +78,6 @@ const config = new Config().merge({
     new webpack.DefinePlugin({
       CONFIG: JSON.stringify(loadConfig('env')),
     }),
-    new InterpolateHtmlPlugin(Object.assign({}, { PUBLIC_URL }, loadConfig('html'))),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       filename: `static/js/vendor${IS_PROD ? '.[chunkhash:8]' : ''}.js`,

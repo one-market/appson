@@ -7,6 +7,7 @@ const webpack = require('webpack')
 const StatsPlugin = require('stats-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
 const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin')
 const MinifyPlugin = require('babel-minify-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
@@ -36,6 +37,15 @@ const chooseMinifySystem = () =>
     }) :
     new MinifyPlugin()
 
+const PUBLIC_PATH = paths.servedPath
+const PUBLIC_URL = PUBLIC_PATH.slice(0, -1)
+const shouldUseRelativeAssetPaths = PUBLIC_PATH === './'
+
+const cssFilename = 'static/css/style.[contenthash:8].css'
+const extractTextPluginOptions = shouldUseRelativeAssetPaths ?
+  { publicPath: Array(cssFilename.split('/').length).join('../') } :
+  {}
+
 const config = new Config().extend(resolve(__dirname, './common.js')).merge({
   devtool: argv.sourceMap,
   entry: {
@@ -48,6 +58,8 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
     sourceMapFilename: 'static/js/[name].[chunkhash:8].js.map',
+    path: paths.app.build,
+    publicPath: PUBLIC_PATH,
     devtoolModuleFilenameTemplate: info =>
       relative(paths.app.src.root, info.absoluteResourcePath)
         .replace(/\\/g, '/'),
@@ -56,10 +68,12 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     rules: [{
       test: /\.css$/,
       include: [paths.app.assets.stylesheets, paths.app.nodeModules],
-      use: ExtractTextPlugin.extract({
-        fallback: require.resolve('style-loader'),
-        use: [loaders.css, loaders.postcss],
-      }),
+      use: ExtractTextPlugin.extract(
+        Object.assign({
+          fallback: require.resolve('style-loader'),
+          use: [loaders.css, loaders.postcss],
+        }, extractTextPluginOptions),
+      ),
     }],
   },
   plugins: [
@@ -69,7 +83,8 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     }),
     new DuplicatePackageCheckerPlugin(),
     new StatsPlugin('bundle-stats.json', { chunkModules: true }),
-    new ExtractTextPlugin('static/css/style.[contenthash:8].css'),
+    new ExtractTextPlugin(cssFilename),
+    new InterpolateHtmlPlugin(Object.assign({}, { PUBLIC_URL }, loadConfig('html'))),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.app.assets.htmlFile,
