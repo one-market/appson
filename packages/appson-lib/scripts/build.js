@@ -53,7 +53,6 @@ const EXTERNAL = CONFIG.external || []
 const GLOBALS = CONFIG.globals || {}
 const HAS_GZIP = argv.gzip
 const IS_PROD = CONFIG.production || argv.p || ENV === 'production'
-const IS_WATCH = CONFIG.watch || argv.watch
 
 const JS_REGEXP = /.(js|jsx)$/
 const TS_REGEXP = /.(ts|tsx)$/
