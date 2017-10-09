@@ -1,13 +1,13 @@
 {
   "name": "@onemarket/appson-example-typescript",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "license": "MIT",
   "scripts": {
     "start": "appson start --ts",
     "build": "appson build"
   },
   "dependencies": {
-    "@onemarket/appson": "^0.4.0",
+    "@onemarket/appson": "^0.4.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-router": "^4.2.0",
