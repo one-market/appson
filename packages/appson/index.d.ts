@@ -343,8 +343,8 @@ declare module '@onemarket/appson/lib/hocs/connect-props' {
 	export interface MapperFn {
 	    (...states: object[]): object;
 	}
-	export interface ConnectFn {
-	    (states: string[], mapper?: MapperFn): (WrappedComponent: React.ComponentType) => React.ComponentType;
+	export interface ConnectFn<P = any, NP = any> {
+	    (states: string[], mapper?: MapperFn): (WrappedComponent: React.ComponentType<P>) => React.ComponentType<P & NP>;
 	}
 	export type ConnectPropsContext = {
 	    store: AppStore;
@@ -361,8 +361,8 @@ declare module '@onemarket/appson/lib/hocs/connect-handlers' {
 	export interface MapperFn {
 	    (...states: object[]): object;
 	}
-	export interface ConnectFn {
-	    (states: string[], mapper?: MapperFn): (WrappedComponent: React.ComponentType) => React.ComponentType;
+	export interface ConnectFn<P = any, NP = any> {
+	    (states: string[], mapper?: MapperFn): (WrappedComponent: React.ComponentType<P>) => React.ComponentType<P & NP>;
 	} const connectHandlers: ConnectFn;
 	export default connectHandlers;
 
