@@ -15,9 +15,6 @@ module.exports = {
   external,
   context: SRC,
   extensions: ['.ts', '.tsx'],
-  include: [
-    'src/index.ts',
-  ],
   output: [{
     filename: '[dir]/[name].js',
     dest: LIB,
