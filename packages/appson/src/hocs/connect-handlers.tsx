@@ -17,7 +17,7 @@ export interface MapperFn {
   (...states: object[]): object
 }
 
-export interface ConnectFn<P = any, NP = any> {
+export interface ConnectFn<NP = any, P = any> {
   (states: string[], mapper?: MapperFn):
     (WrappedComponent: React.ComponentType<P>) => React.ComponentType<P & NP>
 }
