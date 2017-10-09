@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.4.2"></a>
+## [0.4.2](https://github.com/one-market/appson/compare/v0.4.1...v0.4.2) (2017-10-09)
+
+
+### Bug Fixes
+
+* **packages/appson-lib:** fix ([260b2b5](https://github.com/one-market/appson/commit/260b2b5))
+
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/one-market/appson/compare/v0.2.8...v0.3.0) (2017-10-03)
 
