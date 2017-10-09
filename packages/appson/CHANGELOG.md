@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.4.3"></a>
+## [0.4.3](https://github.com/one-market/appson/compare/v0.4.2...v0.4.3) (2017-10-09)
+
+
+### Bug Fixes
+
+* **packages/appson:** ConnectFn with props ([96c37bf](https://github.com/one-market/appson/commit/96c37bf))
+
+
+
+
 <a name="0.4.2"></a>
 ## [0.4.2](https://github.com/one-market/appson/compare/v0.4.1...v0.4.2) (2017-10-09)
 
