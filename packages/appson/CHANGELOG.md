@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.4.4"></a>
+## [0.4.4](https://github.com/one-market/appson/compare/v0.4.3...v0.4.4) (2017-10-09)
+
+
+### Bug Fixes
+
+* **packages/appson:** add exported types ([26dc0c0](https://github.com/one-market/appson/commit/26dc0c0))
+* **packages/appson:** change props types order on ConnectFn ([04d2b39](https://github.com/one-market/appson/commit/04d2b39))
+* **packages/appson:** remove include ([c27253c](https://github.com/one-market/appson/commit/c27253c))
+* **packages/appson:** remove index.d.ts from git ([1dbe171](https://github.com/one-market/appson/commit/1dbe171))
+
+
+
+
 <a name="0.4.3"></a>
 ## [0.4.3](https://github.com/one-market/appson/compare/v0.4.2...v0.4.3) (2017-10-09)
 
