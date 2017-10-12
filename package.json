@@ -16,24 +16,24 @@
     "examples/*"
   ],
   "devDependencies": {
+    "@types/graphql": "^0.11.5",
     "@types/history": "^4.6.0",
     "@types/invariant": "^2.2.29",
-    "@types/graphql": "^0.11.4",
-    "@types/prop-types": "^15.5.1",
-    "@types/ramda": "^0.24.11",
-    "@types/react": "^16.0.5",
+    "@types/prop-types": "^15.5.2",
+    "@types/ramda": "^0.24.16",
+    "@types/react": "^16.0.10",
+    "@types/react-dom": "^16.0.1",
     "@types/react-hot-loader": "^3.0.4",
-    "@types/react-dom": "^15.5.4",
     "@types/react-router": "^4.0.15",
-    "@types/react-router-dom": "^4.0.7",
+    "@types/react-router-dom": "^4.0.8",
     "@types/react-router-redux": "^5.0.8",
     "@types/reduce-reducers": "^0.1.2",
     "@types/redux": "^3.6.0",
     "@types/redux-saga": "^0.10.5",
+    "cross-env": "^5.0.5",
     "eslint": "^4.8.0",
     "eslint-config-appson": "^0.2.0",
-    "lerna": "2.2.0",
-    "cross-env": "^5.0.5",
-    "typescript": "^2.5.2"
+    "lerna": "2.4.0",
+    "typescript": "^2.5.3"
   }
 }

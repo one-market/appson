@@ -32,10 +32,10 @@
   "dependencies": {
     "history": "^4.7.2",
     "invariant": "^2.2.2",
-    "prop-types": "^15.5.10",
-    "ramda": "^0.24.1",
-    "react-hot-loader": "^3.0.0-beta.7",
-    "react-router-dom": "^4.1.2",
+    "prop-types": "^15.6.0",
+    "ramda": "^0.25.0",
+    "react-hot-loader": "^3.0.0",
+    "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.6",
     "reduce-reducers": "^0.1.2",
     "redux-devtools-extension": "^2.13.2"
