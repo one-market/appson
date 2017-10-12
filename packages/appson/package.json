@@ -24,8 +24,6 @@
     "postbuild": "yarn run dts"
   },
   "peerDependencies": {
-    "@onemarket/appson-cli": "^0.2.0",
-    "history": "^4.7.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-router": "^4.2.0",
@@ -33,6 +31,7 @@
     "redux-saga": "^0.15.6"
   },
   "dependencies": {
+    "history": "^4.7.2",
     "invariant": "^2.2.2",
     "prop-types": "^15.5.10",
     "ramda": "^0.24.1",
