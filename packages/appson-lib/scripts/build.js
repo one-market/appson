@@ -69,16 +69,11 @@ const resolveWithCtx = (p) => path.resolve(CONTEXT, p)
 const filterSelectedExts = (filepath) =>
   micromatch.isMatch(filepath, EXTS_GLOB)
 
-const filterByExt = (ext) => (filepath) =>
-  micromatch.isMatch(filepath, ext)
-
 const filterExclude = (filepath) =>
   !micromatch.any(filepath, DEFAULT_EXCLUDE)
 
 const INCLUDE = DEFAULT_INCLUDE.map(resolveWithCtx)
 const FILES = ls(INCLUDE).filter(filterExclude).filter(filterSelectedExts)
-const JS_FILES = HAS_JS && FILES.filter(filterByExt(JS_REGEXP))
-const TS_FILES = HAS_TS && FILES.filter(filterByExt(TS_REGEXP))
 
 const UGLIFY_OPTS = {
   compress: {
@@ -99,13 +94,12 @@ const PLUGINS = [
   commonjs({
     namedExports: CONFIG.namedExports || {},
   }),
-  (HAS_JS && eslint({ include: JS_FILES })),
-  (HAS_TS && tslint({ include: TS_FILES })),
+  (HAS_JS && eslint({ exclude: '/**/node_modules/**' })),
+  (HAS_TS && tslint({ exclude: '/**/node_modules/**' })),
   (HAS_TS && typescript({
-    include: TS_FILES,
     typescript: require('typescript'),
   })),
-  babel({ include: FILES }),
+  babel({ exclude: '/**/node_modules/**' }),
   replace({ 'process.env.NODE_ENV': JSON.stringify(ENV) }),
   sourceMaps(),
   (IS_PROD && uglify(UGLIFY_OPTS, minify)),
