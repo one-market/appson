@@ -10,7 +10,7 @@ const emoji = require('node-emoji')
 const logUpdate = require('log-update')
 const { argv } = require('yargs')
 const { rm, exit, test, ls } = require('shelljs')
-const { rollup } = require('rollup')
+const { rollup, watch } = require('rollup')
 const babel = require('rollup-plugin-babel')
 const commonjs = require('rollup-plugin-commonjs')
 const eslint = require('rollup-plugin-eslint')
@@ -53,6 +53,7 @@ const EXTERNAL = CONFIG.external || []
 const GLOBALS = CONFIG.globals || {}
 const HAS_GZIP = argv.gzip
 const IS_PROD = CONFIG.production || argv.p || ENV === 'production'
+const WATCH = argv.watch
 
 const JS_REGEXP = /.(js|jsx)$/
 const TS_REGEXP = /.(ts|tsx)$/
@@ -167,6 +168,22 @@ const build = Promise.coroutine(function* (input) {
   }
 })
 
+const watchOpts = (input) => ({
+  ...getInputOpts(input),
+  output: OUTPUT.map((output) => getOutputOpts(input, output)),
+  watch: {
+    exclude: '/**/node_modules/**',
+  },
+})
+
+const watchLib = (done) => {
+  const opts = FILES.map(watchOpts)
+  const watcher = watch(opts)
+
+  watcher.on('event', log.watch(CONTEXT))
+  done()
+}
+
 const buildLib = (done) => {
   logUpdate(`${emoji.get(':rocket:')}  Start compiling...`)
 
@@ -175,4 +192,4 @@ const buildLib = (done) => {
   done()
 }
 
-async.series([clean, buildLib])
+async.series([clean, WATCH ? watchLib : buildLib])

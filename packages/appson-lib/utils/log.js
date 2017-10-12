@@ -1,11 +1,16 @@
 /* eslint max-params: 0 */
 const { argv } = require('yargs')
+const { exit } = require('shelljs')
 const fs = require('fs')
 const path = require('path')
 const c = require('chalk')
+const emoji = require('node-emoji')
 const filesize = require('filesize')
 const gzip = require('gzip-size')
 const logUpdate = require('log-update')
+const PrettyError = require('pretty-error')
+
+const pe = new PrettyError()
 
 const symbols = require('./symbols')
 const filenameReplace = require('./filename-replace')
@@ -65,4 +70,37 @@ exports.success = (root, context, input, output, warning) => {
   logUpdate(msg)
   if (warning) logWarning(warning)
   logUpdate.done()
+}
+
+exports.watch = (context) => (ev) => {
+  const file = ev.input && path.relative(context, ev.input)
+  const evType = (code) => ev.code === code
+
+  switch (ev.code) {
+    case 'START':
+      logUpdate(`${emoji.get(':mag_right:')}  Watching...`)
+      logUpdate.done()
+      break
+    case 'BUNDLE_START':
+      logUpdate(`${c.cyan.bold(symbols.arrow)}  ${c.cyan.bold('Start compiling:')} ${file}`)
+      break
+    case 'BUNDLE_END':
+      logUpdate(`${symbols.success}  ${c.green.bold('Finished compiling:')} ${file}`)
+      logUpdate.done()
+      break
+    case 'END':
+      logUpdate(`${symbols.success}  ${c.green.bold('All completed')}`)
+      logUpdate.done()
+      break
+    case 'FATAL':
+      console.log(pe.render(ev.error))
+      evType('FATAL') && exit(1)
+      break
+    case 'ERROR':
+      console.log(pe.render(ev.error))
+      evType('FATAL') && exit(1)
+      break
+    default:
+      break
+  }
 }
