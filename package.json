@@ -8,7 +8,7 @@
     "bs": "lerna bootstrap",
     "packages-build": "lerna run build:prod",
     "packages-lint": "lerna run lint",
-    "prenp": "yarn run --parallel lint build-packages",
+    "prenp": "yarn run packages-lint && yarn run packages-build",
     "np": "lerna publish --conventional-commits --skip-npm"
   },
   "workspaces": [
