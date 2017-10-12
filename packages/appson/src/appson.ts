@@ -1,4 +1,5 @@
 /* eslint no-use-before-define: 0, react/jsx-no-bind: 0, brace-style: 0 */
+
 import * as R from 'ramda'
 import { ComponentType } from 'react'
 import { ReducersMapObject, Middleware, Store } from 'redux'
