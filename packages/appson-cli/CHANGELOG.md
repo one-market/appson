@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.2"></a>
+## [0.5.2](https://github.com/one-market/appson/compare/v0.5.1...v0.5.2) (2017-10-12)
+
+
+### Bug Fixes
+
+* **packages/appson-cli:** fix argv commons ([bc75001](https://github.com/one-market/appson/commit/bc75001))
+
+
+
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/one-market/appson/compare/v0.5.0...v0.5.1) (2017-10-12)
 
