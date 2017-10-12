@@ -101,7 +101,10 @@ if (argv.ts) {
   })
 
   config.plugins.unshift(
-    new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+    new ForkTsCheckerWebpackPlugin({
+      checkSyntacticErrors: true,
+      workers: ForkTsCheckerWebpackPlugin.TWO_CPUS_FREE,
+    }),
     new HappyPack({
       id: 'ts',
       threadPool: HAPPY_THREAD_POOL,

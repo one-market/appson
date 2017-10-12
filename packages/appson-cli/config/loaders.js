@@ -54,6 +54,7 @@ exports.ts = {
   loader: require.resolve('ts-loader'),
   options: {
     configFile: paths.app.tsconfig,
+    transpileOnly: true,
     happyPackMode: true,
   },
 }
