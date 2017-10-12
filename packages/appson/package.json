@@ -15,12 +15,11 @@
   "license": "MIT",
   "scripts": {
     "lint": "tslint -p ./",
-    "prebuild:dev": "yarn run lint",
-    "prebuild:prod": "yarn run lint",
     "dts": "node ./scripts/dts",
     "build": "lib build --sm --gzip",
     "build:prod": "yarn run build --p",
     "build:watch": "yarn run build --w",
+    "prebuild": "yarn run lint",
     "postbuild": "yarn run dts"
   },
   "peerDependencies": {
@@ -48,7 +47,7 @@
     "babel-plugin-transform-private-underscore": "^0.1.3",
     "babel-preset-appson": "^0.2.0",
     "dts-generator": "^2.1.0",
-    "eslint": "^4.7.2",
+    "eslint": "^4.8.0",
     "eslint-config-appson": "^0.2.0",
     "shelljs": "^0.7.8",
     "tslint": "^5.7.0",
