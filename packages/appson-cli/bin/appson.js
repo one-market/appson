@@ -12,13 +12,13 @@ const commonArgs = {
     alias: 'd',
     default: false,
   },
-}
-
-const start = Object.assign({}, commonArgs, {
   'typescript': {
     alias: 'ts',
     default: false,
   },
+}
+
+const start = Object.assign({}, commonArgs, {
   'css-modules': {
     alias: 'cm',
     default: false,
