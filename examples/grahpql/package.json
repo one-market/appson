@@ -1,13 +1,13 @@
 {
   "name": "@onemarket/appson-example-graphql",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "license": "MIT",
   "scripts": {
     "start": "appson start",
     "build": "appson build"
   },
   "dependencies": {
-    "@onemarket/appson": "^0.5.0",
+    "@onemarket/appson": "^0.5.1",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-apollo": "^1.4.16",
@@ -18,6 +18,6 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "@onemarket/appson-cli": "^0.5.0"
+    "@onemarket/appson-cli": "^0.5.1"
   }
 }

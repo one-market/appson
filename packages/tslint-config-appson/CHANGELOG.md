@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/one-market/appson/compare/v0.5.0...v0.5.1) (2017-10-12)
+
+
+### Bug Fixes
+
+* **packages/tsling-config-appson:** main on package.json ([5f08a3d](https://github.com/one-market/appson/commit/5f08a3d))
+
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/one-market/appson/compare/v0.4.7...v0.5.0) (2017-10-12)
 

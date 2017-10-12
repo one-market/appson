@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/one-market/appson/compare/v0.5.0...v0.5.1) (2017-10-12)
+
+
+### Bug Fixes
+
+* **packages/appson-cli:** number of default threads ([bf0f48e](https://github.com/one-market/appson/commit/bf0f48e))
+* **packages/appson-cli:** remove progress plugin from development ([5d4890a](https://github.com/one-market/appson/commit/5d4890a))
+* **packages/appson-cli:** remove some args ([070ac3d](https://github.com/one-market/appson/commit/070ac3d))
+* **packages/appson-cli:** unnused import ([7181456](https://github.com/one-market/appson/commit/7181456))
+
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/one-market/appson/compare/v0.4.7...v0.5.0) (2017-10-12)
 
