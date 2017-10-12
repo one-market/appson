@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.4.7"></a>
+## [0.4.7](https://github.com/one-market/appson/compare/v0.4.6...v0.4.7) (2017-10-12)
+
+
+### Bug Fixes
+
+* **packages/appson-cli:** ts loader fixes ([e904945](https://github.com/one-market/appson/commit/e904945))
+
+
+
+
 <a name="0.4.5"></a>
 ## [0.4.5](https://github.com/one-market/appson/compare/v0.4.4...v0.4.5) (2017-10-12)
 
