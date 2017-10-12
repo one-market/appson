@@ -45,9 +45,6 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     hints: false,
   },
   plugins: [
-    new SimpleProgressWebpackPlugin({
-      format: 'compact',
-    }),
     new InterpolateHtmlPlugin(Object.assign({}, { PUBLIC_URL }, loadConfig('html'))),
     new HtmlWebpackPlugin({
       inject: true,
