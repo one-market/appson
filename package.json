@@ -9,7 +9,7 @@
     "packages-build": "lerna run build:prod",
     "packages-lint": "lerna run lint",
     "prenp": "yarn run packages-lint && yarn run packages-build",
-    "np": "lerna publish --conventional-commits --skip-npm"
+    "np": "lerna publish --conventional-commits"
   },
   "workspaces": [
     "packages/*",
