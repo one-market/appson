@@ -2,7 +2,7 @@
   "name": "tslint-config-appson",
   "description": "Appson default tslint config",
   "version": "0.5.0",
-  "main": "tslint.js",
+  "main": "./tslint.js",
   "license": "MIT",
   "dependencies": {
     "tslint-config-airbnb": "^5.3.0",
