@@ -1,7 +1,7 @@
 {
   "name": "@onemarket/appson-cli",
   "description": "CLI to manage Appson applications",
-  "version": "0.4.0",
+  "version": "0.4.5",
   "bin": {
     "appson": "./bin/appson.js"
   },

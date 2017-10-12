@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.4.5"></a>
+## [0.4.5](https://github.com/one-market/appson/compare/v0.4.4...v0.4.5) (2017-10-12)
+
+
+
+
+**Note:** Version bump only for package @onemarket/appson-cli
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/one-market/appson/compare/v0.3.2...v0.4.0) (2017-10-09)
 
