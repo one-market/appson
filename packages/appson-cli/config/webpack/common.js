@@ -14,7 +14,7 @@ const loaders = require('../loaders')
 const loadConfig = require('../../utils/load-config')
 
 const IS_PROD = (process.env.NODE_ENV === 'production')
-const HAPPY_THREAD_POOL = HappyPack.ThreadPool({ size: 7 })
+const HAPPY_THREAD_POOL = HappyPack.ThreadPool({ size: argv.poolThreads })
 
 const config = new Config().merge({
   resolve: {

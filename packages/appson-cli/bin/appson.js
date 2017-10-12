@@ -12,6 +12,10 @@ const commonArgs = {
     alias: 'd',
     default: false,
   },
+  'pool-threads': {
+    alias: 'pd',
+    default: process.env.POOL_THREADS || 5,
+  },
 }
 
 const start = Object.assign({}, commonArgs, {
