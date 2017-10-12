@@ -1,12 +1,12 @@
-const { argv } = require('yargs')
 const { red } = require('chalk')
 
 const env = require('../config/env')
+const paths = require('../config/paths')
 
 let appsonConfig
 
 try {
-  appsonConfig = require(argv.config)
+  appsonConfig = require(paths.app.appsonConfig)
 } catch (err) {
   console.log(red(err))
   appsonConfig = {}

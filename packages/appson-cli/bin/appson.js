@@ -2,24 +2,15 @@
 /* eslint no-unused-expressions: 0, func-names: 0 */
 
 const yargs = require('yargs')
-const paths = require('../config/paths')
 
 const commonArgs = {
   'port': {
     alias: 'p',
     default: 3000,
   },
-  'config': {
-    alias: 'c',
-    default: paths.app.appsonConfig,
-  },
   'debug-bundle': {
     alias: 'd',
     default: false,
-  },
-  'pool-threads': {
-    alias: 'pd',
-    default: process.env.POOL_THREADS || 5,
   },
 }
 
