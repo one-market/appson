@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 
 const isArr = R.is(Array)
 const isObj = R.is(Object)

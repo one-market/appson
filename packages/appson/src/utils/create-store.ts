@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import { devToolsEnhancer } from 'redux-devtools-extension'
 import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
 import {

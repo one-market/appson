@@ -1,6 +1,6 @@
 import { ActionTypes, Action, ActionMap, HandlerMap } from '../state'
 
-import R from 'ramda'
+import * as R from 'ramda'
 
 const isError = R.is(Error)
 const reduceIndexed = R.addIndex(R.reduce)

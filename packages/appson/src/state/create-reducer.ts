@@ -1,6 +1,6 @@
 import { ActionTypes, Action, Handler, HandlerMap } from '../state'
 
-import R from 'ramda'
+import * as R from 'ramda'
 import invariant from 'invariant'
 import reduceReducers from 'reduce-reducers'
 

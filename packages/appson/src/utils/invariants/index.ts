@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import invariant from 'invariant'
 
 const isObj = R.is(Object)

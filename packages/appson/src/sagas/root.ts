@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import { fork, take, call } from 'redux-saga/effects'
 import { SagaIterator } from 'redux-saga'
 

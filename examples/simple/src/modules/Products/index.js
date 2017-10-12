@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import t from 'prop-types'
 import React from 'react'
 import { addState, connectProps } from '@onemarket/appson'

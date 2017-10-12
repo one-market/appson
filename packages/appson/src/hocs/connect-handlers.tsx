@@ -1,5 +1,5 @@
 import t from 'prop-types'
-import R from 'ramda'
+import * as R from 'ramda'
 import React, { PureComponent } from 'react'
 import { Dispatch } from 'redux'
 

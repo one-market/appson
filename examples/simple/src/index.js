@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import React from 'react'
 import { Routes, Route, Link, addState, addEffects } from '@onemarket/appson'
 

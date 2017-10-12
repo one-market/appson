@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import t from 'prop-types'
 import { Children, ComponentType, PureComponent } from 'react'
 

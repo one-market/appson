@@ -1,5 +1,5 @@
 import { ActionTypes, HandlerMap } from '../state'
-import R from 'ramda'
+import * as R from 'ramda'
 
 const snakeCase = (str: string): string =>
   str.replace(/([A-Z])/g, (char: string): string => `_${char.toLowerCase()}`)

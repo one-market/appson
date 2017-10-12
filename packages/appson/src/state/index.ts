@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import reduceReducers from 'reduce-reducers'
 import invariant from 'invariant'
 import { Action as ReduxAction, Dispatch } from 'redux'

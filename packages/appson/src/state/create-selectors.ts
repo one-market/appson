@@ -3,7 +3,7 @@ import { Computed, ComputedMap } from '../state'
 type Selector = Computed
 type SelectorMap = ComputedMap
 
-import R from 'ramda'
+import * as R from 'ramda'
 
 const isFunc = R.is(Function)
 const isObject = R.is(Object)

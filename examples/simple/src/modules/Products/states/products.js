@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import { State } from '@onemarket/appson'
 import { v4 } from 'uuid'
 
