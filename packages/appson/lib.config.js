@@ -10,6 +10,8 @@ const external = [
   'redux-saga/effects',
   'history/createHashHistory',
   'history/createBrowserHistory',
+  'history/PathUtils',
+  'history/createMemoryHistory',
 ]
 
 module.exports = {
