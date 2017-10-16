@@ -52,7 +52,7 @@ devServerUtils.choosePort(HOST, DEFAULT_PORT)
     const compiler = createCompiler(webpack, config, appName, urls, USE_YARN)
     const proxySetting = require(paths.app.packageJson).proxy
     const proxyConfig = prepareProxy(proxySetting, paths.appPublic)
-    const serverConfig = createDevServerConfig(proxyConfig, urls.lanUrlForConfig)
+    const serverConfig = createDevServerConfig(proxyConfig, urls.lanUrlForConfig, compiler)
     const devServer = new WebpackDevServer(compiler, serverConfig)
 
     devServer.listen(port, HOST, (err) => {
