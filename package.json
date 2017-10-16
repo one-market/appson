@@ -29,10 +29,9 @@
     "@types/react-router-redux": "^5.0.8",
     "@types/reduce-reducers": "^0.1.2",
     "@types/redux": "^3.6.0",
-    "@types/redux-saga": "^0.10.5",
     "cross-env": "^5.0.5",
     "eslint": "^4.8.0",
-    "eslint-config-appson": "^0.2.0",
+    "eslint-config-appson": "^0.5.0",
     "lerna": "2.4.0",
     "typescript": "^2.5.3"
   }
