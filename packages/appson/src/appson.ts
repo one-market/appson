@@ -6,6 +6,7 @@ import { ReducersMapObject, Middleware, Store } from 'redux'
 import { History } from 'history'
 import { render } from 'react-dom'
 import { routerReducer, routerMiddleware } from 'react-router-redux'
+import { END } from 'redux-saga'
 import createHistory from 'history/createBrowserHistory'
 
 import createStore, { sagaMiddleware } from './utils/create-store'
@@ -33,6 +34,8 @@ export class App {
   private history: History
   private middlewares: Middleware[]
   private defaultReducers: ReducersMapObject
+  private store: AppStore
+  private rootEl: string
 
   constructor(Module: ComponentType) {
     this.RootModule = Module
@@ -46,6 +49,11 @@ export class App {
     this.defaultReducers = {
       router: routerReducer,
     }
+
+    this.store = createStore(
+      this.middlewares,
+      this.defaultReducers,
+    )
   }
 
   public addMiddleware(middleware: Middleware): App {
@@ -66,13 +74,21 @@ export class App {
   }
 
   public render(el: string): void {
-    const { wrappers, RootModule, middlewares, defaultReducers, history } = this
-
-    const store: AppStore = createStore(middlewares, defaultReducers)
+    const { RootModule, wrappers, history, store } = this
     const app: JSX.Element = createApp(RootModule, wrappers, store, history)
 
-    sagaMiddleware.run(rootSaga, store)
+    this.rootEl = el
+
+    store.dispatch(END)
+    sagaMiddleware.run(rootSaga, this.store)
     render(app, document.querySelector(el))
+  }
+
+  public updateRootModule(NewModule: ComponentType) {
+    this.RootModule = NewModule
+    this.render(this.rootEl)
+
+    return this
   }
 }
 

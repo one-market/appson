@@ -1,28 +1,33 @@
-import * as R from 'ramda'
 import t from 'prop-types'
 import { Children, ComponentType, PureComponent } from 'react'
-
 import { AppStore, InternalStore } from '../appson'
 
-type StoreMap = {
-  [key: string]: AppStore | InternalStore,
+type ProviderProps = {
+  store: AppStore | InternalStore,
 }
 
 type ChildContext = {
-  [key: string]: AppStore | InternalStore,
+  [key: string]: any,
 }
 
-const createProvider = (storeMap: StoreMap): ComponentType =>
-  class Provider extends PureComponent<{}> {
-    childContext: ChildContext
+export const createProvider = (storeKey: string = 'store'): ComponentType<ProviderProps> => {
+  class Provider extends PureComponent<ProviderProps> {
+    static childContextTypes: ChildContext = {
+      [storeKey]: t.object.isRequired,
+    }
 
-    static childContextTypes = R.mapObjIndexed(() => t.object, storeMap)
-
-    getChildContext = () => storeMap
+    getChildContext() {
+      return {
+        [storeKey]: this.props.store,
+      }
+    }
 
     render() {
       return Children.only(this.props.children)
     }
   }
+
+  return Provider
+}
 
 export default createProvider
