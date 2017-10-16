@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.4"></a>
+## [0.5.4](https://github.com/one-market/appson/compare/v0.5.3...v0.5.4) (2017-10-16)
+
+
+### Bug Fixes
+
+* **packages/appson-cli:** update react hot loader config ([ef96c79](https://github.com/one-market/appson/commit/ef96c79))
+
+
+
+
 <a name="0.5.2"></a>
 ## [0.5.2](https://github.com/one-market/appson/compare/v0.5.1...v0.5.2) (2017-10-12)
 
