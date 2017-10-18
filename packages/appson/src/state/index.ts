@@ -131,6 +131,7 @@ export class State<S> {
 
   public getInitial(): any { return this._initial }
   public getRootReducer(): Reducer { return this._rootReducer }
+  public getActions(): ActionMap { return this._actions }
 
   public getPath(): string[] {
     return this._parent ? R.append(this.name, this._parent.getPath()) : [this.name]

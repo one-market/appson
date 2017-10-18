@@ -14,7 +14,7 @@ import NoMatch from './modules/NoMatch'
 const Simple = () => (
   <AppContainer warnings={false}>
     <div>
-      <h1>Tetete</h1>
+      <h1>Simple</h1>
       <ul>
         <li><Link to="/">Home</Link></li>
         <li><Link to="/products">Products</Link></li>
