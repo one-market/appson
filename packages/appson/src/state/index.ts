@@ -76,6 +76,7 @@ interface Selectors<S> extends ComputedMap<S> {}
 export class State<S> {
   public name: string
   public children: StateMap | null
+  [key: string]: any,
 
   private _initial: any
   private _actions: ActionMap
@@ -102,6 +103,14 @@ export class State<S> {
     const actions = createActions(actionTypes, handlers)
     const rootReducer = createReducer(initial, actionTypes, handlers)
     const selectors = createSelectors(stateName, initial, computed)
+
+    for (const selector in selectors) {
+      this[selector] = R.prop(selector, selectors)
+    }
+
+    for (const action in actions) {
+      this[action] = R.prop(action, actions)
+    }
 
     this.name = stateName
     this.children = null
@@ -131,7 +140,6 @@ export class State<S> {
 
   public getInitial(): any { return this._initial }
   public getRootReducer(): Reducer { return this._rootReducer }
-  public getActions(): ActionMap { return this._actions }
 
   public getPath(): string[] {
     return this._parent ? R.append(this.name, this._parent.getPath()) : [this.name]
