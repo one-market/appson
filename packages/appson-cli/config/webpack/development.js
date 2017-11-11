@@ -14,7 +14,7 @@ const loaders = require('../loaders')
 const loadConfig = require('../../utils/load-config')
 
 const config = new Config().extend(resolve(__dirname, './common.js')).merge({
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'cheap-module-source-map',
   entry: {
     main: [
       require.resolve('react-hot-loader/patch'),
@@ -29,6 +29,7 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     publicPath: PUBLIC_PATH,
     filename: 'static/js/[name].js',
     sourceMapFilename: 'static/js/[name].js.map',
+    crossOriginLoading: 'anonymous',
     devtoolModuleFilenameTemplate: info =>
       resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
