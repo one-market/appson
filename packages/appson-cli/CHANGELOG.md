@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.7"></a>
+## [0.5.7](https://github.com/one-market/appson/compare/v0.5.6...v0.5.7) (2017-11-11)
+
+
+### Bug Fixes
+
+* **packages/appson-cli:** fix react crossorigin dev errors ([448a040](https://github.com/one-market/appson/commit/448a040))
+
+
+
+
 <a name="0.5.4"></a>
 ## [0.5.4](https://github.com/one-market/appson/compare/v0.5.3...v0.5.4) (2017-10-16)
 
