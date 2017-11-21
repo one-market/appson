@@ -34,21 +34,26 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
       resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   module: {
-    rules: [{
-      test: /\.css$/,
-      include: [paths.app.assets.stylesheets, paths.app.src.root],
-      exclude: /node_modules/,
-      use: [loaders.style, loaders.css, loaders.postcss],
-    }],
+    rules: [
+      {
+        test: /\.css$/,
+        include: [paths.app.assets.stylesheets, paths.app.src.root],
+        exclude: /node_modules/,
+        use: [loaders.style, loaders.css, loaders.postcss],
+      },
+    ],
   },
   performance: {
     hints: false,
   },
   plugins: [
-    new InterpolateHtmlPlugin(Object.assign({}, { PUBLIC_URL }, loadConfig('html'))),
+    new InterpolateHtmlPlugin(
+      Object.assign({}, { PUBLIC_URL }, loadConfig('html'))
+    ),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.app.assets.htmlFile,
+      data: loadConfig('htmlData'),
     }),
     new webpack.HotModuleReplacementPlugin(),
     new WatchMissingNodeModulesPlugin(paths.app.nodeModules),
