@@ -1,3 +1,4 @@
+/* eslint no-else-return: 0 */
 const R = require('ramda')
 const fs = require('fs')
 const path = require('path')
@@ -23,9 +24,11 @@ const ensureSlash = (dir, needsSlash) => {
 
   if (hasSlash && !needsSlash) {
     return path.substr(dir, dir.length - 1)
+  } else if (!hasSlash && needsSlash) {
+    return `${dir}/`
   }
 
-  return `${dir}/`
+  return dir
 }
 
 const getServedPath = appPackageJson => {
