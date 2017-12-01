@@ -53,6 +53,7 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.app.assets.htmlFile,
+      data: loadConfig('htmlData'),
     }),
     new webpack.HotModuleReplacementPlugin(),
     new WatchMissingNodeModulesPlugin(paths.app.nodeModules),
