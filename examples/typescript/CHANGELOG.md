@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.10"></a>
+## [0.5.10](https://github.com/one-market/appson/compare/v0.5.9...v0.5.10) (2017-12-01)
+
+
+
+
+**Note:** Version bump only for package @onemarket/appson-example-typescript
+
 <a name="0.5.9"></a>
 ## [0.5.9](https://github.com/one-market/appson/compare/v0.5.8...v0.5.9) (2017-12-01)
 
