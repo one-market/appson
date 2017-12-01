@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.9"></a>
+## [0.5.9](https://github.com/one-market/appson/compare/v0.5.8...v0.5.9) (2017-12-01)
+
+
+### Bug Fixes
+
+* **appson-cli:** webpack minify syste, ([2f79d0d](https://github.com/one-market/appson/commit/2f79d0d))
+* prettier for appson ([c81808e](https://github.com/one-market/appson/commit/c81808e))
+
+
+
+
 <a name="0.5.8"></a>
 ## [0.5.8](https://github.com/one-market/appson/compare/v0.5.7...v0.5.8) (2017-11-21)
 

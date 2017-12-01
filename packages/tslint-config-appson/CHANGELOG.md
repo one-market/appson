@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.9"></a>
+## [0.5.9](https://github.com/one-market/appson/compare/v0.5.8...v0.5.9) (2017-12-01)
+
+
+
+
+**Note:** Version bump only for package tslint-config-appson
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/one-market/appson/compare/v0.5.0...v0.5.1) (2017-10-12)
 

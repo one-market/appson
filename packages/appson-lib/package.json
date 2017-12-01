@@ -1,7 +1,7 @@
 {
   "name": "@onemarket/appson-lib",
   "description": "CLI to bundle libs",
-  "version": "0.5.0",
+  "version": "0.5.9",
   "bin": {
     "lib": "./bin/lib.js"
   },

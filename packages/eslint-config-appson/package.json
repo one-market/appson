@@ -1,7 +1,7 @@
 {
   "name": "eslint-config-appson",
   "description": "Appson default eslint config",
-  "version": "0.5.0",
+  "version": "0.5.9",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {

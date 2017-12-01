@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.9"></a>
+## [0.5.9](https://github.com/one-market/appson/compare/v0.5.8...v0.5.9) (2017-12-01)
+
+
+### Bug Fixes
+
+* prettier for appson ([c81808e](https://github.com/one-market/appson/commit/c81808e))
+
+
+
+
 <a name="0.5.6"></a>
 ## [0.5.6](https://github.com/one-market/appson/compare/v0.5.5...v0.5.6) (2017-10-19)
 
