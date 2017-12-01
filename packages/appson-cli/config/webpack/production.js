@@ -18,41 +18,39 @@ const loaders = require('../loaders')
 const loadConfig = require('../../utils/load-config')
 
 const chooseMinifySystem = () =>
-  argv.minify === 'uglify' ?
-    new UglifyJSPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false,
-        screw_ie8: true,
-        conditionals: true,
-        unused: true,
-        comparisons: true,
-        sequences: true,
-        dead_code: true,
-        evaluate: true,
-        if_return: true,
-        join_vars: true,
-      },
-      comments: false,
-    }) :
-    new MinifyPlugin()
+  argv.minify === 'uglify'
+    ? new UglifyJSPlugin({
+        sourceMap: true,
+        uglifyOptions: {
+          compress: {
+            warnings: false,
+            conditionals: true,
+            unused: true,
+            comparisons: true,
+            sequences: true,
+            dead_code: true,
+            evaluate: true,
+            if_return: true,
+            join_vars: true,
+          },
+          comments: false,
+        },
+      })
+    : new MinifyPlugin()
 
 const PUBLIC_PATH = paths.servedPath
 const PUBLIC_URL = PUBLIC_PATH.slice(0, -1)
 const shouldUseRelativeAssetPaths = PUBLIC_PATH === './'
 
 const cssFilename = 'static/css/style.[contenthash:8].css'
-const extractTextPluginOptions = shouldUseRelativeAssetPaths ?
-  { publicPath: Array(cssFilename.split('/').length).join('../') } :
-  {}
+const extractTextPluginOptions = shouldUseRelativeAssetPaths
+  ? { publicPath: Array(cssFilename.split('/').length).join('../') }
+  : {}
 
 const config = new Config().extend(resolve(__dirname, './common.js')).merge({
   devtool: argv.sourceMap,
   entry: {
-    main: [
-      require.resolve('babel-polyfill'),
-      join(paths.app.src.root, 'main'),
-    ],
+    main: [require.resolve('babel-polyfill'), join(paths.app.src.root, 'main')],
   },
   output: {
     filename: 'static/js/[name].[chunkhash:8].js',
@@ -61,20 +59,27 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     path: paths.app.build,
     publicPath: PUBLIC_PATH,
     devtoolModuleFilenameTemplate: info =>
-      relative(paths.app.src.root, info.absoluteResourcePath)
-        .replace(/\\/g, '/'),
+      relative(paths.app.src.root, info.absoluteResourcePath).replace(
+        /\\/g,
+        '/'
+      ),
   },
   module: {
-    rules: [{
-      test: /\.css$/,
-      include: [paths.app.assets.stylesheets, paths.app.nodeModules],
-      use: ExtractTextPlugin.extract(
-        Object.assign({
-          fallback: require.resolve('style-loader'),
-          use: [loaders.css, loaders.postcss],
-        }, extractTextPluginOptions),
-      ),
-    }],
+    rules: [
+      {
+        test: /\.css$/,
+        include: [paths.app.assets.stylesheets, paths.app.nodeModules],
+        use: ExtractTextPlugin.extract(
+          Object.assign(
+            {
+              fallback: require.resolve('style-loader'),
+              use: [loaders.css, loaders.postcss],
+            },
+            extractTextPluginOptions
+          )
+        ),
+      },
+    ],
   },
   plugins: [
     chooseMinifySystem(),
@@ -84,7 +89,9 @@ const config = new Config().extend(resolve(__dirname, './common.js')).merge({
     new DuplicatePackageCheckerPlugin(),
     new StatsPlugin('bundle-stats.json', { chunkModules: true }),
     new ExtractTextPlugin(cssFilename),
-    new InterpolateHtmlPlugin(Object.assign({}, { PUBLIC_URL }, loadConfig('html'))),
+    new InterpolateHtmlPlugin(
+      Object.assign({}, { PUBLIC_URL }, loadConfig('html'))
+    ),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.app.assets.htmlFile,
