@@ -9,7 +9,8 @@
     "packages-build": "lerna run build:prod",
     "packages-lint": "lerna run lint",
     "prenp": "yarn run packages-lint && yarn run packages-build",
-    "np": "lerna publish --conventional-commits"
+    "np": "lerna publish --conventional-commits",
+    "format": "prettier-eslint --write \"{examples,packages}/**/*.{js,ts,tsx}\""
   },
   "workspaces": [
     "packages/*",
@@ -32,7 +33,13 @@
     "cross-env": "^5.0.5",
     "eslint": "^4.8.0",
     "eslint-config-appson": "^0.5.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-xo": "^0.19.0",
+    "eslint-config-xo-react": "^0.14.0",
+    "eslint-config-xo-space": "^0.17.0",
+    "eslint-plugin-react": "^7.5.1",
     "lerna": "2.4.0",
+    "prettier-eslint-cli": "^4.4.0",
     "typescript": "^2.5.3"
   }
 }
