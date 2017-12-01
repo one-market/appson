@@ -22,10 +22,13 @@ export interface CreateStoreFn {
 
 const createStore: CreateStoreFn = (middlewares, defaultReducers) => {
   const root: Reducer<any> = combineReducers(defaultReducers)
-  const store: Store<any> = createReduxStore(root, compose(
-    applyMiddleware(sagaMiddleware, ...middlewares),
-    devToolsEnhancer({}),
-  ))
+  const store: Store<any> = createReduxStore(
+    root,
+    compose(
+      applyMiddleware(sagaMiddleware, ...middlewares),
+      devToolsEnhancer({})
+    )
+  )
 
   return R.merge(store, { defaultReducers })
 }

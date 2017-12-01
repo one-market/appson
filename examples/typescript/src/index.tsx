@@ -8,7 +8,9 @@ const Typescript = () => (
   <div>
     <h1>Typescript</h1>
     <ul>
-      <li><Link to="/">Home</Link></li>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
     </ul>
     <Routes>
       <Route exact path="/" component={Home} />

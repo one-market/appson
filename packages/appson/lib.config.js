@@ -18,20 +18,21 @@ module.exports = {
   external,
   context: SRC,
   extensions: ['.ts', '.tsx'],
-  include: [
-    './index.ts',
+  include: ['./index.ts'],
+  output: [
+    {
+      filename: '[name].js',
+      dest: LIB,
+      format: 'cjs',
+      sourcemap: true,
+    },
+    {
+      filename: '[name].js',
+      dest: ES,
+      format: 'es',
+      sourcemap: true,
+    },
   ],
-  output: [{
-    filename: '[name].js',
-    dest: LIB,
-    format: 'cjs',
-    sourcemap: true,
-  }, {
-    filename: '[name].js',
-    dest: ES,
-    format: 'es',
-    sourcemap: true,
-  }],
   namedExports: {
     '../../node_modules/react-hot-loader/index.js': ['AppContainer'],
   },

@@ -40,8 +40,9 @@ if (!checkRequiredFiles([paths.app.assets.htmlFile])) {
   process.exit(1)
 }
 
-devServerUtils.choosePort(HOST, DEFAULT_PORT)
-  .then((port) => {
+devServerUtils
+  .choosePort(HOST, DEFAULT_PORT)
+  .then(port => {
     if (port === null) return
 
     const { createCompiler, prepareProxy, prepareUrls } = devServerUtils
@@ -52,25 +53,28 @@ devServerUtils.choosePort(HOST, DEFAULT_PORT)
     const compiler = createCompiler(webpack, config, appName, urls, USE_YARN)
     const proxySetting = require(paths.app.packageJson).proxy
     const proxyConfig = prepareProxy(proxySetting, paths.appPublic)
-    const serverConfig = createDevServerConfig(proxyConfig, urls.lanUrlForConfig, compiler)
+    const serverConfig = createDevServerConfig(
+      proxyConfig,
+      urls.lanUrlForConfig,
+      compiler
+    )
     const devServer = new WebpackDevServer(compiler, serverConfig)
 
-    devServer.listen(port, HOST, (err) => {
+    devServer.listen(port, HOST, err => {
       if (err) return console.log(err)
       if (IS_INTERACTIVE) clearConsole()
 
       console.log(chalk.cyan('Starting the development server...\n'))
       openBrowser(urls.localUrlForBrowser)
-    });
-
-    ['SIGINT', 'SIGTERM'].forEach((sig) => {
+    })
+    ;['SIGINT', 'SIGTERM'].forEach(sig => {
       process.on(sig, () => {
         devServer.close()
         process.exit()
       })
     })
   })
-  .catch((err) => {
+  .catch(err => {
     if (err && err.message) console.log(err.message)
     process.exit(1)
   })

@@ -10,11 +10,16 @@ type EffectsAction = Action<Effects>
 type ActiveState = object
 type ActiveAction = Action<object>
 
-const effects = (state: EffectsState = {}, { type, payload = {} }: EffectsAction): EffectsState =>
+const effects = (
+  state: EffectsState = {},
+  { type, payload = {} }: EffectsAction
+): EffectsState =>
   /TOGGLE_EFFECTS/.test(type) ? symmetricDiff(state, payload) : state
 
-const active = (state: ActiveState = {}, { type, payload = {} }: ActiveAction): ActiveState =>
-  /SET_ACTIVE_EFFECTS/.test(type) ? payload : state
+const active = (
+  state: ActiveState = {},
+  { type, payload = {} }: ActiveAction
+): ActiveState => (/SET_ACTIVE_EFFECTS/.test(type) ? payload : state)
 
 const root: Reducer<any> = combineReducers({ effects, active })
 const store: Store<any> = createStore(root)

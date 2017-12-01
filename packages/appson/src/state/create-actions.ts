@@ -24,8 +24,11 @@ const createAction = (type: string) => (payload: any, meta: any): Action => {
 }
 
 const createActions = (types: ActionTypes, handlers: HandlerMap): ActionMap =>
-  reduceIndexed((obj: object, key: string, idx: number): object =>
-    R.assoc(key, createAction(R.nth(idx, types)), obj), {}, R.keys(handlers),
+  reduceIndexed(
+    (obj: object, key: string, idx: number): object =>
+      R.assoc(key, createAction(R.nth(idx, types)), obj),
+    {},
+    R.keys(handlers)
   )
 
 export default createActions

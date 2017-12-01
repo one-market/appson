@@ -12,8 +12,12 @@ const GraphQLExample = () => (
   <div>
     <h1>GraphQL Example</h1>
     <ul>
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/Products">Products</Link></li>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/Products">Products</Link>
+      </li>
     </ul>
     <Routes>
       <Route exact path="/" component={Home} />
@@ -23,8 +27,6 @@ const GraphQLExample = () => (
   </div>
 )
 
-const enhance = R.compose(
-  addState(main)
-)
+const enhance = R.compose(addState(main))
 
 export default enhance(GraphQLExample)

@@ -7,10 +7,13 @@ import { toggleEffects } from '../stores/effects'
 import getDisplayName from '../utils/get-display-name'
 
 type Context = {
-  effects: InternalStore,
+  effects: InternalStore
 }
 
-const atComponent = (effects: Effects, WrappedComponent: ComponentType): ComponentType =>
+const atComponent = (
+  effects: Effects,
+  WrappedComponent: ComponentType
+): ComponentType =>
   class AddEffectsComponent extends PureComponent {
     context: Context
 
@@ -20,8 +23,7 @@ const atComponent = (effects: Effects, WrappedComponent: ComponentType): Compone
       effects: t.object,
     }
 
-    dispatchAction = () =>
-      this.context.effects.dispatch(toggleEffects(effects))
+    dispatchAction = () => this.context.effects.dispatch(toggleEffects(effects))
 
     componentWillMount() {
       this.dispatchAction()
@@ -32,9 +34,7 @@ const atComponent = (effects: Effects, WrappedComponent: ComponentType): Compone
     }
 
     render(): JSX.Element {
-      return (
-        <WrappedComponent {...this.props} />
-      )
+      return <WrappedComponent {...this.props} />
     }
   }
 
@@ -44,10 +44,14 @@ const atState = (effects: Effects, state: State<any>): State<any> => {
 }
 
 export interface AddEffectsFn {
-  <E extends Effects>(effects: E): (resource: React.ComponentType | State<any>) => any
+  <E extends Effects>(effects: E): (
+    resource: React.ComponentType | State<any>
+  ) => any
 }
 
-const addEffects: AddEffectsFn = (effects) => (resource) =>
-  resource instanceof State ? atState(effects, resource) : atComponent(effects, resource)
+const addEffects: AddEffectsFn = effects => resource =>
+  resource instanceof State
+    ? atState(effects, resource)
+    : atComponent(effects, resource)
 
 export default addEffects

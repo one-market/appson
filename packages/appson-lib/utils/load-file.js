@@ -1,4 +1,4 @@
-const loadFile = (filepath) => {
+const loadFile = filepath => {
   let file
 
   try {

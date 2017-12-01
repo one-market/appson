@@ -12,16 +12,19 @@ class AddProducts extends PureComponent {
     name: '',
   }
 
-  handleChange = (ev) => this.setState({ name: ev.target.value })
+  handleChange = ev => this.setState({ name: ev.target.value })
+
   handleAdd = () => this.props.add({ id: v4(), name: this.state.name })
 
   render() {
     return (
       <div>
-        <input type="text" value={this.state.name} onChange={this.handleChange} />
-        <button onClick={this.handleAdd}>
-          Add Product
-        </button>
+        <input
+          type="text"
+          value={this.state.name}
+          onChange={this.handleChange}
+        />
+        <button onClick={this.handleAdd}>Add Product</button>
       </div>
     )
   }

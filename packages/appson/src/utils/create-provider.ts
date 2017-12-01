@@ -3,14 +3,16 @@ import { Children, ComponentType, PureComponent } from 'react'
 import { AppStore, InternalStore } from '../appson'
 
 type ProviderProps = {
-  store: AppStore | InternalStore,
+  store: AppStore | InternalStore
 }
 
 type ChildContext = {
-  [key: string]: any,
+  [key: string]: any
 }
 
-export const createProvider = (storeKey: string = 'store'): ComponentType<ProviderProps> => {
+export const createProvider = (
+  storeKey: string = 'store'
+): ComponentType<ProviderProps> => {
   class Provider extends PureComponent<ProviderProps> {
     static childContextTypes: ChildContext = {
       [storeKey]: t.object.isRequired,

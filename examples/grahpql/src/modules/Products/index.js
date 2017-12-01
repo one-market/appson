@@ -10,7 +10,9 @@ const Products = ({ data }) => {
       <h3>Product List</h3>
       <ul>
         {data.allProducts.map(product => (
-          <li key={product.id}>{product.name} R${product.value}</li>
+          <li key={product.id}>
+            {product.name} R${product.value}
+          </li>
         ))}
       </ul>
     </div>
@@ -21,12 +23,14 @@ Products.propTypes = {
   data: t.object.isRequired,
 }
 
-const query = gql`{
-  allProducts {
-    id
-    name
-    value
+const query = gql`
+  {
+    allProducts {
+      id
+      name
+      value
+    }
   }
-}`
+`
 
 export default graphql(query)(Products)

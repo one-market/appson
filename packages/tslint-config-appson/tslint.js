@@ -2,8 +2,14 @@ const path = require('path')
 
 module.exports = {
   rulesDirectory: [
-    path.join(path.dirname(require.resolve('tslint-consistent-codestyle')), './'),
-    path.join(path.dirname(require.resolve('tslint-eslint-rules')), 'dist/rules'),
+    path.join(
+      path.dirname(require.resolve('tslint-consistent-codestyle')),
+      './'
+    ),
+    path.join(
+      path.dirname(require.resolve('tslint-eslint-rules')),
+      'dist/rules'
+    ),
     path.join(path.dirname(require.resolve('tslint-microsoft-contrib')), './'),
     path.join(path.dirname(require.resolve('vrsource-tslint-rules')), 'rules'),
   ],
@@ -17,10 +23,13 @@ module.exports = {
     quotemark: [true, 'single', 'jsx-double'],
     'no-eval': true,
     'no-function-constructor-with-string-args': true,
-    'space-before-function-paren': [true, {
-      anonymous: 'always',
-      named: 'never',
-    }],
+    'space-before-function-paren': [
+      true,
+      {
+        anonymous: 'always',
+        named: 'never',
+      },
+    ],
     'no-param-reassign': true,
     align: [true, 'parameters', 'statements', 'members'],
     'ter-prefer-arrow-callback': [true],
@@ -30,10 +39,10 @@ module.exports = {
     'one-variable-per-declaration': [true, 'ignore-for-loop'],
     'no-increment-decrement': false,
     'triple-equals': [true, 'allow-null-check'],
-    'brace-style': ['error', 'stroustrup', { 'allowSingleLine': true }],
+    'brace-style': ['error', 'stroustrup', { allowSingleLine: true }],
     'comment-format': [true, 'check-space'],
     indent: [true, 'space'],
-    'ter-indent': [true, 2, { 'SwitchCase': 1 }],
+    'ter-indent': [true, 2, { SwitchCase: 1 }],
     whitespace: [
       true,
       'check-branch',
@@ -46,18 +55,29 @@ module.exports = {
     'array-bracket-spacing': [true, 'never'],
     'object-curly-spacing': [true, 'always'],
     'max-line-length': [true, 100],
-    'trailing-comma': [true, {
-      multiline: 'always',
-      singleline: 'never',
-    }],
+    'trailing-comma': [
+      true,
+      {
+        multiline: 'always',
+        singleline: 'never',
+      },
+    ],
     semicolon: [true, 'never'],
     radix: true,
     'no-construct': true,
-    'function-name': [true, {
-      'static-method-regex': '^[a-z][\\w\\d]+$',
-      'private-method-regex': '^[_]?[a-z][\\w\\d]+$',
-    }],
-    'variable-name': [true, 'check-format', 'allow-pascal-case', 'allow-leading-underscore'],
+    'function-name': [
+      true,
+      {
+        'static-method-regex': '^[a-z][\\w\\d]+$',
+        'private-method-regex': '^[_]?[a-z][\\w\\d]+$',
+      },
+    ],
+    'variable-name': [
+      true,
+      'check-format',
+      'allow-pascal-case',
+      'allow-leading-underscore',
+    ],
     'no-var-self': true,
     'import-name': false,
   },

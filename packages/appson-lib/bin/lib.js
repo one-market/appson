@@ -9,25 +9,25 @@ const DEFAULT_CONFIG_FILE = `${ROOT_PATH}/lib.config.js`
 const DEFAULT_TSCONFIG = `${ROOT_PATH}/tsconfig.json`
 
 const args = {
-  'config': {
+  config: {
     alias: 'c',
     default: DEFAULT_CONFIG_FILE,
   },
-  'extensions': {
+  extensions: {
     alias: 'ex',
     default: ['.js', '.jsx'],
   },
-  'tsconfig': {
+  tsconfig: {
     default: DEFAULT_TSCONFIG,
   },
-  'gzip': {
+  gzip: {
     default: false,
   },
-  'production': {
+  production: {
     alias: 'p',
     default: false,
   },
-  'watch': {
+  watch: {
     alias: 'w',
     default: false,
   },
@@ -38,5 +38,4 @@ yargs
   .command('build', 'build your library', args, () => {
     require('../scripts/build')
   })
-  .help()
-  .argv
+  .help().argv

@@ -9,8 +9,8 @@ import getDisplayName from '../utils/get-display-name'
 import * as invariants from '../utils/invariants'
 
 export type ConnectHandlerState = {
-  handlers: object,
-  args: object,
+  handlers: object
+  args: object
 }
 
 export interface MapperFn {
@@ -18,17 +18,21 @@ export interface MapperFn {
 }
 
 export interface ConnectFn<NP = any, P = any> {
-  (states: string[], mapper?: MapperFn):
-    (WrappedComponent: React.ComponentType<P>) => React.ComponentType<P & NP>
+  (states: string[], mapper?: MapperFn): (
+    WrappedComponent: React.ComponentType<P>
+  ) => React.ComponentType<P & NP>
 }
 
 type ConnectHandlersContext = {
-  store: AppStore,
+  store: AppStore
 }
 
 const reduceIndexed = R.addIndex(R.reduce)
 
-const connectHandlers: ConnectFn = (states, mapHandlers) => (WrappedComponent) => {
+const connectHandlers: ConnectFn = (
+  states,
+  mapHandlers
+) => WrappedComponent => {
   if (mapHandlers) {
     invariants.isFn('mapHandlers', mapHandlers)
   }
@@ -36,7 +40,9 @@ const connectHandlers: ConnectFn = (states, mapHandlers) => (WrappedComponent) =
   return class ConnectHandlers extends PureComponent<{}, ConnectHandlerState> {
     context: ConnectHandlersContext
 
-    static displayName: string = `ConnectHandlers(${getDisplayName(WrappedComponent)})`
+    static displayName: string = `ConnectHandlers(${getDisplayName(
+      WrappedComponent
+    )})`
 
     static contextTypes = {
       store: t.object,
@@ -49,19 +55,28 @@ const connectHandlers: ConnectFn = (states, mapHandlers) => (WrappedComponent) =
 
     updateHandlers = (args: object): void =>
       this.setState({
-        handlers: mapHandlers ? mapHandlers(...R.values(args)) : R.mergeAll(R.values(args)),
+        handlers: mapHandlers
+          ? mapHandlers(...R.values(args))
+          : R.mergeAll(R.values(args)),
       })
 
-    getArgs = (dispatch: Dispatch<any>) =>
-      (obj: object, path: string, idx: number): object => {
-        const state: State<any> = State.find(path)
-        return state ? R.assoc(`${idx}`, state.mapDispatch(dispatch), obj) : obj
-      }
+    getArgs = (dispatch: Dispatch<any>) => (
+      obj: object,
+      path: string,
+      idx: number
+    ): object => {
+      const state: State<any> = State.find(path)
+      return state ? R.assoc(`${idx}`, state.mapDispatch(dispatch), obj) : obj
+    }
 
     updateArgs = (globalState: any): void => {
       const { args } = this.state
 
-      const newArgs: object = reduceIndexed(this.getArgs(globalState), args, states)
+      const newArgs: object = reduceIndexed(
+        this.getArgs(globalState),
+        args,
+        states
+      )
       const hasArgs: boolean = R.not(R.isNil(newArgs))
 
       if (hasArgs) {
@@ -75,9 +90,7 @@ const connectHandlers: ConnectFn = (states, mapHandlers) => (WrappedComponent) =
     }
 
     render(): JSX.Element {
-      return (
-        <WrappedComponent {...this.state.handlers} {...this.props} />
-      )
+      return <WrappedComponent {...this.state.handlers} {...this.props} />
     }
   }
 }

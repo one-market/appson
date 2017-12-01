@@ -16,9 +16,15 @@ const Simple = () => (
     <div>
       <h1>Simple</h1>
       <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/products">Products</Link></li>
-        <li><Link to="/cart">Cart</Link></li>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/products">Products</Link>
+        </li>
+        <li>
+          <Link to="/cart">Cart</Link>
+        </li>
       </ul>
       <Routes>
         <Route exact path="/" component={Home} />
@@ -30,9 +36,6 @@ const Simple = () => (
   </AppContainer>
 )
 
-const enhance = R.compose(
-  addState(main),
-  addEffects({ logAction }),
-)
+const enhance = R.compose(addState(main), addEffects({ logAction }))
 
 export default enhance(Simple)

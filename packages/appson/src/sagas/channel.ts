@@ -5,8 +5,8 @@ import states from '../stores/states'
 import effects from '../stores/effects'
 
 export type StoresChannelAction = {
-  storeName: string,
-  state: any,
+  storeName: string
+  state: any
 }
 
 export type StoresChannel = Channel<StoresChannelAction>
@@ -26,13 +26,14 @@ export interface AppsonChannel {
 const emitFrom = (emitter: EmitterFn): EmitFn => ({ name, getState }) => () =>
   emitter({ storeName: name, state: getState() })
 
-const channel: AppsonChannel = () => eventChannel((emitter: EmitterFn): () => void => {
-  const emit = emitFrom(emitter)
+const channel: AppsonChannel = () =>
+  eventChannel((emitter: EmitterFn): (() => void) => {
+    const emit = emitFrom(emitter)
 
-  states.subscribe(emit(states))
-  effects.subscribe(emit(effects))
+    states.subscribe(emit(states))
+    effects.subscribe(emit(effects))
 
-  return () => null
-})
+    return () => null
+  })
 
 export default channel

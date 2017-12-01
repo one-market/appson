@@ -1,16 +1,11 @@
 module.exports = {
   parser: 'babel-eslint',
-  extends: [
-    'xo',
-    'xo-react',
-    'xo-react/space',
-    'xo-space',
-  ],
+  extends: ['xo', 'xo-react', 'xo-react/space', 'xo-space'],
   rules: {
-    'semi': [2, 'never'],
+    semi: [2, 'never'],
     'comma-dangle': [2, 'always-multiline'],
     'quote-props': 0,
-    'curly': 0,
+    curly: 0,
     'new-cap': 0,
     'arrow-parens': 0,
     'object-curly-spacing': 0,

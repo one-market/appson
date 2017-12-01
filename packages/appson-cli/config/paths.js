@@ -6,15 +6,16 @@ const url = require('url')
 const ENV_PUBLIC_URL = process.env.PUBLIC_URL
 const appDirectory = fs.realpathSync(process.cwd())
 
-const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath)
-const resolveOwn = (relativePath) => path.resolve(__dirname, '..', relativePath)
-const getPublicUrl = (appPackageJson) => ENV_PUBLIC_URL || require(appPackageJson).homepage
+const resolveApp = relativePath => path.resolve(appDirectory, relativePath)
+const resolveOwn = relativePath => path.resolve(__dirname, '..', relativePath)
+const getPublicUrl = appPackageJson =>
+  ENV_PUBLIC_URL || require(appPackageJson).homepage
 
 const getNodePaths = R.pipe(
   R.split(process.platform === 'win32' ? ';' : ':'),
   R.filter(Boolean),
   R.filter(folder => !path.isAbsolute(folder)),
-  R.map(resolveApp),
+  R.map(resolveApp)
 )
 
 const ensureSlash = (dir, needsSlash) => {
@@ -22,16 +23,15 @@ const ensureSlash = (dir, needsSlash) => {
 
   if (hasSlash && !needsSlash) {
     return path.substr(dir, dir.length - 1)
-  } else if (!hasSlash && needsSlash) {
-    return `${dir}/`
   }
 
-  return dir
+  return `${dir}/`
 }
 
-const getServedPath = (appPackageJson) => {
+const getServedPath = appPackageJson => {
   const publicUrl = getPublicUrl(appPackageJson)
-  const servedUrl = ENV_PUBLIC_URL || (publicUrl ? url.parse(publicUrl).pathname : '/')
+  const servedUrl =
+    ENV_PUBLIC_URL || (publicUrl ? url.parse(publicUrl).pathname : '/')
 
   return ensureSlash(servedUrl, true)
 }

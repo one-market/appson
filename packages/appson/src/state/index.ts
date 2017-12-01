@@ -76,7 +76,7 @@ interface Selectors<S> extends ComputedMap<S> {}
 export class State<S> {
   public name: string
   public children: StateMap | null
-  [key: string]: any,
+  [key: string]: any
 
   private _initial: any
   private _actions: ActionMap
@@ -85,7 +85,12 @@ export class State<S> {
   private _effects: Effects
   private _parent: State<any> | null
 
-  constructor({ name: stateName, initial = {}, handlers = {}, computed = null }: StateParams) {
+  constructor({
+    name: stateName,
+    initial = {},
+    handlers = {},
+    computed = null,
+  }: StateParams) {
     invariants.isString('name', stateName)
     invariants.isPlainObject('handlers', handlers)
     invariants.isPlainObject('computed', computed || {})
@@ -95,7 +100,9 @@ export class State<S> {
     if (!R.isNil(computed)) {
       invariant(
         isObj(initial),
-        `To use computed props the initial value of state "${stateName}" need to be an object`,
+        `To use computed props the initial value of state "${
+          stateName
+        }" need to be an object`
       )
     }
 
@@ -127,22 +134,33 @@ export class State<S> {
 
   static find(path: string): State<any> {
     const globalState = statesStore.getState()
-    const pathWithChildren: string[] = R.intersperse('children', R.split('.', path))
+    const pathWithChildren: string[] = R.intersperse(
+      'children',
+      R.split('.', path)
+    )
 
     return R.path(pathWithChildren, globalState)
   }
 
   // getter methods
 
-  get effects(): Effects { return this._effects }
+  get effects(): Effects {
+    return this._effects
+  }
 
   // public methods
 
-  public getInitial(): any { return this._initial }
-  public getRootReducer(): Reducer { return this._rootReducer }
+  public getInitial(): any {
+    return this._initial
+  }
+  public getRootReducer(): Reducer {
+    return this._rootReducer
+  }
 
   public getPath(): string[] {
-    return this._parent ? R.append(this.name, this._parent.getPath()) : [this.name]
+    return this._parent
+      ? R.append(this.name, this._parent.getPath())
+      : [this.name]
   }
 
   public setParent(state: State<any>): void {
@@ -178,7 +196,9 @@ export class State<S> {
 
     const reduceSelectors = R.reduce((obj: object, key: string): object => {
       const selector: Selector<S> = R.prop(key, selectors)
-      const newSelector = isFn(selector) ? selector(state) : reduceSelectors(R.keys(selector))
+      const newSelector = isFn(selector)
+        ? selector(state)
+        : reduceSelectors(R.keys(selector))
 
       return R.assoc(key, newSelector, obj)
     }, {})
@@ -208,8 +228,14 @@ export class State<S> {
   private _updateReducerWithChild(child: State<any>): void {
     const childReducer: Reducer = child.getRootReducer()
 
-    this._rootReducer = reduceReducers(this._rootReducer, (state: any, action: Action): any =>
-      R.assoc(child.name, childReducer(R.prop(child.name, state), action), state),
+    this._rootReducer = reduceReducers(
+      this._rootReducer,
+      (state: any, action: Action): any =>
+        R.assoc(
+          child.name,
+          childReducer(R.prop(child.name, state), action),
+          state
+        )
     )
   }
 }

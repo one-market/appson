@@ -10,9 +10,7 @@ const Products = ({ products, quantity }) => (
   <div>
     <h4>Showing: {quantity} products</h4>
     <ul>
-      {products.map(product => (
-        <li key={product.id}>{product.name}</li>
-      ))}
+      {products.map(product => <li key={product.id}>{product.name}</li>)}
       <AddProduct />
     </ul>
   </div>
@@ -25,7 +23,7 @@ Products.propTypes = {
 
 const enhance = R.compose(
   addState(products),
-  connectProps(['products'], (products) => ({
+  connectProps(['products'], products => ({
     ...products,
     products: products.list,
   }))

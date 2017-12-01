@@ -7,12 +7,18 @@ const NODE_ENV = JSON.stringify(process.env.NODE_ENV || 'development')
 
 const env = R.pipe(
   R.filter(key => SHAZAM.test(key)),
-  R.reduce((env, key) => {
-    env[`process.env.${key}`] = JSON.stringify(process.env[key]).replace('"', '')
-    return env
-  }, {
-    'process.env.NODE_ENV': NODE_ENV,
-  })
+  R.reduce(
+    (env, key) => {
+      env[`process.env.${key}`] = JSON.stringify(process.env[key]).replace(
+        '"',
+        ''
+      )
+      return env
+    },
+    {
+      'process.env.NODE_ENV': NODE_ENV,
+    }
+  )
 )
 
 module.exports = env(R.keys(process.env))

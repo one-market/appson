@@ -8,7 +8,7 @@ import getDisplayName from '../utils/get-display-name'
 import addEffects from './add-effects'
 
 type Context = {
-  states: InternalStore,
+  states: InternalStore
 }
 
 const atComponent = (state: State<any>, WrappedComponent: ComponentType) => {
@@ -24,8 +24,7 @@ const atComponent = (state: State<any>, WrappedComponent: ComponentType) => {
       states: t.object,
     }
 
-    dispatchActions = () =>
-      this.context.states.dispatch(action)
+    dispatchActions = () => this.context.states.dispatch(action)
 
     componentWillMount() {
       this.dispatchActions()
@@ -36,9 +35,7 @@ const atComponent = (state: State<any>, WrappedComponent: ComponentType) => {
     }
 
     render(): JSX.Element {
-      return (
-        <WrappedComponent {...this.props} />
-      )
+      return <WrappedComponent {...this.props} />
     }
   }
 
@@ -54,7 +51,9 @@ export interface AddStateFn<S> {
   (state: State<S>): (resource: React.ComponentType | State<any>) => any
 }
 
-const addState: AddStateFn<any> = (state) => (resource) =>
-  resource instanceof State ? atState(state, resource) : atComponent(state, resource)
+const addState: AddStateFn<any> = state => resource =>
+  resource instanceof State
+    ? atState(state, resource)
+    : atComponent(state, resource)
 
 export default addState

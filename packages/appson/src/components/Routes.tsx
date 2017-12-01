@@ -6,7 +6,10 @@ import { matchPath, RouterChildContext } from 'react-router'
 const isRoot = R.equals('/')
 
 const mergePath = (basePath: string, path: string): string =>
-  `${(R.isNil(basePath) || isRoot(basePath)) ? '' : basePath}/${path.substring(1, path.length)}`
+  `${R.isNil(basePath) || isRoot(basePath) ? '' : basePath}/${path.substring(
+    1,
+    path.length
+  )}`
 
 export const mountPath = (basePath: string, path: string): string =>
   R.not(R.isNil(path)) ? mergePath(basePath, path) : ''
@@ -16,11 +19,11 @@ export interface RoutesProps {
 }
 
 type Child = ReactElement<{
-  path: string,
-  from: string,
-  exact: boolean,
-  strict: boolean,
-  basePath: string,
+  path: string
+  from: string
+  exact: boolean
+  strict: boolean
+  basePath: string
 }>
 
 class Routes extends PureComponent<RoutesProps> {
@@ -42,13 +45,18 @@ class Routes extends PureComponent<RoutesProps> {
       const { path: pathProp, exact, strict, from } = element.props
 
       const path = mountPath(match.path, pathProp || from)
-      const computedMatch = path ? matchPath(pathname, { path, exact, strict }) : match
+      const computedMatch = path
+        ? matchPath(pathname, { path, exact, strict })
+        : match
       const basePath = computedMatch && computedMatch.url
 
-      return computedMatch && React.cloneElement(element, {
-        basePath,
-        path,
-      })
+      return (
+        computedMatch &&
+        React.cloneElement(element, {
+          basePath,
+          path,
+        })
+      )
     })
 
     return child.length ? Children.only(child[0]) : null

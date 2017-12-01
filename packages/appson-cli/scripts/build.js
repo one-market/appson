@@ -32,7 +32,7 @@ if (!checkRequiredFiles([paths.app.assets.htmlFile])) {
   process.exit(1)
 }
 
-const build = (previousFileSizes) => {
+const build = previousFileSizes => {
   console.log('Creating an optimized production build...')
 
   let compiler
@@ -83,11 +83,11 @@ const build = (previousFileSizes) => {
 const copyPublicFolder = () =>
   fs.copySync(paths.app.assets.root, paths.app.build, {
     dereference: true,
-    filter: (file) => file !== paths.app.assets.htmlFile,
+    filter: file => file !== paths.app.assets.htmlFile,
   })
 
 measureFileSizesBeforeBuild(paths.app.build)
-  .then((previousFileSizes) => {
+  .then(previousFileSizes => {
     fs.emptyDirSync(paths.app.build)
     copyPublicFolder()
 
@@ -103,7 +103,9 @@ measureFileSizesBeforeBuild(paths.app.build)
           to learn more about each warning.
         `)
         console.log(
-          `To ignore, add ${chalk.cyan('// eslint-disable-next-line')} to the line before.\n`
+          `To ignore, add ${chalk.cyan(
+            '// eslint-disable-next-line'
+          )} to the line before.\n`
         )
       } else {
         console.log(chalk.green('Compiled successfully.\n'))
@@ -132,7 +134,7 @@ measureFileSizesBeforeBuild(paths.app.build)
         USE_YARN
       )
     },
-    (err) => {
+    err => {
       console.log(chalk.red('Failed to compile.\n'))
       printBuildError(err)
       process.exit(1)

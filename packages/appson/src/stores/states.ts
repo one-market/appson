@@ -4,7 +4,10 @@ import * as R from 'ramda'
 import { createStore, Store } from 'redux'
 import { symmetricDiff } from '../utils/object/diff'
 
-const states = (state: StateMap = {}, { type, payload }: Action<StateMap>): StateMap =>
+const states = (
+  state: StateMap = {},
+  { type, payload }: Action<StateMap>
+): StateMap =>
   /TOGGLE_STATE/.test(type) ? symmetricDiff(state, payload) : state
 
 const store: Store<any> = createStore(states)

@@ -9,11 +9,11 @@ import {
 export interface RouteComponentProps<P> extends RRouteComponentProps<P> {}
 
 export interface RouteProps extends RRouteProps {
-  basePath?: string | null,
+  basePath?: string | null
 }
 
 export type RouteContext = {
-  basePath: string,
+  basePath: string
 }
 
 class Route extends PureComponent<RouteProps, {}> {
@@ -30,9 +30,7 @@ class Route extends PureComponent<RouteProps, {}> {
   }
 
   render(): JSX.Element {
-    return (
-      <RRoute {...this.props} />
-    )
+    return <RRoute {...this.props} />
   }
 }
 

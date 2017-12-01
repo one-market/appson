@@ -6,10 +6,14 @@ import reduceReducers from 'reduce-reducers'
 
 const reduceIndexed = R.addIndex(R.reduce)
 
-const handleAction = (type: string, reducer: Handler = R.identity, initialState: any): Handler => {
+const handleAction = (
+  type: string,
+  reducer: Handler = R.identity,
+  initialState: any
+): Handler => {
   invariant(
     !R.isNil(initialState),
-    `initialState for reducer handling ${type} should be defined`,
+    `initialState for reducer handling ${type} should be defined`
   )
 
   return (state: any = initialState, action: Action): any => {
@@ -19,20 +23,30 @@ const handleAction = (type: string, reducer: Handler = R.identity, initialState:
 }
 
 const reducersArr = (map: HandlerMap, initialState: any): Handler[] =>
-  R.map((type: string): Handler =>
-    handleAction(type, R.prop(type, map), initialState), R.keys(map),
+  R.map(
+    (type: string): Handler =>
+      handleAction(type, R.prop(type, map), initialState),
+    R.keys(map)
   )
 
 const handlerMap = (types: ActionTypes, handlers: HandlerMap): HandlerMap =>
-  reduceIndexed((obj: object, key: string, idx: number): HandlerMap =>
-    R.assoc(key, R.nth(idx, R.values(handlers)), obj), {}, types,
+  reduceIndexed(
+    (obj: object, key: string, idx: number): HandlerMap =>
+      R.assoc(key, R.nth(idx, R.values(handlers)), obj),
+    {},
+    types
   )
 
-const createReducer = (initialState: any, types: ActionTypes, handlers: HandlerMap): Handler => {
+const createReducer = (
+  initialState: any,
+  types: ActionTypes,
+  handlers: HandlerMap
+): Handler => {
   const map: HandlerMap = handlerMap(types, handlers)
   const reducer: Handler = reduceReducers(...reducersArr(map, initialState))
 
-  return (state: any = initialState, action: Action): any => reducer(state, action)
+  return (state: any = initialState, action: Action): any =>
+    reducer(state, action)
 }
 
 export default createReducer

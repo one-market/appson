@@ -22,8 +22,8 @@ export interface AppStore extends Store<any> {
 }
 
 export type WrapperProps = {
-  children: any,
-  store?: AppStore,
+  children: any
+  store?: AppStore
 }
 
 export type WrapperComponent = React.ComponentType<WrapperProps>
@@ -42,18 +42,13 @@ export class App {
     this.history = createHistory()
     this.wrappers = []
 
-    this.middlewares = [
-      routerMiddleware(this.history),
-    ]
+    this.middlewares = [routerMiddleware(this.history)]
 
     this.defaultReducers = {
       router: routerReducer,
     }
 
-    this.store = createStore(
-      this.middlewares,
-      this.defaultReducers,
-    )
+    this.store = createStore(this.middlewares, this.defaultReducers)
   }
 
   public addMiddleware(middleware: Middleware): App {
@@ -67,7 +62,8 @@ export class App {
   }
 
   public wrapper(Component: WrapperComponent): App {
-    Component.displayName = Component.displayName || Component.name || 'AppsonWrapper'
+    Component.displayName =
+      Component.displayName || Component.name || 'AppsonWrapper'
     this.wrappers.push(Component)
 
     return this

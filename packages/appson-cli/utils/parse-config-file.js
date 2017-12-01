@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-module.exports = (rcPath) => {
+module.exports = rcPath => {
   let file
 
   try {

@@ -6,11 +6,11 @@ import { NavLink } from 'react-router-dom'
 import { mountPath } from './Routes'
 
 export type LocationObject = {
-  pathname?: string,
-  search?: string,
-  state?: any,
-  hash?: string,
-  key?: string,
+  pathname?: string
+  search?: string
+  state?: any
+  hash?: string
+  key?: string
 }
 
 export interface LinkActiveFn {
@@ -20,15 +20,15 @@ export interface LinkActiveFn {
 export interface LinkProps {
   replace?: boolean
   relative?: boolean
-  exact?: boolean,
-  strict?: boolean,
-  activeClassName?: string,
-  className?: string,
-  activeStyle?: object,
-  style?: object,
+  exact?: boolean
+  strict?: boolean
+  activeClassName?: string
+  className?: string
+  activeStyle?: object
+  style?: object
   to: string
-  location?: LocationObject,
-  isActive?: LinkActiveFn,
+  location?: LocationObject
+  isActive?: LinkActiveFn
   ariaCurrent?: 'page' | 'step' | 'location' | 'true'
 }
 
@@ -49,9 +49,7 @@ class Link extends PureComponent<LinkProps, {}> {
 
     const path = relative ? mountPath(basePath, to) : to
 
-    return (
-      <NavLink {...props} to={path} />
-    )
+    return <NavLink {...props} to={path} />
   }
 }
 

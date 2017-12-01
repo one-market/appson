@@ -35,7 +35,7 @@ invariant(
   `Your project must contain a ${c.bold('libson configuration')} file`
 )
 
-const isFn = (val) => val instanceof Function
+const isFn = val => val instanceof Function
 
 const ENV = process.env.NODE_ENV
 const ROOT_PATH = fs.realpathSync(process.cwd())
@@ -63,18 +63,18 @@ const EXTS_GLOB = `**/*.{${EXTS}}`
 const HAS_TS = EXTENSIONS.some(e => TS_REGEXP.test(e))
 const HAS_JS = EXTENSIONS.some(e => JS_REGEXP.test(e))
 const DEFAULT_EXCLUDE = CONFIG.exclude || []
-const DEFAULT_INCLUDE = (CONFIG.include || [EXTS_GLOB])
+const DEFAULT_INCLUDE = CONFIG.include || [EXTS_GLOB]
 
-const resolveWithCtx = (p) => path.resolve(CONTEXT, p)
+const resolveWithCtx = p => path.resolve(CONTEXT, p)
 
-const filterSelectedExts = (filepath) =>
-  micromatch.isMatch(filepath, EXTS_GLOB)
+const filterSelectedExts = filepath => micromatch.isMatch(filepath, EXTS_GLOB)
 
-const filterExclude = (filepath) =>
-  !micromatch.any(filepath, DEFAULT_EXCLUDE)
+const filterExclude = filepath => !micromatch.any(filepath, DEFAULT_EXCLUDE)
 
 const INCLUDE = DEFAULT_INCLUDE.map(resolveWithCtx)
-const FILES = ls(INCLUDE).filter(filterExclude).filter(filterSelectedExts)
+const FILES = ls(INCLUDE)
+  .filter(filterExclude)
+  .filter(filterSelectedExts)
 
 const UGLIFY_OPTS = {
   compress: {
@@ -95,21 +95,22 @@ const PLUGINS = [
   commonjs({
     namedExports: CONFIG.namedExports || {},
   }),
-  (HAS_JS && eslint({ exclude: '/**/node_modules/**' })),
-  (HAS_TS && tslint({ exclude: '/**/node_modules/**' })),
-  (HAS_TS && typescript({
-    typescript: require('typescript'),
-  })),
+  HAS_JS && eslint({ exclude: '/**/node_modules/**' }),
+  HAS_TS && tslint({ exclude: '/**/node_modules/**' }),
+  HAS_TS &&
+    typescript({
+      typescript: require('typescript'),
+    }),
   babel({ exclude: '/**/node_modules/**' }),
   replace({ 'process.env.NODE_ENV': JSON.stringify(ENV) }),
   sourceMaps(),
-  (IS_PROD && uglify(UGLIFY_OPTS, minify)),
-  ((IS_PROD && HAS_GZIP) && gzip()),
+  IS_PROD && uglify(UGLIFY_OPTS, minify),
+  IS_PROD && HAS_GZIP && gzip(),
 ]
 
 let warningList = {}
 
-const getInputOpts = (input) => ({
+const getInputOpts = input => ({
   input,
   plugins: PLUGINS,
   external: EXTERNAL,
@@ -118,7 +119,10 @@ const getInputOpts = (input) => ({
   },
 })
 
-const getOutputOpts = (input, { name, dest, filename, format = 'cjs', sourcemap = false }) => {
+const getOutputOpts = (
+  input,
+  { name, dest, filename, format = 'cjs', sourcemap = false }
+) => {
   invariant(
     format === 'umd' && !name,
     `Please set a ${c.bold('name')} if your bundle has a ${c.bold('UMD')} format`
@@ -136,7 +140,7 @@ const getOutputOpts = (input, { name, dest, filename, format = 'cjs', sourcemap 
   }
 }
 
-const clean = (done) => {
+const clean = done => {
   logUpdate(`${emoji.get(':recycle:')}  Cleaning old files...`)
 
   for (const output of OUTPUT) {
@@ -147,7 +151,7 @@ const clean = (done) => {
   done()
 }
 
-const build = Promise.coroutine(function* (input) {
+const build = Promise.coroutine(function*(input) {
   const relative = path.relative(ROOT_PATH, input)
 
   for (const output of OUTPUT) {
@@ -168,15 +172,15 @@ const build = Promise.coroutine(function* (input) {
   }
 })
 
-const watchOpts = (input) => ({
+const watchOpts = input => ({
   ...getInputOpts(input),
-  output: OUTPUT.map((output) => getOutputOpts(input, output)),
+  output: OUTPUT.map(output => getOutputOpts(input, output)),
   watch: {
     exclude: '/**/node_modules/**',
   },
 })
 
-const watchLib = (done) => {
+const watchLib = done => {
   const opts = FILES.map(watchOpts)
   const watcher = watch(opts)
 
@@ -184,7 +188,7 @@ const watchLib = (done) => {
   done()
 }
 
-const buildLib = (done) => {
+const buildLib = done => {
   logUpdate(`${emoji.get(':rocket:')}  Start compiling...`)
 
   for (const file of FILES) build(file)

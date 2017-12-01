@@ -10,28 +10,26 @@ const syntaxDynamicImport = require.resolve('babel-plugin-syntax-dynamic-import'
 const classProperties = require.resolve('babel-plugin-transform-class-properties')
 
 exports.default = {
-  presets: [
-    [env, { modules: false }],
-    react,
-  ],
+  presets: [[env, { modules: false }], react],
   plugins: [
     exportExtensions,
     syntaxDynamicImport,
     classProperties,
     [objectRestSpread, { useBuiltIns: true }],
     [reactJSX, { useBuiltIns: true }],
-    [runtime, {
-      helpers: false,
-      polyfill: false,
-      regenerator: true,
-      moduleName: path.dirname(require.resolve('babel-runtime/package')),
-    }],
+    [
+      runtime,
+      {
+        helpers: false,
+        polyfill: false,
+        regenerator: true,
+        moduleName: path.dirname(require.resolve('babel-runtime/package')),
+      },
+    ],
   ],
   env: {
     production: {
-      presets: [
-        reactOptimize,
-      ],
+      presets: [reactOptimize],
     },
   },
 }

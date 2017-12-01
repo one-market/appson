@@ -13,7 +13,7 @@ const env = require('../env')
 const loaders = require('../loaders')
 const loadConfig = require('../../utils/load-config')
 
-const IS_PROD = (process.env.NODE_ENV === 'production')
+const IS_PROD = process.env.NODE_ENV === 'production'
 const HAPPY_THREAD_POOL = HappyPack.ThreadPool({
   size: process.env.THREADS || 4,
 })
@@ -21,53 +21,52 @@ const HAPPY_THREAD_POOL = HappyPack.ThreadPool({
 const config = new Config().merge({
   resolve: {
     extensions: ['.css', '.json', '.js', '.jsx', '.ts', '.tsx'],
-    modules: [
-      paths.app.src.root,
-      paths.app.nodeModules,
-      paths.app.assets.root,
-    ],
+    modules: [paths.app.src.root, paths.app.nodeModules, paths.app.assets.root],
     moduleExtensions: ['*-loader'],
     alias: {
       'babel-runtime/regenerator': require.resolve('babel-runtime/regenerator'),
     },
-    plugins: [
-      new ModuleScopePlugin(paths.app.root, [paths.app.packageJson]),
-    ],
+    plugins: [new ModuleScopePlugin(paths.app.root, [paths.app.packageJson])],
   },
   module: {
-    rules: [{
-      test: /\.(js|jsx)$/,
-      include: [paths.app.src.root],
-      exclude: /node_modules/,
-      enforce: 'pre',
-      use: loaders.sourcemap,
-    }, {
-      test: /\.(js|jsx)$/,
-      enforce: 'pre',
-      include: [paths.app.src.root],
-      exclude: /node_modules/,
-      use: loaders.eslint,
-    }, {
-      test: /\.(js|jsx)$/,
-      include: [paths.app.src.root],
-      exclude: /node_modules/,
-      use: 'happypack/loader?id=js',
-    }, {
-      test: /\.svg$/,
-      include: [paths.app.assets.images, paths.app.nodeModules],
-      use: loaders.file,
-    }, {
-      exclude: [
-        /\.ejs$/,
-        /\.html$/,
-        /\.(js|jsx)$/,
-        /\.(ts|tsx)$/,
-        /\.css$/,
-        /\.json$/,
-        /\.svg$/,
-      ],
-      use: loaders.url,
-    }],
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        include: [paths.app.src.root],
+        exclude: /node_modules/,
+        enforce: 'pre',
+        use: loaders.sourcemap,
+      },
+      {
+        //   test: /\.(js|jsx)$/,
+        //   enforce: 'pre',
+        //   include: [paths.app.src.root],
+        //   exclude: /node_modules/,
+        //   use: loaders.eslint,
+        // }, {
+        test: /\.(js|jsx)$/,
+        include: [paths.app.src.root],
+        exclude: /node_modules/,
+        use: 'happypack/loader?id=js',
+      },
+      {
+        test: /\.svg$/,
+        include: [paths.app.assets.images, paths.app.nodeModules],
+        use: loaders.file,
+      },
+      {
+        exclude: [
+          /\.ejs$/,
+          /\.html$/,
+          /\.(js|jsx)$/,
+          /\.(ts|tsx)$/,
+          /\.css$/,
+          /\.json$/,
+          /\.svg$/,
+        ],
+        use: loaders.url,
+      },
+    ],
   },
   plugins: [
     new HappyPack({
@@ -89,18 +88,21 @@ const config = new Config().merge({
 })
 
 if (argv.ts) {
-  config.module.rules.push({
-    test: /\.(ts|tsx)$/,
-    enforce: 'pre',
-    include: [paths.app.src.root],
-    exclude: /node_modules/,
-    use: loaders.tslint,
-  }, {
-    test: /\.(ts|tsx)$/,
-    include: [paths.app.src.root],
-    exclude: /node_modules/,
-    use: 'happypack/loader?id=ts',
-  })
+  config.module.rules.push(
+    {
+      test: /\.(ts|tsx)$/,
+      enforce: 'pre',
+      include: [paths.app.src.root],
+      exclude: /node_modules/,
+      use: loaders.tslint,
+    },
+    {
+      test: /\.(ts|tsx)$/,
+      include: [paths.app.src.root],
+      exclude: /node_modules/,
+      use: 'happypack/loader?id=ts',
+    }
+  )
 
   config.plugins.unshift(
     new ForkTsCheckerWebpackPlugin({

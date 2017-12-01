@@ -19,7 +19,12 @@ const recursiveWrappers: RecursiveWrappersFn = ([Wrapper, ...rest], props) => (
 )
 
 export interface CreateAppFn {
-  (Module: ComponentType, wrappers: WC[], store: AppStore, history: History): JSX.Element
+  (
+    Module: ComponentType,
+    wrappers: WC[],
+    store: AppStore,
+    history: History
+  ): JSX.Element
 }
 
 const createApp: CreateAppFn = (Module, wrappers, store, history) => {
@@ -27,7 +32,7 @@ const createApp: CreateAppFn = (Module, wrappers, store, history) => {
   const StatesProvider = createProvider('states')
   const EffectsProvider = createProvider('effects')
 
-  const Wrapper: WC = (props) =>
+  const Wrapper: WC = props =>
     wrappers.length ? recursiveWrappers(wrappers, props) : props.children
 
   return (

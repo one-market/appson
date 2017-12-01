@@ -9,8 +9,8 @@ import getDisplayName from '../utils/get-display-name'
 import * as invariants from '../utils/invariants'
 
 export type ConnectPropsState = {
-  props: object,
-  args: object,
+  props: object
+  args: object
 }
 
 export interface MapperFn {
@@ -18,17 +18,18 @@ export interface MapperFn {
 }
 
 export interface ConnectFn<NP = any, P = any> {
-  (states: string[], mapper?: MapperFn):
-    (WrappedComponent: React.ComponentType<P>) => React.ComponentType<P & NP>
+  (states: string[], mapper?: MapperFn): (
+    WrappedComponent: React.ComponentType<P>
+  ) => React.ComponentType<P & NP>
 }
 
 export type ConnectPropsContext = {
-  store: AppStore,
+  store: AppStore
 }
 
 const reduceIndexed = R.addIndex(R.reduce)
 
-const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
+const connectProps: ConnectFn = (states, mapProps) => WrappedComponent => {
   if (mapProps) {
     invariants.isFn('mapProps', mapProps)
   }
@@ -38,7 +39,9 @@ const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
   return class ConnectProps extends PureComponent<{}, ConnectPropsState> {
     context: ConnectPropsContext
 
-    static displayName: string = `ConnectProps(${getDisplayName(WrappedComponent)})`
+    static displayName: string = `ConnectProps(${getDisplayName(
+      WrappedComponent
+    )})`
 
     static contextTypes = {
       store: t.object,
@@ -51,19 +54,28 @@ const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
 
     updateProps = (args: object): void =>
       this.setState({
-        props: mapProps ? mapProps(...R.values(args)) : R.mergeAll(R.values(args)),
+        props: mapProps
+          ? mapProps(...R.values(args))
+          : R.mergeAll(R.values(args)),
       })
 
-    getArgs = (globalState: any) =>
-      (obj: object, path: string, idx: number): object => {
-        const state: State<any> = State.find(path)
-        return state ? R.assoc(`${idx}`, state.mapProps(globalState), obj) : obj
-      }
+    getArgs = (globalState: any) => (
+      obj: object,
+      path: string,
+      idx: number
+    ): object => {
+      const state: State<any> = State.find(path)
+      return state ? R.assoc(`${idx}`, state.mapProps(globalState), obj) : obj
+    }
 
     updateArgs = (globalState: any): void => {
       const { args } = this.state
 
-      const newArgs: object = reduceIndexed(this.getArgs(globalState), args, states)
+      const newArgs: object = reduceIndexed(
+        this.getArgs(globalState),
+        args,
+        states
+      )
       const hasArgs: boolean = R.not(R.isNil(newArgs))
       const hasChanges: boolean = R.not(deepEqual(args, newArgs))
 
@@ -109,9 +121,7 @@ const connectProps: ConnectFn = (states, mapProps) => (WrappedComponent) => {
     }
 
     render(): JSX.Element {
-      return (
-        <WrappedComponent {...this.state.props} {...this.props} />
-      )
+      return <WrappedComponent {...this.state.props} {...this.props} />
     }
   }
 }

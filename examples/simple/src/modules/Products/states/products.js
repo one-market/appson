@@ -14,11 +14,10 @@ const products = new State({
     ],
   },
   computed: {
-    quantity: (state) => state.list.length,
+    quantity: state => state.list.length,
   },
   handlers: {
-    add: (state, { payload }) =>
-      R.evolve({ list: R.append(payload) }, state),
+    add: (state, { payload }) => R.evolve({ list: R.append(payload) }, state),
   },
 })
 

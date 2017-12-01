@@ -1,6 +1,10 @@
 import React from 'react'
 import { appson } from '@onemarket/appson'
-import { ApolloClient, createNetworkInterface, ApolloProvider } from 'react-apollo'
+import {
+  ApolloClient,
+  createNetworkInterface,
+  ApolloProvider,
+} from 'react-apollo'
 import Simple from './'
 
 const client = new ApolloClient({
