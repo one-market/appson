@@ -1,6 +1,6 @@
 {
   "name": "@onemarket/appson-example-simple",
-  "version": "0.5.12",
+  "version": "0.5.13",
   "license": "MIT",
   "scripts": {
     "start": "appson start",
@@ -17,6 +17,6 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "@onemarket/appson-cli": "^0.5.12"
+    "@onemarket/appson-cli": "^0.5.13"
   }
 }

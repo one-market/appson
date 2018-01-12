@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.13"></a>
+## [0.5.13](https://github.com/one-market/appson/compare/v0.5.12...v0.5.13) (2018-01-12)
+
+
+### Bug Fixes
+
+* **appson-cli:** assets plugin config ([3339273](https://github.com/one-market/appson/commit/3339273))
+
+
+
+
 <a name="0.5.12"></a>
 ## [0.5.12](https://github.com/one-market/appson/compare/v0.5.11...v0.5.12) (2018-01-12)
 
