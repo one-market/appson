@@ -7,6 +7,7 @@ const { Config } = require('webpack-config')
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const HappyPack = require('happypack')
+const AssetsPlugin = require('assets-webpack-plugin')
 
 const paths = require('../paths')
 const env = require('../env')
@@ -74,7 +75,11 @@ const config = new Config().merge({
       threadPool: HAPPY_THREAD_POOL,
       loaders: [loaders.babel],
     }),
-    new webpack.NamedModulesPlugin(),
+    new AssetsPlugin({
+      path: paths.build,
+      filename: 'assets.json',
+    }),
+    new webpack.NamedModulesPlugin()(),
     new webpack.DefinePlugin(env),
     new webpack.DefinePlugin({
       CONFIG: JSON.stringify(loadConfig('env')),
