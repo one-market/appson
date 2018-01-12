@@ -79,7 +79,7 @@ const config = new Config().merge({
       path: paths.build,
       filename: 'assets.json',
     }),
-    new webpack.NamedModulesPlugin()(),
+    new webpack.NamedModulesPlugin(),
     new webpack.DefinePlugin(env),
     new webpack.DefinePlugin({
       CONFIG: JSON.stringify(loadConfig('env')),
