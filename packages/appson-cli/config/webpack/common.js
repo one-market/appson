@@ -76,7 +76,7 @@ const config = new Config().merge({
       loaders: [loaders.babel],
     }),
     new AssetsPlugin({
-      path: paths.build,
+      path: paths.app.build,
       filename: 'assets.json',
     }),
     new webpack.NamedModulesPlugin(),
