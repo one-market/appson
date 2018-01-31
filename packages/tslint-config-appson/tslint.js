@@ -78,7 +78,6 @@ module.exports = {
       'allow-pascal-case',
       'allow-leading-underscore',
     ],
-    'no-var-self': true,
     'import-name': false,
   },
 }
