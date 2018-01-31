@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.5.14"></a>
+## [0.5.14](https://github.com/one-market/appson/compare/v0.5.13...v0.5.14) (2018-01-31)
+
+
+### Bug Fixes
+
+* **tslint-config-appson:** remove deprecated rule ([02d689c](https://github.com/one-market/appson/commit/02d689c))
+
+
+
+
 <a name="0.5.9"></a>
 ## [0.5.9](https://github.com/one-market/appson/compare/v0.5.8...v0.5.9) (2017-12-01)
 

@@ -1,7 +1,7 @@
 {
   "name": "@onemarket/appson-cli",
   "description": "CLI to manage Appson applications",
-  "version": "0.5.13",
+  "version": "0.5.14",
   "bin": {
     "appson": "./bin/appson.js"
   },
@@ -50,7 +50,7 @@
     "style-loader": "^0.19.0",
     "ts-loader": "^3.2.0",
     "tslint": "^5.8.0",
-    "tslint-config-appson": "^0.5.9",
+    "tslint-config-appson": "^0.5.14",
     "tslint-loader": "^3.5.3",
     "typescript": "^2.6.2",
     "uglifyjs-webpack-plugin": "^1.1.2",
